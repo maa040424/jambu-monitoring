@@ -23,6 +23,13 @@ function showArimaOverlay() {
         statusEl.style.color = '';
     }
 
+    // Pastikan video autoplay ulang
+    const video = document.getElementById('arima-loading-video');
+    if (video) {
+        video.currentTime = 0;
+        video.play().catch(() => {});
+    }
+
     overlay.classList.remove('hiding');
     overlay.style.display = 'flex';
 

@@ -8,16 +8,11 @@
 ════════════════════════════════════════════════════ --}}
 <div id="arima-overlay" class="arima-overlay" style="display:none;">
     <div class="arima-overlay-inner">
-        {{-- Lottie ARIMA animation --}}
-        <div class="arima-lottie-wrap">
-            <lottie-player
-                src="{{ asset('img/ARIMA_animation.json') }}"
-                background="transparent"
-                speed="1"
-                loop
-                autoplay
-                style="width: 100%; height: 100%;">
-            </lottie-player>
+        {{-- Video ARIMA animation --}}
+        <div class="arima-video-wrap">
+            <video id="arima-loading-video" autoplay loop muted playsinline>
+                <source src="{{ asset('img/ARIMA_animation.mp4') }}" type="video/mp4">
+            </video>
         </div>
 
         {{-- Teks status --}}
@@ -83,18 +78,31 @@
     to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Lottie wrap */
-.arima-lottie-wrap {
-    width: clamp(200px, 40vw, 300px);
-    height: clamp(200px, 40vw, 300px);
+/* Video wrap */
+.arima-video-wrap {
+    width: clamp(180px, 38vw, 260px);
+    height: clamp(180px, 38vw, 260px);
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid rgba(34, 197, 94, 0.35);
+    box-shadow:
+        0 0 40px rgba(34, 197, 94, 0.2),
+        0 0 80px rgba(34, 197, 94, 0.08),
+        inset 0 0 20px rgba(34, 197, 94, 0.05);
+    animation: glow-pulse 2.5s ease-in-out infinite alternate;
+    background: #0b1120;
     flex-shrink: 0;
-    filter: drop-shadow(0 0 30px rgba(34, 197, 94, 0.2));
-    animation: lottie-glow 2.5s ease-in-out infinite alternate;
 }
 
-@keyframes lottie-glow {
-    0%   { filter: drop-shadow(0 0 20px rgba(34,197,94,0.15)); }
-    100% { filter: drop-shadow(0 0 45px rgba(34,197,94,0.30)); }
+@keyframes glow-pulse {
+    0%   { box-shadow: 0 0 30px rgba(34,197,94,0.15), 0 0 60px rgba(34,197,94,0.06); }
+    100% { box-shadow: 0 0 55px rgba(34,197,94,0.30), 0 0 100px rgba(34,197,94,0.12); }
+}
+
+#arima-loading-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 /* Text */
@@ -146,7 +154,7 @@
 
 /* Mobile adjustments */
 @media (max-width: 480px) {
-    .arima-lottie-wrap { width: 180px; height: 180px; }
+    .arima-video-wrap { width: 150px; height: 150px; }
     .arima-overlay-inner { gap: 1.5rem; }
 }
 </style>
@@ -183,13 +191,9 @@
 
 <div class="row g-3 mb-4" id="forecast-charts-container">
     <div class="col-12 text-center py-5 text-muted" id="forecast-loading">
-        <lottie-player
-            src="{{ asset('img/ARIMA_animation.json') }}"
-            background="transparent"
-            speed="1"
-            loop autoplay
-            style="width: 120px; height: 120px; margin: 0 auto 1rem;">
-        </lottie-player>
+        <video autoplay loop muted playsinline style="width: 120px; height: 120px; border-radius: 50%; margin-bottom: 1rem; object-fit: cover;">
+            <source src="{{ asset('img/ARIMA_animation.mp4') }}" type="video/mp4">
+        </video>
         <div class="fw-semibold">Sedang menghitung prediksi dengan model Machine Learning...</div>
         <small>Ini mungkin memakan waktu beberapa saat tergantung jumlah data.</small>
     </div>
