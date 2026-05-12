@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
 
   # ─── Nginx ─────────────────────────────────
@@ -29,6 +27,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      ml:
+        condition: service_started
     restart: unless-stopped
 
   # ─── Queue Worker (ARIMA & notifikasi) ─────
@@ -64,6 +64,19 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    restart: unless-stopped
+
+  # ─── Flask ML / ARIMA ──────────────────────
+  ml:
+    build:
+      context: ./ml
+      dockerfile: Dockerfile
+    container_name: jambu_ml
+    env_file:
+      - ./ml/.env
+    depends_on:
+      db:
+        condition: service_healthy
     restart: unless-stopped
 
   # ─── MQTT Broker (Mosquitto) ───────────────
