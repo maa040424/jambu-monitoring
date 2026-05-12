@@ -4,9 +4,13 @@
 
 {{-- Loading Overlay --}}
 <div id="loading-overlay" class="loading-overlay">
-    <div class="spinner-border text-success" role="status" style="width: 3rem; height: 3rem;">
-        <span class="visually-hidden">Loading...</span>
-    </div>
+    <lottie-player
+        src="{{ asset('img/signal-analysis.json') }}"
+        background="transparent"
+        speed="1"
+        loop autoplay
+        style="width: 120px; height: 120px;">
+    </lottie-player>
     <p class="mt-3 text-light">Memuat data sensor...</p>
 </div>
 

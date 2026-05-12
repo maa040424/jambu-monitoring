@@ -184,7 +184,7 @@
 <div class="row g-3 mb-4" id="forecast-charts-container">
     <div class="col-12 text-center py-5 text-muted" id="forecast-loading">
         <lottie-player
-            src="{{ asset('img/signal-analysis.json') }}"
+            src="{{ asset('img/ARIMA_animation.json') }}"
             background="transparent"
             speed="1"
             loop autoplay
