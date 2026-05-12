@@ -246,7 +246,6 @@
 @endsection
 
 @section('scripts')
-<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 <script src="{{ asset('js/forecast.js') }}?v={{ time() }}"></script>
 @endsection
 
