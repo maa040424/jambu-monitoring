@@ -20,13 +20,7 @@ function showArimaOverlay() {
     const statusEl = document.getElementById('arima-status-text');
     if (statusEl) {
         statusEl.textContent = 'Sistem sedang memproses data historis dengan model Machine Learning...';
-    }
-
-    // Pastikan video autoplay ulang
-    const video = document.getElementById('arima-loading-video');
-    if (video) {
-        video.currentTime = 0;
-        video.play().catch(() => {}); // ignore autoplay policy error
+        statusEl.style.color = '';
     }
 
     overlay.classList.remove('hiding');
