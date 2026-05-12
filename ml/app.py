@@ -571,6 +571,10 @@ def predict_pdf():
 if __name__ == '__main__':
     print("[INFO] Jambu ML Forecasting Service")
     print(f"[INFO] Model: ARIMA | Sensors: {', '.join(SENSORS)}")
-    print(f"[INFO] Running on http://127.0.0.1:5001")
-    app.run(host='127.0.0.1', port=5001, debug=True)
+    host = os.getenv('FLASK_HOST', '0.0.0.0')
+    port = int(os.getenv('FLASK_PORT', 5001))
+    debug = os.getenv('FLASK_DEBUG', 'false').lower() == 'true'
+    print(f"[INFO] Running on http://{host}:{port}")
+    app.run(host=host, port=port, debug=debug)
+
 
