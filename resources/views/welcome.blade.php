@@ -425,7 +425,7 @@
         {{-- ── LEFT: Konten ── --}}
         <div class="hero-left">
             <video class="hero-mascot" autoplay loop muted playsinline>
-                <source src="{{ asset('img/maskot.mp4') }}" type="video/mp4">
+                <source src="{{ asset('img/maskot_.mp4') }}" type="video/mp4">
             </video>
 
             <div class="hero-badge">

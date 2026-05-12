@@ -8,11 +8,16 @@
 ════════════════════════════════════════════════════ --}}
 <div id="arima-overlay" class="arima-overlay" style="display:none;">
     <div class="arima-overlay-inner">
-        {{-- Video animasi dari maskot/loading-animation.mp4 --}}
-        <div class="arima-video-wrap">
-            <video id="arima-loading-video" autoplay loop muted playsinline>
-                <source src="{{ asset('img/loading-animation.mp4') }}" type="video/mp4">
-            </video>
+        {{-- Lottie ARIMA animation --}}
+        <div class="arima-lottie-wrap">
+            <lottie-player
+                src="{{ asset('img/ARIMA_animation.json') }}"
+                background="transparent"
+                speed="1"
+                loop
+                autoplay
+                style="width: 100%; height: 100%;">
+            </lottie-player>
         </div>
 
         {{-- Teks status --}}
@@ -78,31 +83,18 @@
     to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Video wrap */
-.arima-video-wrap {
-    width: clamp(160px, 35vw, 240px);
-    height: clamp(160px, 35vw, 240px);
-    border-radius: 50%;
-    overflow: hidden;
-    border: 2px solid rgba(34, 197, 94, 0.35);
-    box-shadow:
-        0 0 40px rgba(34, 197, 94, 0.2),
-        0 0 80px rgba(34, 197, 94, 0.08),
-        inset 0 0 20px rgba(34, 197, 94, 0.05);
-    animation: glow-pulse 2.5s ease-in-out infinite alternate;
-    background: #0b1120;
+/* Lottie wrap */
+.arima-lottie-wrap {
+    width: clamp(200px, 40vw, 300px);
+    height: clamp(200px, 40vw, 300px);
     flex-shrink: 0;
+    filter: drop-shadow(0 0 30px rgba(34, 197, 94, 0.2));
+    animation: lottie-glow 2.5s ease-in-out infinite alternate;
 }
 
-@keyframes glow-pulse {
-    0%   { box-shadow: 0 0 30px rgba(34,197,94,0.15), 0 0 60px rgba(34,197,94,0.06); }
-    100% { box-shadow: 0 0 55px rgba(34,197,94,0.30), 0 0 100px rgba(34,197,94,0.12); }
-}
-
-#arima-loading-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+@keyframes lottie-glow {
+    0%   { filter: drop-shadow(0 0 20px rgba(34,197,94,0.15)); }
+    100% { filter: drop-shadow(0 0 45px rgba(34,197,94,0.30)); }
 }
 
 /* Text */
@@ -154,7 +146,7 @@
 
 /* Mobile adjustments */
 @media (max-width: 480px) {
-    .arima-video-wrap { width: 150px; height: 150px; }
+    .arima-lottie-wrap { width: 180px; height: 180px; }
     .arima-overlay-inner { gap: 1.5rem; }
 }
 </style>
@@ -191,7 +183,13 @@
 
 <div class="row g-3 mb-4" id="forecast-charts-container">
     <div class="col-12 text-center py-5 text-muted" id="forecast-loading">
-        <div class="spinner-border text-primary border-0 mb-3" style="width: 3rem; height: 3rem; border-width: 0.25rem !important;" role="status"></div>
+        <lottie-player
+            src="{{ asset('img/signal-analysis.json') }}"
+            background="transparent"
+            speed="1"
+            loop autoplay
+            style="width: 120px; height: 120px; margin: 0 auto 1rem;">
+        </lottie-player>
         <div class="fw-semibold">Sedang menghitung prediksi dengan model Machine Learning...</div>
         <small>Ini mungkin memakan waktu beberapa saat tergantung jumlah data.</small>
     </div>
@@ -248,6 +246,7 @@
 @endsection
 
 @section('scripts')
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 <script src="{{ asset('js/forecast.js') }}?v={{ time() }}"></script>
 @endsection
 

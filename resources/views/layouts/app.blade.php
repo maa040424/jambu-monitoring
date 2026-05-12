@@ -30,7 +30,7 @@
             <div class="nav-top">
                 <a class="nav-brand" href="{{ route('dashboard') }}">
                     <video class="nav-mascot" autoplay loop muted playsinline>
-                        <source src="{{ asset('img/maskot.mp4') }}" type="video/mp4">
+                        <source src="{{ asset('img/maskot_.mp4') }}" type="video/mp4">
                     </video>
                     <span class="nav-brand-text">Jambu<span class="nav-brand-accent">Monitor</span></span>
                 </a>
@@ -168,25 +168,18 @@
             to   { opacity: 1; }
         }
 
-        .fno-video-wrap {
-            width: clamp(140px, 30vw, 200px);
-            height: clamp(140px, 30vw, 200px);
-            border-radius: 50%;
-            overflow: hidden;
-            border: 2px solid rgba(34, 197, 94, 0.35);
-            box-shadow: 0 0 40px rgba(34,197,94,0.2), 0 0 80px rgba(34,197,94,0.08);
-            background: #0b1120;
+        .fno-lottie-wrap {
+            width: clamp(180px, 35vw, 260px);
+            height: clamp(180px, 35vw, 260px);
+            filter: drop-shadow(0 0 30px rgba(34,197,94,0.2));
             animation: glow-fno 2.5s ease-in-out infinite alternate;
         }
 
         @keyframes glow-fno {
-            0%   { box-shadow: 0 0 28px rgba(34,197,94,0.14); }
-            100% { box-shadow: 0 0 52px rgba(34,197,94,0.28); }
+            0%   { filter: drop-shadow(0 0 20px rgba(34,197,94,0.14)); }
+            100% { filter: drop-shadow(0 0 45px rgba(34,197,94,0.28)); }
         }
 
-        .fno-video-wrap video {
-            width: 100%; height: 100%; object-fit: cover;
-        }
 
         .fno-title {
             font-size: clamp(1rem, 3vw, 1.35rem);
@@ -222,10 +215,14 @@
 
     {{-- Overlay element --}}
     <div id="forecast-nav-overlay">
-        <div class="fno-video-wrap">
-            <video autoplay loop muted playsinline>
-                <source src="{{ asset('img/loading-animation.mp4') }}" type="video/mp4">
-            </video>
+        <div class="fno-lottie-wrap">
+            <lottie-player
+                src="{{ asset('img/ARIMA_animation.json') }}"
+                background="transparent"
+                speed="1"
+                loop autoplay
+                style="width: 100%; height: 100%;">
+            </lottie-player>
         </div>
         <div>
             <div class="fno-title">Menghitung Prediksi ARIMA</div>
@@ -262,6 +259,7 @@
         });
     });
     </script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     @endif
 
     @yield('scripts')
