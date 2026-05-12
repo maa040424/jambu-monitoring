@@ -1,0 +1,64 @@
+@startuml Arsitektur Sistem
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam componentStyle uml2
+
+title Arsitektur Sistem\nMonitoring Tanaman Jambu Kristal
+
+package "Perangkat IoT" {
+    [Mikrokontroler ESP32] as mcu
+    [Sensor Suhu dan\nKelembaban Udara] as s1
+    [Sensor Kelembaban\nTanah] as s2
+    [Sensor Intensitas\nCahaya] as s3
+}
+
+package "Server Aplikasi" {
+    [Modul Autentikasi] as auth
+    [Modul Penerimaan Data] as receiver
+    [Modul Dashboard] as dashboard
+    [Modul Prediksi] as forecast
+    [Modul Ekspor Data] as export
+    [Modul Notifikasi] as notifmod
+}
+
+package "Sistem Prediksi" {
+    [Model ARIMA] as arima
+}
+
+database "Basis Data" as db
+
+cloud "Layanan Notifikasi\n(Telegram)" as telegram
+
+actor "Admin" as admin
+actor "Petani" as petani
+
+' === Koneksi Sensor ===
+s1 --> mcu
+s2 --> mcu
+s3 --> mcu
+
+' === Aliran Data ===
+mcu --> receiver : Kirim data sensor
+receiver --> db : Simpan data
+receiver --> notifmod : Perubahan status
+notifmod --> telegram : Kirim notifikasi
+
+dashboard --> db : Ambil data
+export --> db : Ambil data
+forecast --> arima : Minta prediksi
+arima --> db : Ambil data historis
+
+' === Interaksi Pengguna ===
+admin --> auth : Login
+admin --> dashboard : Lihat monitoring
+admin --> export : Unduh data
+admin --> forecast : Lihat prediksi
+
+petani --> auth : Login
+petani --> dashboard : Lihat monitoring
+petani --> forecast : Lihat prediksi
+
+@enduml

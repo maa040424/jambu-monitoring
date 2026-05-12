@@ -1,0 +1,43 @@
+@startuml Sequence Diagram - Pengiriman Data Sensor
+skinparam backgroundColor white
+skinparam defaultFontSize 12
+skinparam defaultFontName Arial
+skinparam sequenceMessageAlign center
+
+title Sequence Diagram — Alur Pengiriman Data Sensor
+
+actor "Perangkat IoT" as iot #LightYellow
+participant "Server\nAplikasi" as server #LightBlue
+database "Basis Data" as db #LightGreen
+participant "Sistem\nNotifikasi" as notif #Orange
+
+== Pengiriman Data Sensor ==
+
+iot -> server : Kirim data sensor
+activate server
+
+server -> server : Validasi data
+server -> server : Tentukan status\nkelembaban tanah
+
+server -> db : Simpan data sensor
+activate db
+db --> server : Data tersimpan
+deactivate db
+
+server -> db : Ambil data sebelumnya
+activate db
+db --> server : Data sebelumnya
+deactivate db
+
+alt Status berubah
+    server -> notif : Kirim notifikasi\nperubahan status
+    activate notif
+    notif --> server : Notifikasi terkirim
+    deactivate notif
+end
+
+server --> iot : Konfirmasi data diterima
+
+deactivate server
+
+@enduml

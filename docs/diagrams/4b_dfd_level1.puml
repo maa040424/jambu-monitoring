@@ -1,0 +1,61 @@
+@startuml DFD Level 1
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 11
+
+title Data Flow Diagram Level 1\nSistem Monitoring Tanaman Jambu Kristal
+
+' === Entitas Luar ===
+rectangle "Admin" as admin
+rectangle "Petani" as petani
+rectangle "Perangkat IoT" as iot
+rectangle "Sistem Notifikasi" as notif
+
+' === Data Store ===
+database "D1: Data Sensor" as ds_sensor
+database "D2: Data Pengguna" as ds_users
+
+' === Proses ===
+usecase "P1\nAutentikasi" as p1
+usecase "P2\nPenerimaan\nData Sensor" as p2
+usecase "P3\nMonitoring\nData" as p3
+usecase "P4\nPrediksi\nData Sensor" as p4
+usecase "P5\nEkspor\nData" as p5
+usecase "P6\nNotifikasi\nStatus" as p6
+usecase "P7\nPengelolaan\nData" as p7
+
+' === Aliran Data ===
+admin --> p1 : Data login
+petani --> p1 : Data login
+p1 --> ds_users : Verifikasi pengguna
+p1 --> admin : Status autentikasi
+p1 --> petani : Status autentikasi
+
+iot --> p2 : Data sensor
+p2 --> ds_sensor : Simpan data
+p2 --> p6 : Perubahan status
+
+admin --> p3 : Permintaan data
+petani --> p3 : Permintaan data
+ds_sensor --> p3 : Data sensor
+p3 --> admin : Informasi monitoring
+p3 --> petani : Informasi monitoring
+
+admin --> p4 : Permintaan prediksi
+petani --> p4 : Permintaan prediksi
+ds_sensor --> p4 : Data historis
+p4 --> admin : Hasil prediksi
+p4 --> petani : Hasil prediksi
+
+admin --> p5 : Permintaan ekspor
+ds_sensor --> p5 : Data sensor
+p5 --> admin : Berkas ekspor
+
+p6 --> notif : Pesan notifikasi
+
+admin --> p7 : Permintaan kelola data
+p7 --> ds_sensor : Hapus data
+
+@enduml

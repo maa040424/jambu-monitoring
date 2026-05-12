@@ -1,0 +1,45 @@
+@startuml Sequence Diagram - Prediksi Data Sensor
+skinparam backgroundColor white
+skinparam defaultFontSize 12
+skinparam defaultFontName Arial
+skinparam sequenceMessageAlign center
+
+title Sequence Diagram — Alur Prediksi Data Sensor
+
+actor "Admin" as user #LightBlue
+participant "Peramban\n(Browser)" as browser #White
+participant "Server\nAplikasi" as server #LightBlue
+participant "Sistem\nPrediksi" as ml #LightCoral
+database "Basis Data" as db #LightGreen
+
+== Proses Prediksi ==
+
+user -> browser : Buka halaman prediksi
+browser -> server : Minta halaman prediksi
+activate server
+server --> browser : Tampilkan halaman
+deactivate server
+
+browser -> server : Minta data prediksi
+activate server
+server -> ml : Minta proses prediksi
+activate ml
+
+ml -> db : Ambil data historis
+activate db
+db --> ml : Data historis sensor
+deactivate db
+
+ml -> ml : Proses prediksi\ndengan metode ARIMA
+
+ml --> server : Hasil prediksi
+deactivate ml
+
+server --> browser : Data aktual &\nhasil prediksi
+deactivate server
+
+browser -> browser : Tampilkan grafik\nhasil prediksi
+
+browser --> user : Halaman prediksi\nditampilkan
+
+@enduml

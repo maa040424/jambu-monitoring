@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="680px" preserveAspectRatio="none" style="width:1173px;height:680px;" version="1.1" viewBox="0 0 1173 680" width="1173px" zoomAndPan="magnify"><defs/><g><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="93" x="533.53" y="11.2559">Arsitektur Sistem</text><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="192" x="484.03" y="25.0547">Monitoring Tanaman Jambu Kristal</text><!--MD5=[ba392a0978799b2f1967a731ecf68770]
+cluster Perangkat IoT--><polygon fill="#FFFFFF" points="505.06,33.5977,590.06,33.5977,597.06,53.3965,1047.06,53.3965,1047.06,260.5977,505.06,260.5977,505.06,33.5977" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="505.06" x2="597.06" y1="53.3965" y2="53.3965"/><text fill="#000000" font-family="Arial" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="79" x="509.06" y="46.8535">Perangkat IoT</text><!--MD5=[36f2ed40395229a2c33bb70c4b9f8792]
+cluster Server Aplikasi--><polygon fill="#FFFFFF" points="29.06,321.5977,121.06,321.5977,128.06,341.3965,914.06,341.3965,914.06,550.5977,29.06,550.5977,29.06,321.5977" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="29.06" x2="128.06" y1="341.3965" y2="341.3965"/><text fill="#000000" font-family="Arial" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="86" x="33.06" y="334.8535">Server Aplikasi</text><!--MD5=[e4f0504aafff6929c6f52c585b92666a]
+cluster Sistem Prediksi--><polygon fill="#FFFFFF" points="938.06,458.5977,1034.06,458.5977,1041.06,478.3965,1082.06,478.3965,1082.06,550.5977,938.06,550.5977,938.06,458.5977" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="938.06" x2="1041.06" y1="478.3965" y2="478.3965"/><text fill="#000000" font-family="Arial" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="90" x="942.06" y="471.8535">Sistem Prediksi</text><!--MD5=[32212cae6d0d0cef86b81fed9b864ca2]
+entity mcu--><rect fill="#F8F8F8" height="43.7988" style="stroke:#383838;stroke-width:1.5;" width="158" x="692.06" y="200.5977"/><rect fill="#F8F8F8" height="10" style="stroke:#383838;stroke-width:1.5;" width="15" x="830.06" y="205.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="828.06" y="207.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="828.06" y="211.5977"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="118" x="707.06" y="231.8535">Mikrokontroler ESP32</text><!--MD5=[1f0e52a1457a111061ef2aae8e5ec9c5]
+entity s1--><rect fill="#F8F8F8" height="57.5977" style="stroke:#383838;stroke-width:1.5;" width="148" x="883.06" y="65.5977"/><rect fill="#F8F8F8" height="10" style="stroke:#383838;stroke-width:1.5;" width="15" x="1011.06" y="70.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="1009.06" y="72.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="1009.06" y="76.5977"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="96" x="898.06" y="96.8535">Sensor Suhu dan</text><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="108" x="898.06" y="110.6523">Kelembaban Udara</text><!--MD5=[dc66687c89eac77dba91b7320324a287]
+entity s2--><rect fill="#F8F8F8" height="57.5977" style="stroke:#383838;stroke-width:1.5;" width="154" x="694.06" y="65.5977"/><rect fill="#F8F8F8" height="10" style="stroke:#383838;stroke-width:1.5;" width="15" x="828.06" y="70.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="826.06" y="72.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="826.06" y="76.5977"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="114" x="709.06" y="96.8535">Sensor Kelembaban</text><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="35" x="709.06" y="110.6523">Tanah</text><!--MD5=[b165ca7cce796f881c879adda4a6bef9]
+entity s3--><rect fill="#F8F8F8" height="57.5977" style="stroke:#383838;stroke-width:1.5;" width="137" x="521.56" y="65.5977"/><rect fill="#F8F8F8" height="10" style="stroke:#383838;stroke-width:1.5;" width="15" x="638.56" y="70.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="636.56" y="72.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="636.56" y="76.5977"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="97" x="536.56" y="96.8535">Sensor Intensitas</text><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="42" x="536.56" y="110.6523">Cahaya</text><!--MD5=[e29493a8775effcafa538aa0485107d1]
+entity auth--><rect fill="#F8F8F8" height="43.7988" style="stroke:#383838;stroke-width:1.5;" width="136" x="45.06" y="353.5977"/><rect fill="#F8F8F8" height="10" style="stroke:#383838;stroke-width:1.5;" width="15" x="161.06" y="358.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="159.06" y="360.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="159.06" y="364.5977"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="96" x="60.06" y="384.8535">Modul Autentikasi</text><!--MD5=[5396727a6920f555e89155bb37322e73]
+entity receiver--><rect fill="#F8F8F8" height="43.7988" style="stroke:#383838;stroke-width:1.5;" width="173" x="545.56" y="353.5977"/><rect fill="#F8F8F8" height="10" style="stroke:#383838;stroke-width:1.5;" width="15" x="698.56" y="358.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="696.56" y="360.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="696.56" y="364.5977"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="133" x="560.56" y="384.8535">Modul Penerimaan Data</text><!--MD5=[4b4aa12fd50f56bd13a7a0170aaccc36]
+entity dashboard--><rect fill="#F8F8F8" height="43.7988" style="stroke:#383838;stroke-width:1.5;" width="138" x="216.06" y="353.5977"/><rect fill="#F8F8F8" height="10" style="stroke:#383838;stroke-width:1.5;" width="15" x="334.06" y="358.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="332.06" y="360.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="332.06" y="364.5977"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="98" x="231.06" y="384.8535">Modul Dashboard</text><!--MD5=[98cb33f4ebb9a3a4a49f1f3c7a329547]
+entity forecast--><rect fill="#F8F8F8" height="43.7988" style="stroke:#383838;stroke-width:1.5;" width="121" x="389.56" y="353.5977"/><rect fill="#F8F8F8" height="10" style="stroke:#383838;stroke-width:1.5;" width="15" x="490.56" y="358.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="488.56" y="360.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="488.56" y="364.5977"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="81" x="404.56" y="384.8535">Modul Prediksi</text><!--MD5=[80dabf241d271177efc0216b16049b74]
+entity export--><rect fill="#F8F8F8" height="43.7988" style="stroke:#383838;stroke-width:1.5;" width="144" x="754.06" y="353.5977"/><rect fill="#F8F8F8" height="10" style="stroke:#383838;stroke-width:1.5;" width="15" x="878.06" y="358.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="876.06" y="360.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="876.06" y="364.5977"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="104" x="769.06" y="384.8535">Modul Ekspor Data</text><!--MD5=[2447256ba09051b3264580cbac4824ae]
+entity notifmod--><rect fill="#F8F8F8" height="43.7988" style="stroke:#383838;stroke-width:1.5;" width="127" x="490.56" y="490.5977"/><rect fill="#F8F8F8" height="10" style="stroke:#383838;stroke-width:1.5;" width="15" x="597.56" y="495.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="595.56" y="497.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="595.56" y="501.5977"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="87" x="505.56" y="521.8535">Modul Notifikasi</text><!--MD5=[3bc89d07aeb7fd8d2f2a882cfb33b8c8]
+entity arima--><rect fill="#F8F8F8" height="43.7988" style="stroke:#383838;stroke-width:1.5;" width="111" x="954.56" y="490.5977"/><rect fill="#F8F8F8" height="10" style="stroke:#383838;stroke-width:1.5;" width="15" x="1045.56" y="495.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="1043.56" y="497.5977"/><rect fill="#F8F8F8" height="2" style="stroke:#383838;stroke-width:1.5;" width="4" x="1043.56" y="501.5977"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="71" x="969.56" y="521.8535">Model ARIMA</text><!--MD5=[7468467f3b6b392f1d176d828c753b77]
+entity db--><path d="M861.56,629.0977 C861.56,619.0977 902.06,619.0977 902.06,619.0977 C902.06,619.0977 942.56,619.0977 942.56,629.0977 L942.56,651.8965 C942.56,661.8965 902.06,661.8965 902.06,661.8965 C902.06,661.8965 861.56,661.8965 861.56,651.8965 L861.56,629.0977 " fill="#F8F8F8" style="stroke:#000000;stroke-width:1.5;"/><path d="M861.56,629.0977 C861.56,639.0977 902.06,639.0977 902.06,639.0977 C902.06,639.0977 942.56,639.0977 942.56,629.0977 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="61" x="871.56" y="654.3535">Basis Data</text><!--MD5=[f516d59a671ee8a4982901a6a8c80687]
+entity telegram--><path d="M497.7682,620.3478 C501.4822,614.5106 505.6851,613.2769 510.19,619.5357 C512.5156,613.9024 515.9653,613.7017 519.9245,617.9218 C522.6447,611.2392 526.5046,611.26 531.0893,616.1181 C533.6611,610.446 539.1226,608.9075 542.9553,614.8275 C545.4754,608.7623 550.1363,607.0044 555.3704,611.6947 C560.4363,607.1647 563.9648,608.2142 567.0844,613.9217 C570.6396,608.78 575.1177,609.2099 577.9521,614.6612 C582.8443,610.2771 586.4042,611.3748 589.4566,616.8154 C594.144,611.9031 599.0046,613.3965 600.4207,619.9449 C604.3301,614.3708 610.0824,614.0933 612.8091,621.1086 C624.4554,623.7774 625.4505,633.1638 618.3541,641.0454 C624.8758,649.7235 624.1914,658.0331 612.477,661.4619 C609.971,667.6609 604.2385,668.5984 600.2091,663.0532 C598.5059,669.462 593.0075,670.1388 589.0206,665.3313 C585.6485,669.852 582.5944,669.432 579.1332,665.4347 C576.3573,670.9582 571.6056,672.1441 567.0714,667.5261 C562.5804,672.6377 558.5073,673.4883 554.6004,666.9033 C550.7805,671.1586 546.9936,670.6654 544.3079,665.6447 C540.5592,671.5873 535.8695,671.2731 533.002,664.8397 C529.043,671.0024 523.5627,671.4562 520.1721,664.2925 C516.6816,670.1847 510.7795,669.8022 508.2672,663.3491 C504.3992,668.2709 500.4252,667.5748 496.9657,662.8695 C485.7636,659.9167 481.6971,649.4783 490.7049,640.7939 C483.259,631.9112 486.4324,622.7422 497.7682,620.3478 " fill="#F8F8F8" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="101" x="503.56" y="637.8535">Layanan Notifikasi</text><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="61" x="503.56" y="651.6523">(Telegram)</text><!--MD5=[79a439086b036a57b90a01d7b2f8bbd1]
+entity admin--><ellipse cx="386.06" cy="194.0977" fill="#F8F8F8" rx="8" ry="8" style="stroke:#383838;stroke-width:1.5;"/><path d="M386.06,202.0977 L386.06,229.0977 M373.06,210.0977 L399.06,210.0977 M386.06,229.0977 L373.06,244.0977 M386.06,229.0977 L399.06,244.0977 " fill="none" style="stroke:#383838;stroke-width:1.5;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="35" x="368.56" y="257.8535">Admin</text><!--MD5=[6c033524f46262379f61e76ea645b587]
+entity petani--><ellipse cx="98.06" cy="194.0977" fill="#F8F8F8" rx="8" ry="8" style="stroke:#383838;stroke-width:1.5;"/><path d="M98.06,202.0977 L98.06,229.0977 M85.06,210.0977 L111.06,210.0977 M98.06,229.0977 L85.06,244.0977 M98.06,229.0977 L111.06,244.0977 " fill="none" style="stroke:#383838;stroke-width:1.5;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="35" x="80.56" y="257.8535">Petani</text><!--MD5=[bec579688c223ca0da71c213838c7b43]
+link s1 to mcu--><path d="M915.32,123.8777 C882.65,146.0077 837.71,176.4477 806.71,197.4477 " fill="none" id="s1-to-mcu" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="802.24,200.4677,811.9324,198.7191,806.376,197.6581,807.437,192.1016,802.24,200.4677" style="stroke:#383838;stroke-width:1.0;"/><!--MD5=[c2f20aab85668002c4309e4d24644d82]
+link s2 to mcu--><path d="M771.06,123.8777 C771.06,145.2777 771.06,174.4577 771.06,195.3477 " fill="none" id="s2-to-mcu" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="771.06,200.4677,775.06,191.4677,771.06,195.4677,767.06,191.4677,771.06,200.4677" style="stroke:#383838;stroke-width:1.0;"/><!--MD5=[30ef3f0d7ac0b8a6d90b276fa979fd09]
+link s3 to mcu--><path d="M630.68,123.8777 C662.47,146.0077 706.2,176.4477 736.36,197.4477 " fill="none" id="s3-to-mcu" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="740.71,200.4677,735.613,192.0403,736.6078,197.609,731.0391,198.6038,740.71,200.4677" style="stroke:#383838;stroke-width:1.0;"/><!--MD5=[b746f1595faf48b798ea93130af5ebb4]
+link mcu to receiver--><path d="M764.42,244.8677 C758.15,262.5377 747.39,287.5977 732.06,305.5977 C716.81,323.5077 695.86,338.9177 677.08,350.5977 " fill="none" id="mcu-to-receiver" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="672.35,353.4777,682.1176,352.2149,676.621,350.8779,677.958,345.3813,672.35,353.4777" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="98" x="743.06" y="302.8535">Kirim data sensor</text><!--MD5=[b443e4a991f5340c8b4d81c0e8f3c2f7]
+link receiver to db--><path d="M718.76,395.4677 C766.12,406.4877 816.82,419.7277 825.06,427.5977 C869.16,469.7577 844.52,501.5177 866.06,558.5977 C873.2,577.5177 882.49,598.3577 889.85,614.1577 " fill="none" id="receiver-to-db" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="892.07,618.8977,891.8871,609.0505,889.9548,614.3671,884.6382,612.4348,892.07,618.8977" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="70" x="867.06" y="517.3535">Simpan data</text><!--MD5=[20ad80699a04dae87732264bf1c98900]
+link receiver to notifmod--><path d="M619.87,397.6877 C606.16,421.4277 583.87,460.0077 569.09,485.5877 " fill="none" id="receiver-to-notifmod" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="566.42,490.2077,574.3993,484.4344,568.9314,485.8841,567.4816,480.4162,566.42,490.2077" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="98" x="603.06" y="439.8535">Perubahan status</text><!--MD5=[c034ad5145b257fc9c0e1e776fffb4c3]
+link notifmod to telegram--><path d="M554.06,534.6877 C554.06,554.2277 554.06,583.6077 554.06,606.3177 " fill="none" id="notifmod-to-telegram" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="554.06,611.3477,558.06,602.3477,554.06,606.3477,550.06,602.3477,554.06,611.3477" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="81" x="555.06" y="578.8535">Kirim notifikasi</text><!--MD5=[7fb68e515abfb58ad5fe03986eb28072]
+link dashboard to db--><path d="M354.22,394.1877 C360.23,395.4377 366.24,396.6077 372.06,397.5977 C436.79,408.6577 608.09,396.7377 666.06,427.5977 C732.92,463.1977 718.23,508.5277 775.06,558.5977 C800.66,581.1477 833.14,601.7477 858.85,616.5377 " fill="none" id="dashboard-to-db" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="863.25,619.0377,857.4175,611.1015,858.9079,616.5585,853.4509,618.0489,863.25,619.0377" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="58" x="776.06" y="517.3535">Ambil data</text><!--MD5=[b44de80ef40c98036cbc4178c1c5c1a2]
+link export to db--><path d="M898.31,387.6477 C965.97,399.6377 1059.89,421.1077 1082.06,450.5977 C1117.11,497.2177 1115.5,540.5477 1074.06,581.5977 C1040.21,615.1277 986.34,629.2877 947.91,635.2577 " fill="none" id="export-to-db" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="942.83,636.0077,952.3171,638.6525,947.7766,635.2785,951.1505,630.738,942.83,636.0077" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="58" x="1107.06" y="517.3535">Ambil data</text><!--MD5=[662449ed15bdbace8a75241894e1439e]
+link forecast to arima--><path d="M510.77,393.7377 C516.59,395.1477 522.42,396.4577 528.06,397.5977 C697.78,431.9577 751.47,391.0177 914.06,450.5977 C937.48,459.1777 961.15,474.1377 979.14,487.0977 " fill="none" id="forecast-to-arima" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="983.58,490.3477,978.6576,481.8171,979.5376,487.4051,973.9496,488.285,983.58,490.3477" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="76" x="886.06" y="439.8535">Minta prediksi</text><!--MD5=[4c1745027c6355bf7aec9cd1a7e71c21]
+link arima to db--><path d="M991.98,534.6877 C973.02,556.8077 943.25,591.5377 923.21,614.9177 " fill="none" id="arima-to-db" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="919.84,618.8577,928.7249,614.6082,923.0857,615.0543,922.6396,609.4151,919.84,618.8577" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="102" x="963.06" y="578.8535">Ambil data historis</text><!--MD5=[d7f20e19fb8b493f4c42552f0a3e27f1]
+link admin to auth--><path d="M368.54,230.8477 C334.83,245.0577 258.96,278.2777 199.06,313.5977 C180.32,324.6477 160.45,338.5777 144.53,350.3377 " fill="none" id="admin-to-auth" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="140.15,353.5977,149.7587,351.4361,144.162,350.6137,144.9843,345.0169,140.15,353.5977" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="31" x="239.06" y="302.8535">Login</text><!--MD5=[5006f431c1690d62c1d78354d483169b]
+link admin to dashboard--><path d="M368.48,231.9777 C348.23,242.6177 315.62,262.9577 299.06,290.5977 C288.66,307.9477 285.38,330.7577 284.58,348.2277 " fill="none" id="admin-to-dashboard" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="284.4,353.4577,288.6807,344.5878,284.5571,348.4601,280.6847,344.3364,284.4,353.4577" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="89" x="300.06" y="302.8535">Lihat monitoring</text><!--MD5=[82fd2b4bacd68d3e642306f13acc9488]
+link admin to export--><path d="M403.95,231.1977 C427.02,240.7977 468.52,257.4177 505.06,268.5977 C545.68,281.0277 556.79,280.5577 598.06,290.5977 C624.77,297.0977 630.99,300.8477 658.06,305.5977 C692.38,311.6177 703.31,301.6877 736.06,313.5977 C758.63,321.8077 780.99,336.9177 797.78,350.0477 " fill="none" id="admin-to-export" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="801.93,353.3377,797.3621,344.6122,798.0118,350.2316,792.3924,350.8813,801.93,353.3377" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="64" x="659.06" y="302.8535">Unduh data</text><!--MD5=[bae2211971811356c94b4e3f5a3b06cf]
+link admin to forecast--><path d="M403.57,227.1177 C431.85,233.8477 486.75,251.5077 510.06,290.5977 C522.54,311.5177 504.85,333.9077 485.51,350.3077 " fill="none" id="admin-to-forecast" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="481.63,353.5077,491.1164,350.8605,485.4851,350.3236,486.022,344.6923,481.63,353.5077" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="74" x="515.06" y="302.8535">Lihat prediksi</text><!--MD5=[780505a888d57efa08625d19d603ee74]
+link petani to auth--><path d="M80.52,231.3877 C53.4,244.6277 6,273.2677 22.06,305.5977 C31.41,324.4177 48.62,339.4877 65.58,350.6777 " fill="none" id="petani-to-auth" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="69.88,353.4477,64.4597,345.2245,65.6699,350.7504,60.1441,351.9606,69.88,353.4477" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="31" x="23.06" y="302.8535">Login</text><!--MD5=[bc79615e11e01cdd9e07c4e9dde16725]
+link petani to dashboard--><path d="M86.06,260.7177 C83.43,276.4277 84.12,293.7877 95.06,305.5977 C110.81,322.6077 177.26,305.7177 199.06,313.5977 C221.12,321.5677 242.64,336.8477 258.64,350.1177 " fill="none" id="petani-to-dashboard" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="262.58,353.4377,258.2784,344.5778,258.7577,350.2143,253.1211,350.6936,262.58,353.4377" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="89" x="96.06" y="302.8535">Lihat monitoring</text><!--MD5=[26468ee00477665ad6c75b16e8a821ae]
+link petani to forecast--><path d="M115.6,225.8377 C171.98,233.2877 347.62,258.6377 394.06,290.5977 C414.82,304.8877 429.93,329.6277 439.19,348.5777 " fill="none" id="petani-to-forecast" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#383838" points="441.41,353.2577,441.1641,343.4119,439.2659,348.7407,433.937,346.8425,441.41,353.2577" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="12" lengthAdjust="spacing" textLength="74" x="411.06" y="302.8535">Lihat prediksi</text><!--MD5=[b6d142257f3de2acd76e3a9d2d182973]
+@startuml Arsitektur Sistem
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam componentStyle uml2
+
+title Arsitektur Sistem\nMonitoring Tanaman Jambu Kristal
+
+package "Perangkat IoT" {
+    [Mikrokontroler ESP32] as mcu
+    [Sensor Suhu dan\nKelembaban Udara] as s1
+    [Sensor Kelembaban\nTanah] as s2
+    [Sensor Intensitas\nCahaya] as s3
+}
+
+package "Server Aplikasi" {
+    [Modul Autentikasi] as auth
+    [Modul Penerimaan Data] as receiver
+    [Modul Dashboard] as dashboard
+    [Modul Prediksi] as forecast
+    [Modul Ekspor Data] as export
+    [Modul Notifikasi] as notifmod
+}
+
+package "Sistem Prediksi" {
+    [Model ARIMA] as arima
+}
+
+database "Basis Data" as db
+
+cloud "Layanan Notifikasi\n(Telegram)" as telegram
+
+actor "Admin" as admin
+actor "Petani" as petani
+
+' === Koneksi Sensor ===
+s1 - -> mcu
+s2 - -> mcu
+s3 - -> mcu
+
+' === Aliran Data ===
+mcu - -> receiver : Kirim data sensor
+receiver - -> db : Simpan data
+receiver - -> notifmod : Perubahan status
+notifmod - -> telegram : Kirim notifikasi
+
+dashboard - -> db : Ambil data
+export - -> db : Ambil data
+forecast - -> arima : Minta prediksi
+arima - -> db : Ambil data historis
+
+' === Interaksi Pengguna ===
+admin - -> auth : Login
+admin - -> dashboard : Lihat monitoring
+admin - -> export : Unduh data
+admin - -> forecast : Lihat prediksi
+
+petani - -> auth : Login
+petani - -> dashboard : Lihat monitoring
+petani - -> forecast : Lihat prediksi
+
+@enduml
+
+@startuml Arsitektur Sistem
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam componentStyle uml2
+
+title Arsitektur Sistem\nMonitoring Tanaman Jambu Kristal
+
+package "Perangkat IoT" {
+    [Mikrokontroler ESP32] as mcu
+    [Sensor Suhu dan\nKelembaban Udara] as s1
+    [Sensor Kelembaban\nTanah] as s2
+    [Sensor Intensitas\nCahaya] as s3
+}
+
+package "Server Aplikasi" {
+    [Modul Autentikasi] as auth
+    [Modul Penerimaan Data] as receiver
+    [Modul Dashboard] as dashboard
+    [Modul Prediksi] as forecast
+    [Modul Ekspor Data] as export
+    [Modul Notifikasi] as notifmod
+}
+
+package "Sistem Prediksi" {
+    [Model ARIMA] as arima
+}
+
+database "Basis Data" as db
+
+cloud "Layanan Notifikasi\n(Telegram)" as telegram
+
+actor "Admin" as admin
+actor "Petani" as petani
+
+s1 - -> mcu
+s2 - -> mcu
+s3 - -> mcu
+
+mcu - -> receiver : Kirim data sensor
+receiver - -> db : Simpan data
+receiver - -> notifmod : Perubahan status
+notifmod - -> telegram : Kirim notifikasi
+
+dashboard - -> db : Ambil data
+export - -> db : Ambil data
+forecast - -> arima : Minta prediksi
+arima - -> db : Ambil data historis
+
+admin - -> auth : Login
+admin - -> dashboard : Lihat monitoring
+admin - -> export : Unduh data
+admin - -> forecast : Lihat prediksi
+
+petani - -> auth : Login
+petani - -> dashboard : Lihat monitoring
+petani - -> forecast : Lihat prediksi
+
+@enduml
+
+PlantUML version 1.2021.00(Sun Jan 10 18:25:05 WITA 2021)
+(MIT source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: Cp1252
+Language: en
+Country: ID
+--></g></svg>

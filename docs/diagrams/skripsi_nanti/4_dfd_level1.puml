@@ -1,0 +1,52 @@
+@startuml DFD Level 1
+skinparam backgroundColor white
+skinparam defaultFontSize 11
+skinparam defaultFontName Arial
+
+title Data Flow Diagram Level 1\nSistem Monitoring Tanaman Jambu Kristal
+
+' === Entitas Luar ===
+rectangle "Admin" as user #LightBlue
+rectangle "Perangkat IoT" as iot #LightYellow
+rectangle "Sistem Notifikasi" as notif #LightGray
+
+' === Data Store ===
+database "D1: Data Sensor" as ds_sensor
+database "D2: Data Pengguna" as ds_users
+
+' === Proses ===
+usecase "P1\nAutentikasi" as p1 #LightGreen
+usecase "P2\nPenerimaan\nData Sensor" as p2 #LightGreen
+usecase "P3\nMonitoring\nData" as p3 #LightGreen
+usecase "P4\nPrediksi\nData Sensor" as p4 #LightGreen
+usecase "P5\nEkspor\nData" as p5 #LightGreen
+usecase "P6\nNotifikasi\nStatus" as p6 #LightGreen
+usecase "P7\nPengelolaan\nData" as p7 #LightGreen
+
+' === Aliran Data ===
+user --> p1 : Data login
+p1 --> ds_users : Verifikasi pengguna
+p1 --> user : Status autentikasi
+
+iot --> p2 : Data sensor
+p2 --> ds_sensor : Simpan data
+p2 --> p6 : Perubahan status
+
+user --> p3 : Permintaan data
+ds_sensor --> p3 : Data sensor
+p3 --> user : Informasi monitoring
+
+user --> p4 : Permintaan prediksi
+ds_sensor --> p4 : Data historis
+p4 --> user : Hasil prediksi
+
+user --> p5 : Permintaan ekspor
+ds_sensor --> p5 : Data sensor
+p5 --> user : Berkas ekspor
+
+p6 --> notif : Pesan notifikasi
+
+user --> p7 : Permintaan kelola data
+p7 --> ds_sensor : Hapus data
+
+@enduml

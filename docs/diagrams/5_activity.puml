@@ -1,0 +1,63 @@
+@startuml Activity Diagram
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+
+title Activity Diagram\nAlur Kerja Sistem Monitoring Tanaman Jambu Kristal
+
+|Perangkat IoT|
+start
+:Sensor membaca data\n(Suhu, Kelembaban Udara,\nKelembaban Tanah,\nIntensitas Cahaya);
+
+:Kirim data sensor\nke server;
+
+|Server Aplikasi|
+:Terima data sensor;
+
+if (Data valid?) then (Ya)
+else (Tidak)
+    :Tolak data;
+    stop
+endif
+
+:Tentukan status\nkelembaban tanah;
+
+if (Kelembaban tanah < 20%) then (Ya)
+    :Status = Kritis;
+elseif (Kelembaban tanah < 30%) then (Ya)
+    :Status = Perlu Penyiraman;
+else (Tidak)
+    :Status = Normal;
+endif
+
+:Simpan data sensor\nke basis data;
+
+:Periksa status sebelumnya;
+
+if (Status berubah?) then (Ya)
+    |Sistem Notifikasi|
+    :Kirim notifikasi\nperubahan status\nke Petani;
+    |Server Aplikasi|
+else (Tidak)
+endif
+
+|Admin / Petani|
+:Buka dashboard monitoring;
+
+:Lihat data sensor terkini;
+
+if (Ingin melihat prediksi?) then (Ya)
+    |Sistem Prediksi|
+    :Ambil data historis;
+    :Proses prediksi\ndengan metode ARIMA;
+    :Kirim hasil prediksi;
+    |Admin / Petani|
+    :Lihat hasil prediksi;
+else (Tidak)
+endif
+
+stop
+
+@enduml

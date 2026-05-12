@@ -1,0 +1,63 @@
+@startuml ERD
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam linetype ortho
+
+title Entity Relationship Diagram (ERD)\nBasis Data Monitoring Tanaman Jambu Kristal
+
+entity "Pengguna" as users {
+    * **id** : Integer <<PK>>
+    --
+    * nama : String
+    * email : String
+    * kata_sandi : String
+    * peran : String
+    tanggal_dibuat : Timestamp
+    tanggal_diperbarui : Timestamp
+}
+
+entity "Data Sensor" as sensor {
+    * **id** : Integer <<PK>>
+    --
+    * kelembaban_tanah : Desimal
+    * suhu : Desimal
+    * kelembaban_udara : Desimal
+    * intensitas_cahaya : Desimal
+    * status : String
+    * sumber : String
+    tanggal_dibuat : Timestamp
+    tanggal_diperbarui : Timestamp
+}
+
+entity "Sesi" as sessions {
+    * **id** : String <<PK>>
+    --
+    id_pengguna : Integer <<FK>>
+    alamat_ip : String
+    waktu_aktivitas_terakhir : Integer
+}
+
+note bottom of sensor
+    **Status:**
+    - Normal (kelembaban tanah >= 30%)
+    - Perlu Penyiraman (20% <= kelembaban tanah < 30%)
+    - Kritis (kelembaban tanah < 20%)
+
+    **Sumber:**
+    - "real" (data dari perangkat IoT)
+    - "dummy" (data simulasi)
+end note
+
+note bottom of users
+    **Peran:**
+    - Admin
+    - Petani
+end note
+
+' === Relasi ===
+users ||--o{ sessions : "memiliki"
+
+@enduml

@@ -1,0 +1,72 @@
+@startuml Class Diagram
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam classAttributeIconSize 0
+
+title Class Diagram\nSistem Monitoring Tanaman Jambu Kristal
+
+class Pengguna {
+    - id : Integer
+    - nama : String
+    - email : String
+    - kataSandi : String
+    - peran : String
+    --
+    + login() : Boolean
+    + logout() : void
+}
+
+class DataSensor {
+    - id : Integer
+    - kelembabanTanah : Desimal
+    - suhu : Desimal
+    - kelembabanUdara : Desimal
+    - intensitasCahaya : Desimal
+    - status : String
+    - sumber : String
+    - waktu : Timestamp
+    --
+    + simpanData() : void
+    + ambilData() : List
+    + hapusData() : void
+    + tentukanStatus() : String
+}
+
+class Prediksi {
+    - id : Integer
+    - dataSensor : List
+    - jumlahLangkah : Integer
+    - metode : String
+    --
+    + ambilDataHistoris() : List
+    + prosesPrediksi() : List
+    + tampilkanHasil() : void
+}
+
+class Notifikasi {
+    - id : Integer
+    - pesan : String
+    - tujuan : String
+    - statusBaru : String
+    - statusLama : String
+    --
+    + kirimNotifikasi() : void
+    + buatPesan() : String
+}
+
+' === Relasi ===
+Pengguna "1" --> "*" DataSensor : melihat / mengelola
+DataSensor "*" --> "1" Prediksi : dianalisis oleh
+DataSensor "1" --> "0..1" Notifikasi : memicu
+Pengguna "1" --> "*" Notifikasi : menerima
+
+note bottom of Pengguna
+    Peran:
+    - "Admin"
+    - "Petani"
+end note
+
+@enduml

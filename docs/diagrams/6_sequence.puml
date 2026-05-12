@@ -1,0 +1,71 @@
+@startuml Sequence Diagram
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+skinparam sequenceMessageAlign center
+
+title Sequence Diagram\nAlur Kerja Sistem Monitoring Tanaman Jambu Kristal
+
+actor "Perangkat IoT" as iot
+participant "Server\nAplikasi" as server
+database "Basis Data" as db
+participant "Sistem\nPrediksi" as ml
+participant "Sistem\nNotifikasi" as notif
+actor "Admin /\nPetani" as user
+
+== Pengiriman Data Sensor ==
+
+iot -> server : Kirim data sensor
+activate server
+
+server -> server : Validasi data
+server -> server : Tentukan status
+
+server -> db : Simpan data sensor
+activate db
+db --> server : Data tersimpan
+deactivate db
+
+server -> db : Ambil data sebelumnya
+activate db
+db --> server : Status sebelumnya
+deactivate db
+
+alt Status berubah
+    server -> notif : Kirim notifikasi
+    activate notif
+    notif --> server : Notifikasi terkirim
+    deactivate notif
+end
+
+server --> iot : Konfirmasi diterima
+deactivate server
+
+== Monitoring dan Prediksi ==
+
+user -> server : Minta data dashboard
+activate server
+server -> db : Ambil data sensor
+activate db
+db --> server : Data sensor
+deactivate db
+server --> user : Tampilkan data monitoring
+deactivate server
+
+user -> server : Minta prediksi
+activate server
+server -> ml : Minta proses prediksi
+activate ml
+ml -> db : Ambil data historis
+activate db
+db --> ml : Data historis
+deactivate db
+ml -> ml : Proses prediksi ARIMA
+ml --> server : Hasil prediksi
+deactivate ml
+server --> user : Tampilkan hasil prediksi
+deactivate server
+
+@enduml

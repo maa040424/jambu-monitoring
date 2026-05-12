@@ -1,0 +1,47 @@
+@startuml Deployment Diagram
+skinparam backgroundColor white
+skinparam defaultFontSize 12
+skinparam defaultFontName Arial
+
+title Deployment Diagram — Monitoring Tanaman Jambu Kristal
+
+node "Perangkat IoT" as iot_node #LightYellow {
+    artifact "Mikrokontroler" as mcu
+    component "Sensor Suhu &\nKelembaban Udara" as s1
+    component "Sensor Kelembaban\nTanah" as s2
+    component "Sensor Intensitas\nCahaya" as s3
+}
+
+node "Server Aplikasi" as app_server #LightBlue {
+    artifact "Aplikasi Web" as web_app {
+        component "Modul Dashboard" as mod_dash
+        component "Modul Penerimaan Data" as mod_recv
+        component "Modul Notifikasi" as mod_notif
+    }
+    artifact "Sistem Prediksi" as ml_app {
+        component "Model ARIMA" as mod_arima
+    }
+}
+
+database "Server Basis Data" as db_server #LightGreen {
+    storage "Basis Data Monitoring" as db_name {
+        collections "Data Sensor" as tbl_sensor
+        collections "Data Pengguna" as tbl_users
+    }
+}
+
+cloud "Layanan Notifikasi\n(Telegram)" as tele_cloud #LightGray
+
+node "Klien" as client #White {
+    artifact "Peramban Web\n(Browser)" as browser
+}
+
+' === Koneksi ===
+mcu --> mod_recv : Kirim data sensor\n(Internet)
+browser --> mod_dash : Akses sistem\n(Internet)
+mod_recv --> db_server : Simpan data
+mod_dash --> db_server : Ambil data
+mod_arima --> db_server : Ambil data historis
+mod_notif --> tele_cloud : Kirim notifikasi
+
+@enduml

@@ -1,0 +1,45 @@
+@startuml Flowchart
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+
+title Flowchart\nProses Penerimaan dan Pengolahan Data Sensor
+
+start
+
+:Sensor membaca data\n(suhu, kelembaban udara,\nkelembaban tanah,\nintensitas cahaya);
+
+:Perangkat IoT mengirim\ndata ke server;
+
+:Server menerima data;
+
+if (Data valid?) then (Ya)
+else (Tidak)
+    :Tampilkan\npesan kesalahan;
+    stop
+endif
+
+if (Kelembaban tanah\n< 20%?) then (Ya)
+    :Status = **Kritis**;
+elseif (Kelembaban tanah\n< 30%?) then (Ya)
+    :Status = **Perlu Penyiraman**;
+else (Tidak)
+    :Status = **Normal**;
+endif
+
+:Simpan data sensor dan\nstatus ke basis data;
+
+:Ambil status data\nsebelumnya;
+
+if (Status berubah?) then (Ya)
+    :Kirim notifikasi\nke Petani melalui\nSistem Notifikasi;
+else (Tidak)
+endif
+
+:Data tersedia di\ndashboard untuk\nAdmin dan Petani;
+
+stop
+
+@enduml

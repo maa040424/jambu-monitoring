@@ -1,0 +1,29 @@
+@startuml DFD Level 0
+skinparam monochrome true
+skinparam shadowing false
+skinparam backgroundColor white
+skinparam defaultFontName Arial
+skinparam defaultFontSize 12
+
+title Data Flow Diagram Level 0 (Context Diagram)\nSistem Monitoring Tanaman Jambu Kristal
+
+rectangle "Admin" as admin
+rectangle "Petani" as petani
+rectangle "Perangkat IoT" as iot
+rectangle "Sistem Notifikasi" as notif
+
+usecase "Sistem Monitoring\nTanaman Jambu\nKristal" as sistem
+
+iot -right-> sistem : Data Sensor
+
+admin -down-> sistem : Permintaan Data,\nLogin, Kelola Data
+
+sistem -up-> admin : Informasi Dashboard,\nData Sensor,\nHasil Prediksi,\nBerkas Ekspor
+
+petani -down-> sistem : Permintaan Data,\nLogin
+
+sistem -up-> petani : Informasi Dashboard,\nData Sensor,\nHasil Prediksi
+
+sistem -right-> notif : Pesan Notifikasi\nPerubahan Status
+
+@enduml

@@ -1,0 +1,43 @@
+@startuml Flowchart - Proses Prediksi
+skinparam backgroundColor white
+skinparam defaultFontSize 12
+skinparam defaultFontName Arial
+
+title Flowchart — Proses Prediksi Data Sensor (ARIMA)
+
+start
+
+:Admin membuka\nhalaman prediksi;
+
+:Sistem meminta\ndata prediksi;
+
+:Ambil data historis\nsensor dari basis data;
+
+if (Data tersedia?) then (Ya)
+else (Tidak)
+    :Tampilkan pesan\n"Data tidak ditemukan";
+    stop
+endif
+
+:Hitung interval waktu\nrata-rata antar data;
+
+repeat :Proses setiap sensor\n(Kelembaban Tanah, Suhu,\nKelembaban Udara,\nIntensitas Cahaya);
+
+    if (Jumlah data\nmencukupi?) then (Ya)
+        :Proses prediksi\ndengan metode\nARIMA;
+    else (Tidak)
+        :Gunakan nilai\nterakhir sebagai\nperkiraan;
+    endif
+
+    :Batasi hasil prediksi\nke rentang wajar;
+
+repeat while (Masih ada sensor\nyang belum diproses?) is (Ya)
+-> Tidak;
+
+:Gabungkan hasil prediksi\nsemua sensor;
+
+:Tampilkan grafik\ndata aktual dan\nhasil prediksi;
+
+stop
+
+@enduml
