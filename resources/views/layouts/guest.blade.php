@@ -292,7 +292,7 @@
                 <div class="login-brand">
                     <div class="mascot-wrap">
                         <video autoplay loop muted playsinline>
-                            <source src="{{ asset('img/maskot.mp4') }}" type="video/mp4">
+                            <source src="{{ asset('img/maskot_.mp4') }}" type="video/mp4">
                         </video>
                     </div>
                     <h1>Monitoring Kebun Jambu Kristal</h1>
