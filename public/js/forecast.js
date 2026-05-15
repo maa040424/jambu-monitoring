@@ -4,6 +4,7 @@
  */
 
 let currentForecastMode = window.INITIAL_MODE || 'dummy';
+let currentForecastHours = 4; // default 4 jam ke depan
 let chartForecastMoisture = null;
 let chartForecastTemp = null;
 let chartForecastHumidity = null;
@@ -58,6 +59,38 @@ function hideArimaOverlay(callback) {
     }, remaining);
 }
 
+/* ─── Hour Selector ─────────────────────────────────── */
+function selectForecastHours(hours) {
+    if (hours === currentForecastHours) return;
+    currentForecastHours = hours;
+
+    // Update active button with animation
+    const buttons = document.querySelectorAll('.hour-btn');
+    buttons.forEach(btn => {
+        btn.classList.remove('active', 'ripple');
+        if (parseInt(btn.dataset.hours) === hours) {
+            btn.classList.add('active', 'ripple');
+            // Remove ripple class after animation
+            setTimeout(() => btn.classList.remove('ripple'), 400);
+        }
+    });
+
+    // Update info text
+    const steps = getStepsForHours(hours);
+    const infoEl = document.getElementById('forecast-steps-info');
+    if (infoEl) {
+        infoEl.textContent = `≈ ${steps} langkah prediksi`;
+    }
+
+    // Re-fetch forecast with new steps
+    fetchForecast(true);
+}
+
+function getStepsForHours(hours) {
+    // Asumsi interval data ~10 menit, jadi 1 jam = 6 steps
+    return hours * 6;
+}
+
 /* ─── Boot ─────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
     applyTheme(getTheme());
@@ -109,12 +142,17 @@ async function fetchForecast(forceRefresh = false) {
         loading.innerHTML = '<div class="spinner-border text-primary border-0 mb-3" style="width:3rem;height:3rem;border-width:0.25rem!important;" role="status"></div>'
             + '<div class="fw-semibold">Sedang menghitung prediksi dengan model Machine Learning...</div>'
             + '<small>Ini mungkin memakan waktu beberapa saat tergantung jumlah data.</small>';
-        chartWrappers.forEach(el => el.classList.add('d-none'));
+        chartWrappers.forEach(el => {
+            el.classList.add('d-none');
+            el.classList.remove('chart-visible');
+        });
         tableContainer.classList.add('d-none');
     }
 
+    const steps = getStepsForHours(currentForecastHours);
+
     try {
-        const res = await fetch(`/api/forecast?source=${currentForecastMode}`);
+        const res = await fetch(`/api/forecast?source=${currentForecastMode}&steps=${steps}`);
 
         let data;
         try { data = await res.json(); } catch (e) { data = null; }
@@ -129,7 +167,10 @@ async function fetchForecast(forceRefresh = false) {
                 loading.classList.add('d-none');
 
                 // Sembunyikan semua wrapper dulu, munculkan staggered
-                chartWrappers.forEach(el => el.classList.add('d-none'));
+                chartWrappers.forEach(el => {
+                    el.classList.add('d-none');
+                    el.classList.remove('chart-visible');
+                });
                 tableContainer.classList.add('d-none');
 
                 renderForecastChartsStaggered(data, () => {
@@ -158,6 +199,7 @@ async function fetchForecast(forceRefresh = false) {
 
         // Tunggu minimum 3 detik, tampilkan error di loading area
         hideArimaOverlay(() => {
+            loading.classList.remove('d-none');
             loading.innerHTML = `<div class="text-danger"><i class="bi bi-exclamation-triangle-fill fs-3 mb-2 d-block"></i>Gagal memuat prediksi ARIMA.</div>`
                 + `<div class="alert alert-warning d-inline-block mt-2 text-start small border border-warning-subtle shadow-sm">${err.message}</div>`;
         });
@@ -215,7 +257,7 @@ function renderForecastChartsStaggered(data, onAllDone) {
 
     actual.forEach(d => {
         const dt = new Date(d.time);
-        allLabels.push(dt.toLocaleString('id-ID', { hour: '2-digit', minute: '2-digit' }));
+        allLabels.push(dt.toLocaleString('id-ID', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }));
         actualMoisture.push(d.soil_moisture);
         actualTemp.push(d.temperature);
         actualHumidity.push(d.humidity);
@@ -237,7 +279,7 @@ function renderForecastChartsStaggered(data, onAllDone) {
 
     forecast.forEach(d => {
         const dt = new Date(d.time);
-        allLabels.push(dt.toLocaleString('id-ID', { hour: '2-digit', minute: '2-digit' }));
+        allLabels.push(dt.toLocaleString('id-ID', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }));
         actualMoisture.push(null);
         actualTemp.push(null);
         actualHumidity.push(null);
@@ -251,7 +293,6 @@ function renderForecastChartsStaggered(data, onAllDone) {
 
 
     // Definisi 4 chart yang akan dimunculkan berurutan
-
     const chartQueue = [
         {
             wrapperId : 'wrapper-moisture',
@@ -303,46 +344,63 @@ function renderForecastChartsStaggered(data, onAllDone) {
      */
     function buildChart(cfg) {
         if (cfg.oldChart) cfg.oldChart.destroy();
+
+        // Annotation: vertical line at forecast start
+        const forecastStartIndex = actual.length - 1;
+
         const chart = new Chart(document.getElementById(cfg.canvasId), {
             type: 'line',
             data: {
                 labels: allLabels,
                 datasets: [
                     {
-                        label: 'Aktual',
+                        label: 'Aktual (Historis)',
                         data: cfg.actual,
                         borderColor: cfg.color,
-                        borderWidth: 2,
-                        pointRadius: 1,
-                        tension: 0.4
+                        backgroundColor: cfg.color + '18',
+                        borderWidth: 2.5,
+                        pointRadius: 2,
+                        pointHoverRadius: 5,
+                        tension: 0.4,
+                        fill: true,
                     },
                     {
-                        label: 'Prediksi (ARIMA)',
+                        label: `Prediksi ${currentForecastHours} Jam Ke Depan`,
                         data: cfg.predicted,
                         borderColor: cfg.color,
-                        borderWidth: 2,
-                        borderDash: [5, 5],
-                        pointRadius: 1,
+                        backgroundColor: cfg.color + '0a',
+                        borderWidth: 2.5,
+                        borderDash: [6, 4],
+                        pointRadius: 2,
+                        pointHoverRadius: 5,
+                        pointStyle: 'triangle',
                         tension: 0.4,
-                        segment: {
-                            borderColor: ctx => ctx.p0DataIndex >= actual.length - 1 ? cfg.color : 'transparent'
-                        }
+                        fill: true,
                     }
                 ]
             },
             options: {
                 responsive: true, maintainAspectRatio: false,
-                animation: { duration: 900, easing: 'easeInOutQuart' },
+                animation: { duration: 1000, easing: 'easeInOutQuart' },
                 interaction: { mode: 'index', intersect: false },
                 plugins: {
-                    legend: { labels: { color: tc.legend } },
+                    legend: { labels: { color: tc.legend, usePointStyle: true, padding: 16 } },
                     tooltip: {
                         backgroundColor: tc.tooltipBg, titleColor: tc.tooltipTitle,
-                        bodyColor: tc.tooltipBody, borderColor: tc.tooltipBorder, borderWidth: 1
+                        bodyColor: tc.tooltipBody, borderColor: tc.tooltipBorder, borderWidth: 1,
+                        callbacks: {
+                            title: function(items) {
+                                const idx = items[0].dataIndex;
+                                if (idx >= forecastStartIndex) {
+                                    return '🔮 ' + items[0].label + ' (Prediksi)';
+                                }
+                                return '📊 ' + items[0].label + ' (Aktual)';
+                            }
+                        }
                     }
                 },
                 scales: {
-                    x: { ticks: { color: tc.tick, maxRotation: 45 }, grid: { color: tc.grid } },
+                    x: { ticks: { color: tc.tick, maxRotation: 45, font: { size: 10 } }, grid: { color: tc.grid } },
                     y: { ticks: { color: tc.tick }, grid: { color: tc.grid } }
                 }
             }
@@ -412,24 +470,41 @@ function renderForecastTable(forecast) {
     const tbody = document.getElementById('forecast-table-body');
     if (!tbody || !forecast) return;
 
-    tbody.innerHTML = forecast.map(d => {
+    tbody.innerHTML = forecast.map((d, i) => {
         const dt = new Date(d.time);
         const timeStr = dt.toLocaleString('id-ID', {
             day: '2-digit', month: 'short', year: 'numeric',
             hour: '2-digit', minute: '2-digit'
         });
 
-        return `<tr>
-            <td class="text-nowrap">${timeStr}</td>
+        // Stagger animation delay per row
+        const delay = i * 30;
+
+        return `<tr style="animation: table-row-in 0.3s ease ${delay}ms both;">
+            <td class="text-nowrap"><span class="badge bg-success-subtle text-success-emphasis me-1">+${i + 1}</span>${timeStr}</td>
             <td>${parseFloat(d.soil_moisture).toFixed(1)}%</td>
             <td>${parseFloat(d.temperature).toFixed(1)}°C</td>
             <td>${parseFloat(d.humidity).toFixed(1)}%</td>
             <td>${parseFloat(d.light_intensity).toFixed(0)} lux</td>
         </tr>`;
     }).join('');
+
+    // Inject table row animation if not exists
+    if (!document.getElementById('table-row-css')) {
+        const style = document.createElement('style');
+        style.id = 'table-row-css';
+        style.textContent = `
+            @keyframes table-row-in {
+                from { opacity: 0; transform: translateX(-10px); }
+                to   { opacity: 1; transform: translateX(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
 }
 
 /* ─── Export PDF ────────────────────────────────────── */
 function exportForecastPdf() {
-    window.location.href = `/export-forecast-pdf?source=${currentForecastMode}`;
+    const steps = getStepsForHours(currentForecastHours);
+    window.location.href = `/export-forecast-pdf?source=${currentForecastMode}&steps=${steps}`;
 }

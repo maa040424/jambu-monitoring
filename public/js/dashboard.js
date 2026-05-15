@@ -217,22 +217,77 @@ async function fetchSensorData() {
     }
 }
 
-// ── Update Stat Cards ────────────────────────────────────
+// ── Update Stat Cards with smooth animation ─────────────
 function updateStatCards(data) {
     if (!data || data.length === 0) {
-        DOM.valMoisture().textContent = '--';
-        DOM.valTemp().textContent = '--';
-        DOM.valHumidity().textContent = '--';
-        DOM.valLight().textContent = '--';
+        animateValue(DOM.valMoisture(), '--');
+        animateValue(DOM.valTemp(), '--');
+        animateValue(DOM.valHumidity(), '--');
+        animateValue(DOM.valLight(), '--');
         return;
     }
 
     const latest = data[0]; // latest() returns newest first
 
-    DOM.valMoisture().textContent = parseFloat(latest.soil_moisture).toFixed(1);
-    DOM.valTemp().textContent = parseFloat(latest.temperature).toFixed(1);
-    DOM.valHumidity().textContent = parseFloat(latest.humidity).toFixed(1);
-    DOM.valLight().textContent = parseFloat(latest.light_intensity).toFixed(0);
+    animateValue(DOM.valMoisture(), parseFloat(latest.soil_moisture).toFixed(1));
+    animateValue(DOM.valTemp(), parseFloat(latest.temperature).toFixed(1));
+    animateValue(DOM.valHumidity(), parseFloat(latest.humidity).toFixed(1));
+    animateValue(DOM.valLight(), parseFloat(latest.light_intensity).toFixed(0));
+}
+
+/**
+ * Animate stat card value change with counting + pulse effect
+ */
+function animateValue(element, newValue) {
+    if (!element) return;
+
+    const oldValue = element.textContent;
+    if (oldValue === newValue) return; // no change, skip animation
+
+    const oldNum = parseFloat(oldValue);
+    const newNum = parseFloat(newValue);
+
+    // If both are numbers, do counting animation
+    if (!isNaN(oldNum) && !isNaN(newNum)) {
+        const duration = 600; // ms
+        const startTime = performance.now();
+        const decimals = newValue.includes('.') ? newValue.split('.')[1].length : 0;
+
+        // Add pulse class to parent card
+        const card = element.closest('.stat-card');
+        if (card) {
+            card.classList.add('stat-updating');
+            setTimeout(() => card.classList.remove('stat-updating'), duration + 100);
+        }
+
+        function step(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+
+            // Ease out cubic
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = oldNum + (newNum - oldNum) * eased;
+
+            element.textContent = current.toFixed(decimals);
+
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            } else {
+                element.textContent = newValue;
+            }
+        }
+
+        requestAnimationFrame(step);
+    } else {
+        // Non-numeric, just swap with fade
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(5px)';
+        setTimeout(() => {
+            element.textContent = newValue;
+            element.style.opacity = '1';
+            element.style.transform = 'translateY(0)';
+        }, 150);
+    }
 }
 
 // ── Update Status & Warning ──────────────────────────────

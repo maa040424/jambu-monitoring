@@ -186,8 +186,93 @@
 </div>
 
 <div class="alert alert-info border-0 shadow-sm mb-4">
-    <i class="bi bi-info-circle-fill me-2"></i> Prediksi di bawah ini menggunakan Model <strong>ARIMA (AutoRegressive Integrated Moving Average)</strong>. Sistem akan mencoba memperkirakan kondisi 24 langkah (sekitar 4 jam) ke depan berdasarkan urutan data historis terbaru.
+    <i class="bi bi-info-circle-fill me-2"></i> Prediksi di bawah ini menggunakan Model <strong>ARIMA (AutoRegressive Integrated Moving Average)</strong>. Sistem akan memperkirakan kondisi beberapa jam <strong>ke depan</strong> berdasarkan data historis terbaru.
 </div>
+
+{{-- Hour Selector --}}
+<div class="card mb-4" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px;">
+    <div class="card-body py-3">
+        <div class="d-flex flex-wrap align-items-center gap-3">
+            <label class="form-label small fw-semibold text-uppercase text-muted mb-0">
+                <i class="bi bi-clock-history me-1"></i>Prediksi Ke Depan
+            </label>
+            <div class="forecast-hour-selector" id="forecast-hour-selector">
+                <button type="button" class="hour-btn" data-hours="1" onclick="selectForecastHours(1)">1 Jam</button>
+                <button type="button" class="hour-btn" data-hours="2" onclick="selectForecastHours(2)">2 Jam</button>
+                <button type="button" class="hour-btn" data-hours="3" onclick="selectForecastHours(3)">3 Jam</button>
+                <button type="button" class="hour-btn active" data-hours="4" onclick="selectForecastHours(4)">4 Jam</button>
+                <button type="button" class="hour-btn" data-hours="5" onclick="selectForecastHours(5)">5 Jam</button>
+                <button type="button" class="hour-btn" data-hours="6" onclick="selectForecastHours(6)">6 Jam</button>
+            </div>
+            <span class="text-muted small" id="forecast-steps-info">≈ 24 langkah prediksi</span>
+        </div>
+    </div>
+</div>
+
+<style>
+.forecast-hour-selector {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+}
+
+.hour-btn {
+    padding: 0.4rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.hour-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(16, 185, 129, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.hour-btn:hover {
+    border-color: var(--green-500);
+    color: var(--green-400);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15);
+}
+
+.hour-btn:hover::before {
+    opacity: 1;
+}
+
+.hour-btn.active {
+    background: linear-gradient(135deg, #10b981, #059669);
+    border-color: #059669;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+    transform: translateY(-2px) scale(1.05);
+}
+
+.hour-btn.active::before {
+    opacity: 0;
+}
+
+/* Ripple effect on click */
+.hour-btn.ripple {
+    animation: btn-ripple 0.4s ease-out;
+}
+
+@keyframes btn-ripple {
+    0% { transform: translateY(-2px) scale(1.05); }
+    50% { transform: translateY(-2px) scale(0.95); }
+    100% { transform: translateY(-2px) scale(1.05); }
+}
+</style>
 
 <div class="row g-3 mb-4" id="forecast-charts-container">
     <div class="col-12 text-center py-5 text-muted" id="forecast-loading">
