@@ -35,15 +35,19 @@ FORECAST_STEPS = 24  # predict 24 steps ahead
 
 
 def get_sensor_data(source='dummy', limit=500):
-    """Fetch sensor data from MySQL."""
+    """Fetch sensor data from MySQL — ambil data TERBARU."""
     conn = pymysql.connect(**DB_CONFIG)
     try:
+        # Subquery: ambil N data terbaru, lalu urutkan ASC untuk ARIMA
         query = """
-            SELECT created_at, soil_moisture, temperature, humidity, light_intensity
-            FROM sensor_data
-            WHERE source = %s
+            SELECT * FROM (
+                SELECT created_at, soil_moisture, temperature, humidity, light_intensity
+                FROM sensor_data
+                WHERE source = %s
+                ORDER BY created_at DESC
+                LIMIT %s
+            ) AS recent
             ORDER BY created_at ASC
-            LIMIT %s
         """
         df = pd.read_sql(query, conn, params=[source, limit])
         return df
