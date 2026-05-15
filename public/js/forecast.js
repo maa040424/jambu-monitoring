@@ -76,19 +76,13 @@ function selectForecastHours(hours) {
     });
 
     // Update info text
-    const steps = getStepsForHours(hours);
     const infoEl = document.getElementById('forecast-steps-info');
     if (infoEl) {
-        infoEl.textContent = `≈ ${steps} langkah prediksi`;
+        infoEl.textContent = `Prediksi ${hours} jam ke depan dari data terakhir`;
     }
 
-    // Re-fetch forecast with new steps
+    // Re-fetch forecast with new hours
     fetchForecast(true);
-}
-
-function getStepsForHours(hours) {
-    // Asumsi interval data ~10 menit, jadi 1 jam = 6 steps
-    return hours * 6;
 }
 
 /* ─── Boot ─────────────────────────────────────────── */
@@ -149,10 +143,8 @@ async function fetchForecast(forceRefresh = false) {
         tableContainer.classList.add('d-none');
     }
 
-    const steps = getStepsForHours(currentForecastHours);
-
     try {
-        const res = await fetch(`/api/forecast?source=${currentForecastMode}&steps=${steps}`);
+        const res = await fetch(`/api/forecast?source=${currentForecastMode}&hours=${currentForecastHours}`);
 
         let data;
         try { data = await res.json(); } catch (e) { data = null; }
@@ -505,6 +497,5 @@ function renderForecastTable(forecast) {
 
 /* ─── Export PDF ────────────────────────────────────── */
 function exportForecastPdf() {
-    const steps = getStepsForHours(currentForecastHours);
-    window.location.href = `/export-forecast-pdf?source=${currentForecastMode}&steps=${steps}`;
+    window.location.href = `/export-forecast-pdf?source=${currentForecastMode}&hours=${currentForecastHours}`;
 }

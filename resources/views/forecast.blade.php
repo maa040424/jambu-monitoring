@@ -204,7 +204,7 @@
                 <button type="button" class="hour-btn" data-hours="5" onclick="selectForecastHours(5)">5 Jam</button>
                 <button type="button" class="hour-btn" data-hours="6" onclick="selectForecastHours(6)">6 Jam</button>
             </div>
-            <span class="text-muted small" id="forecast-steps-info">≈ 24 langkah prediksi</span>
+            <span class="text-muted small" id="forecast-steps-info">Prediksi 4 jam ke depan dari data terakhir</span>
         </div>
     </div>
 </div>

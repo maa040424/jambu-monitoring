@@ -18,18 +18,18 @@ class MLService
      * Ambil prediksi ARIMA dari service ML Python.
      *
      * @param string $source  Mode data ('dummy' atau 'real')
-     * @param int    $steps   Jumlah langkah prediksi
+     * @param int    $hours   Jumlah jam prediksi ke depan
      * @param int    $limit   Jumlah data historis untuk training
      * @return array|null
      */
-    public function getForecast(string $source = 'dummy', int $steps = 24, int $limit = 500): ?array
+    public function getForecast(string $source = 'dummy', int $hours = 4, int $limit = 500): ?array
     {
         try {
             $response = Http::connectTimeout(5)
-                ->timeout(15)
+                ->timeout(30)
                 ->get("{$this->baseUrl}/predict", [
                     'source' => $source,
-                    'steps'  => $steps,
+                    'hours'  => $hours,
                     'limit'  => $limit,
                 ]);
 

@@ -104,10 +104,12 @@ def predict():
 
     Query params:
         source: 'dummy' or 'real' (default: 'dummy')
-        steps:  number of forecast steps (default: 24)
+        hours:  number of hours to forecast ahead (default: 4)
+        steps:  number of forecast steps (legacy, overridden by hours if provided)
         limit:  max data points to use (default: 500)
     """
     source = request.args.get('source', 'dummy')
+    hours = request.args.get('hours', None)
     steps = int(request.args.get('steps', FORECAST_STEPS))
     limit = int(request.args.get('limit', 500))
 
@@ -126,6 +128,16 @@ def predict():
         avg_interval = (df['created_at'].diff().dropna().mean())
     else:
         avg_interval = timedelta(minutes=10)
+
+    # If hours is provided, calculate steps based on actual data interval
+    if hours is not None:
+        hours = int(hours)
+        target_duration = timedelta(hours=hours)
+        # Calculate how many steps needed to cover the target duration
+        interval_seconds = max(avg_interval.total_seconds(), 1)  # avoid division by zero
+        steps = max(6, int(target_duration.total_seconds() / interval_seconds))
+        # Cap at 360 steps (reasonable limit)
+        steps = min(steps, 360)
 
     last_time = df['created_at'].iloc[-1]
 

@@ -21,10 +21,10 @@ class ForecastController extends Controller
     public function index(Request $request)
     {
         $source = $request->query('source', 'dummy');
-        $steps = $request->query('steps', 24);
+        $hours = $request->query('hours', 4);
         $limit = $request->query('limit', 500);
 
-        $forecastData = $this->mlService->getForecast($source, (int) $steps, (int) $limit);
+        $forecastData = $this->mlService->getForecast($source, (int) $hours, (int) $limit);
 
         if (!$forecastData) {
             return response()->json([
