@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Monitoring Kebun Jambu Kristal — IoT Dashboard</title>
-    <meta name="description" content="Sistem monitoring cerdas untuk kebun jambu kristal menggunakan sensor IoT dan prediksi ARIMA Machine Learning.">
+    <title>Sistem IoT Monitoring & Prediksi Kebun Jambu Kristal — ARIMA</title>
+    <meta name="description" content="Perancangan Sistem IoT untuk Monitoring dan Prediksi Kondisi Lingkungan pada Kebun Jambu Kristal Menggunakan Metode ARIMA.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -298,6 +298,100 @@
             line-height: 1.3;
         }
 
+        /* ── Location Section ── */
+        .location-section {
+            margin-top: 1.25rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .location-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.65rem;
+        }
+
+        .location-header i {
+            color: #4ade80;
+            font-size: 0.85rem;
+        }
+
+        .location-header span {
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .location-card {
+            display: flex;
+            gap: 0.75rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px;
+            padding: 0.7rem;
+            transition: all 0.25s ease;
+        }
+
+        .location-card:hover {
+            background: rgba(34,197,94,0.04);
+            border-color: rgba(34,197,94,0.15);
+        }
+
+        .location-map {
+            width: 90px;
+            height: 70px;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .location-map iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            filter: brightness(0.85) contrast(1.1) saturate(0.8);
+        }
+
+        .location-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+        }
+
+        .location-name {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-bottom: 0.15rem;
+        }
+
+        .location-address {
+            font-size: 0.65rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        .location-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.62rem;
+            color: #4ade80;
+            text-decoration: none;
+            margin-top: 0.3rem;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .location-link:hover {
+            color: #86efac;
+        }
+
         .hero-footer {
             margin-top: auto;
             padding-top: 1rem;
@@ -379,6 +473,11 @@
 
             .img-caption { font-size: 0.62rem; padding: 0.3rem 0.8rem; bottom: 0.6rem; }
             .hero-footer { display: none; }
+
+            .location-section { margin-top: 0.75rem; padding-top: 0.75rem; }
+            .location-map { width: 70px; height: 55px; }
+            .location-name { font-size: 0.72rem; }
+            .location-address { font-size: 0.6rem; }
         }
 
         /* ═══════════════════════════════════════════════════════
@@ -395,6 +494,8 @@
 
             .btn-cta { font-size: 0.77rem; padding: 0.55rem 0.9rem; }
             .stat-value { font-size: 0.9rem; }
+
+            .location-section { display: none; }
         }
 
         /* ═══════════════════════════════════════════════════════
@@ -433,12 +534,12 @@
                 IoT Live Monitoring
             </div>
 
-            <h1>Monitoring Kebun<br>Jambu Kristal</h1>
+            <h1>Monitoring & Prediksi<br>Kebun Jambu Kristal</h1>
 
             <p class="subtitle">
-                Sistem monitoring <strong>cerdas</strong> untuk memantau kondisi kebun
-                secara <strong>real-time</strong> menggunakan sensor IoT dan prediksi
-                <strong>Machine Learning ARIMA</strong>
+                Perancangan Sistem <strong>IoT</strong> untuk Monitoring dan Prediksi
+                Kondisi Lingkungan pada Kebun Jambu Kristal Menggunakan
+                Metode <strong>ARIMA</strong>
             </p>
 
             <div class="feature-pills">
@@ -476,6 +577,31 @@
                 </div>
             </div>
 
+            {{-- ── Lokasi Penelitian ── --}}
+            <div class="location-section">
+                <div class="location-header">
+                    <i class="bi bi-pin-map-fill"></i>
+                    <span>Lokasi Penelitian</span>
+                </div>
+                <div class="location-card">
+                    <div class="location-map">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2104!2d115.4073503!3d-2.1741447!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dfab30061acd2c5%3A0x181dcd3babd88c94!2sKebun%20Jambu%20Kristal!5e1!3m2!1sid!2sid!4v1747418183000"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                        ></iframe>
+                    </div>
+                    <div class="location-info">
+                        <div class="location-name">Kebun Jambu Kristal</div>
+                        <div class="location-address">Kalimantan Selatan, Indonesia</div>
+                        <a href="https://maps.app.goo.gl/TXwvWkUy4rXxhVdj7" target="_blank" class="location-link">
+                            <i class="bi bi-box-arrow-up-right"></i> Lihat di Google Maps
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <p class="hero-footer">
                 &copy; {{ date('Y') }} Monitoring Kebun Jambu Kristal &mdash; Skripsi IoT + Machine Learning
             </p>
@@ -491,7 +617,7 @@
             >
             <div class="img-caption">
                 <i class="bi bi-geo-alt-fill"></i>
-                Kebun Jambu Kristal — Lokasi Monitoring
+                Kebun Jambu Kristal — Kalimantan Selatan
             </div>
         </div>
 

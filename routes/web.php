@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
     // Semua user (admin + petani) bisa akses
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/forecast', [ForecastController::class, 'index'])->name('forecast');
+    Route::get('/profil-kebun', function () { return view('profil-kebun'); })->name('profil.kebun');
 
     // Ubah password (semua user)
     Route::get('/change-password', [ChangePasswordController::class, 'edit'])->name('password.edit');
