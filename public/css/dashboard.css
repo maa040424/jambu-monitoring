@@ -1106,3 +1106,29 @@ body.light-mode .mode-badge-real {
         font-size: 0.65rem;
     }
 }
+
+/* ── Table Custom Overrides for Light/Dark Mode ── */
+.table {
+    --bs-table-bg: transparent !important;
+    --bs-table-hover-bg: rgba(255, 255, 255, 0.04) !important;
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.02) !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.light-mode .table {
+    --bs-table-hover-bg: rgba(0, 0, 0, 0.03) !important;
+    --bs-table-striped-bg: rgba(0, 0, 0, 0.01) !important;
+}
+
+.table th {
+    color: var(--text-primary) !important;
+    font-weight: 600;
+    border-bottom-width: 1px !important;
+    background-color: transparent !important;
+}
+
+.table td {
+    color: var(--text-secondary) !important;
+    background-color: transparent !important;
+}

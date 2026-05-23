@@ -8,11 +8,15 @@
 ════════════════════════════════════════════════════ --}}
 <div id="arima-overlay" class="arima-overlay" style="display:none;">
     <div class="arima-overlay-inner">
-        {{-- Video ARIMA animation --}}
-        <div class="arima-video-wrap">
-            <video id="arima-loading-video" autoplay loop muted playsinline>
-                <source src="{{ asset('img/ARIMA_animation.mp4') }}" type="video/mp4">
-            </video>
+        {{-- Lottie ARIMA animation ── --}}
+        <div class="arima-video-wrap d-flex align-items-center justify-content-center">
+            <lottie-player
+                src="{{ asset('img/ARIMA_animation.json') }}"
+                background="transparent"
+                speed="1.2"
+                loop autoplay
+                style="width: 100%; height: 100%;">
+            </lottie-player>
         </div>
 
         {{-- Teks status --}}
@@ -276,9 +280,15 @@
 
 <div class="row g-3 mb-4" id="forecast-charts-container">
     <div class="col-12 text-center py-5 text-muted" id="forecast-loading">
-        <video autoplay loop muted playsinline style="width: 120px; height: 120px; border-radius: 50%; margin-bottom: 1rem; object-fit: cover;">
-            <source src="{{ asset('img/ARIMA_animation.mp4') }}" type="video/mp4">
-        </video>
+        <div class="d-flex justify-content-center mb-3">
+            <lottie-player
+                src="{{ asset('img/ARIMA_animation.json') }}"
+                background="transparent"
+                speed="1.2"
+                loop autoplay
+                style="width: 120px; height: 120px;">
+            </lottie-player>
+        </div>
         <div class="fw-semibold">Sedang menghitung prediksi dengan model Machine Learning...</div>
         <small>Ini mungkin memakan waktu beberapa saat tergantung jumlah data.</small>
     </div>
@@ -317,7 +327,7 @@
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-hover table-sm mb-0">
-                <thead class="table-light">
+                <thead>
                     <tr>
                         <th>Waktu (Prediksi)</th>
                         <th>Kelembapan Tanah</th>
