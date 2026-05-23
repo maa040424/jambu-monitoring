@@ -14,31 +14,55 @@ class UserManagementController extends Controller
      */
     public function index()
     {
-        $users = User::orderByDesc('last_login_at')->orderBy('name')->get();
+        $currentUser = auth()->user();
+        if ($currentUser->role === 'superadmin') {
+            // Super Admin can manage everyone
+            $users = User::orderByDesc('last_login_at')->orderBy('name')->get();
+        } else {
+            // Admin can only manage petani (ordinary users)
+            $users = User::where('role', 'petani')->orderByDesc('last_login_at')->orderBy('name')->get();
+        }
 
         return view('users', compact('users'));
     }
 
     /**
-     * Simpan user baru (petani).
+     * Simpan user baru (petani/admin).
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $currentUser = auth()->user();
+        
+        $rules = [
             'name'     => ['required', 'string', 'max:255'],
             'email'    => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+        ];
+
+        // If superadmin, validate the role input
+        if ($currentUser->role === 'superadmin') {
+            $rules['role'] = ['required', 'string', 'in:admin,petani'];
+        }
+
+        $request->validate($rules);
+
+        // Determine role to save
+        $role = 'petani';
+        if ($currentUser->role === 'superadmin' && $request->has('role')) {
+            $role = $request->role;
+        }
 
         User::create([
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'role'     => 'petani',
+            'role'     => $role,
         ]);
 
+        $roleText = $role === 'admin' ? 'Admin' : 'Petani';
+
         return redirect()->route('users.index')
-            ->with('success', 'Akun petani berhasil dibuat.');
+            ->with('success', "Akun {$roleText} berhasil dibuat.");
     }
 
     /**
@@ -46,9 +70,17 @@ class UserManagementController extends Controller
      */
     public function destroy(User $user)
     {
-        if ($user->id === auth()->id()) {
+        $currentUser = auth()->user();
+
+        if ($user->id === $currentUser->id) {
             return redirect()->route('users.index')
                 ->with('error', 'Tidak bisa menghapus akun sendiri.');
+        }
+
+        // Prevent normal admin from deleting admins/superadmins
+        if ($currentUser->role === 'admin' && $user->role !== 'petani') {
+            return redirect()->route('users.index')
+                ->with('error', 'Anda tidak memiliki wewenang untuk menghapus akun ini.');
         }
 
         $user->delete();
@@ -62,9 +94,17 @@ class UserManagementController extends Controller
      */
     public function resetPassword(User $user)
     {
-        if ($user->id === auth()->id()) {
+        $currentUser = auth()->user();
+
+        if ($user->id === $currentUser->id) {
             return redirect()->route('users.index')
                 ->with('error', 'Tidak bisa mereset password akun sendiri.');
+        }
+
+        // Prevent normal admin from resetting passwords of admins/superadmins
+        if ($currentUser->role === 'admin' && $user->role !== 'petani') {
+            return redirect()->route('users.index')
+                ->with('error', 'Anda tidak memiliki wewenang untuk mereset password akun ini.');
         }
 
         $defaultPassword = 'jambu123';

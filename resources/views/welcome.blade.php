@@ -300,9 +300,25 @@
 
         /* ── Location Section ── */
         .location-section {
-            margin-top: 1.25rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255,255,255,0.06);
+            position: absolute;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 2;
+            background: rgba(11, 17, 32, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(34, 197, 94, 0.25);
+            border-radius: 16px;
+            padding: 0.85rem;
+            width: clamp(280px, 22vw, 340px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .location-section:hover {
+            border-color: rgba(34, 197, 94, 0.45);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(34, 197, 94, 0.15);
         }
 
         .location-header {
@@ -328,16 +344,9 @@
         .location-card {
             display: flex;
             gap: 0.75rem;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px;
-            padding: 0.7rem;
-            transition: all 0.25s ease;
-        }
-
-        .location-card:hover {
-            background: rgba(34,197,94,0.04);
-            border-color: rgba(34,197,94,0.15);
+            background: transparent;
+            border: none;
+            padding: 0;
         }
 
         .location-map {
@@ -346,7 +355,7 @@
             border-radius: 8px;
             overflow: hidden;
             flex-shrink: 0;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .location-map iframe {
@@ -372,7 +381,7 @@
 
         .location-address {
             font-size: 0.65rem;
-            color: #64748b;
+            color: #94a3b8;
             line-height: 1.4;
         }
 
@@ -474,8 +483,16 @@
             .img-caption { font-size: 0.62rem; padding: 0.3rem 0.8rem; bottom: 0.6rem; }
             .hero-footer { display: none; }
 
-            .location-section { margin-top: 0.75rem; padding-top: 0.75rem; }
-            .location-map { width: 70px; height: 55px; }
+            .location-section {
+                position: absolute;
+                bottom: 1rem;
+                right: 1rem;
+                width: calc(100% - 2rem);
+                max-width: 300px;
+                margin-top: 0;
+                padding-top: 0;
+            }
+            .location-map { width: 75px; height: 60px; }
             .location-name { font-size: 0.72rem; }
             .location-address { font-size: 0.6rem; }
         }
@@ -577,7 +594,20 @@
                 </div>
             </div>
 
-            {{-- ── Lokasi Penelitian ── --}}
+            <p class="hero-footer">
+                &copy; {{ date('Y') }} Monitoring Kebun Jambu Kristal &mdash; Skripsi IoT + Machine Learning
+            </p>
+        </div>
+
+        {{-- ── RIGHT: Foto kebun ── --}}
+        <div class="hero-right">
+            <img
+                src="{{ asset('img/background-landingPage.png') }}"
+                alt="Kebun Jambu Kristal"
+                class="hero-bg-image"
+                loading="eager"
+            >
+            {{-- ── Lokasi Penelitian (Melayang di kanan) ── --}}
             <div class="location-section">
                 <div class="location-header">
                     <i class="bi bi-pin-map-fill"></i>
@@ -600,24 +630,6 @@
                         </a>
                     </div>
                 </div>
-            </div>
-
-            <p class="hero-footer">
-                &copy; {{ date('Y') }} Monitoring Kebun Jambu Kristal &mdash; Skripsi IoT + Machine Learning
-            </p>
-        </div>
-
-        {{-- ── RIGHT: Foto kebun ── --}}
-        <div class="hero-right">
-            <img
-                src="{{ asset('img/background-landingPage.png') }}"
-                alt="Kebun Jambu Kristal"
-                class="hero-bg-image"
-                loading="eager"
-            >
-            <div class="img-caption">
-                <i class="bi bi-geo-alt-fill"></i>
-                Kebun Jambu Kristal — Kalimantan Selatan
             </div>
         </div>
 

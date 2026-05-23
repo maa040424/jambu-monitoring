@@ -44,16 +44,39 @@
                             <tr style="border-bottom: 1px solid var(--border-color);">
                                 <td class="ps-3">
                                     <div class="d-flex align-items-center gap-2">
-                                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background: {{ $user->isAdmin() ? 'rgba(239, 68, 68, 0.15)' : 'rgba(56, 189, 248, 0.15)' }};">
-                                            <i class="bi {{ $user->isAdmin() ? 'bi-shield-lock text-danger' : 'bi-person text-info' }}" style="font-size: 0.85rem;"></i>
+                                        @php
+                                            $bgClass = 'rgba(56, 189, 248, 0.15)';
+                                            $iconClass = 'bi-person text-info';
+                                            if ($user->role === 'superadmin') {
+                                                $bgClass = 'rgba(168, 85, 247, 0.15)';
+                                                $iconClass = 'bi-shield-fill-check';
+                                            } elseif ($user->role === 'admin') {
+                                                $bgClass = 'rgba(239, 68, 68, 0.15)';
+                                                $iconClass = 'bi-shield-lock text-danger';
+                                            }
+                                        @endphp
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background: {{ $bgClass }};">
+                                            <i class="bi {{ $iconClass }}" style="font-size: 0.85rem; {{ $user->role === 'superadmin' ? 'color: #c084fc;' : '' }}"></i>
                                         </div>
                                         <span class="fw-medium">{{ $user->name }}</span>
                                     </div>
                                 </td>
                                 <td style="color: var(--text-secondary);">{{ $user->email }}</td>
                                 <td>
-                                    <span class="badge {{ $user->isAdmin() ? 'bg-danger' : 'bg-info' }} bg-opacity-75" style="font-size: 0.75rem;">
-                                        {{ ucfirst($user->role) }}
+                                    @php
+                                        $badgeBg = 'bg-info';
+                                        $badgeStyle = '';
+                                        $roleLabel = ucfirst($user->role);
+                                        if ($user->role === 'superadmin') {
+                                            $badgeBg = 'bg-purple';
+                                            $badgeStyle = 'background-color: #a855f7 !important; color: #fff;';
+                                            $roleLabel = 'Super Admin';
+                                        } elseif ($user->role === 'admin') {
+                                            $badgeBg = 'bg-danger';
+                                        }
+                                    @endphp
+                                    <span class="badge {{ $badgeBg }} bg-opacity-75" style="font-size: 0.75rem; {{ $badgeStyle }}">
+                                        {{ $roleLabel }}
                                     </span>
                                 </td>
                                 <td style="color: var(--text-secondary); font-size: 0.85rem;">
@@ -108,7 +131,9 @@
             <div class="card-header" style="border-bottom: 1px solid var(--border-color);">
                 <div class="d-flex align-items-center gap-2">
                     <i class="bi bi-person-plus-fill text-success"></i>
-                    <span class="fw-semibold">Tambah Akun Petani</span>
+                    <span class="fw-semibold">
+                        {{ auth()->user()->role === 'superadmin' ? 'Tambah Akun' : 'Tambah Akun Petani' }}
+                    </span>
                 </div>
             </div>
             <div class="card-body">
@@ -118,7 +143,7 @@
                     <div class="mb-3">
                         <label for="name" class="form-label small fw-semibold" style="color: var(--text-secondary);">Nama</label>
                         <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name"
-                               value="{{ old('name') }}" required placeholder="Nama petani"
+                               value="{{ old('name') }}" required placeholder="Nama lengkap"
                                style="background: var(--form-bg, #0f172a); border-color: var(--form-border, #374151); color: var(--form-text, #f9fafb);">
                         @error('name')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -128,12 +153,26 @@
                     <div class="mb-3">
                         <label for="email" class="form-label small fw-semibold" style="color: var(--text-secondary);">Email</label>
                         <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email"
-                               value="{{ old('email') }}" required placeholder="petani@jambu.local"
+                               value="{{ old('email') }}" required placeholder="user@jambu.local"
                                style="background: var(--form-bg, #0f172a); border-color: var(--form-border, #374151); color: var(--form-text, #f9fafb);">
                         @error('email')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
+                    @if(auth()->user()->role === 'superadmin')
+                    <div class="mb-3">
+                        <label for="role" class="form-label small fw-semibold" style="color: var(--text-secondary);">Role</label>
+                        <select class="form-select @error('role') is-invalid @enderror" id="role" name="role" required
+                                style="background: var(--form-bg, #0f172a); border-color: var(--form-border, #374151); color: var(--form-text, #f9fafb);">
+                            <option value="petani" {{ old('role') === 'petani' ? 'selected' : '' }}>Petani (User Biasa)</option>
+                            <option value="admin" {{ old('role') === 'admin' ? 'selected' : '' }}>Admin</option>
+                        </select>
+                        @error('role')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    @endif
 
                     <div class="mb-3">
                         <label for="add-password" class="form-label small fw-semibold" style="color: var(--text-secondary);">Password</label>
@@ -167,12 +206,17 @@
                     </div>
 
                     <button type="submit" class="btn w-100 fw-semibold" style="background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; border: none; border-radius: 10px; padding: 0.6rem;">
-                        <i class="bi bi-person-plus me-1"></i> Tambah Akun Petani
+                        <i class="bi bi-person-plus me-1"></i> Simpan Akun
                     </button>
                 </form>
 
                 <div class="mt-3 small text-muted text-center">
-                    <i class="bi bi-info-circle me-1"></i>Akun yang dibuat otomatis memiliki role <strong>Petani</strong>.
+                    <i class="bi bi-info-circle me-1"></i>
+                    @if(auth()->user()->role === 'superadmin')
+                        Akun yang dibuat akan memiliki hak akses sesuai dengan role pilihan.
+                    @else
+                        Akun yang dibuat otomatis memiliki role <strong>Petani</strong>.
+                    @endif
                 </div>
             </div>
         </div>

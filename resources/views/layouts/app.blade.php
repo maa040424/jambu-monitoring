@@ -101,9 +101,20 @@
                     <div class="nav-user">
                         <div class="nav-user-info">
                             <span class="nav-user-name">{{ auth()->user()->name }}</span>
-                            <span class="nav-user-role {{ auth()->user()->isAdmin() ? 'role-admin' : 'role-user' }}">
-                                <i class="bi {{ auth()->user()->isAdmin() ? 'bi-shield-lock-fill' : 'bi-person-fill' }}"></i>
-                                {{ ucfirst(auth()->user()->role) }}
+                            @php
+                                $roleClass = 'role-user';
+                                $roleIcon = 'bi-person-fill';
+                                if (auth()->user()->role === 'superadmin') {
+                                    $roleClass = 'role-superadmin';
+                                    $roleIcon = 'bi-shield-fill-check';
+                                } elseif (auth()->user()->role === 'admin') {
+                                    $roleClass = 'role-admin';
+                                    $roleIcon = 'bi-shield-lock-fill';
+                                }
+                            @endphp
+                            <span class="nav-user-role {{ $roleClass }}">
+                                <i class="bi {{ $roleIcon }}"></i>
+                                {{ auth()->user()->role === 'superadmin' ? 'Super Admin' : ucfirst(auth()->user()->role) }}
                             </span>
                         </div>
                         <a href="{{ route('password.edit') }}" class="nav-btn nav-btn-ghost" title="Ubah Password" style="font-size: 0.75rem;">
