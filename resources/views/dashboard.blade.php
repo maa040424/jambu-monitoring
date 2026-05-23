@@ -282,6 +282,78 @@
         </div>
     </div>
 </div>
+
+{{-- Card Simulator --}}
+<div id="simulator-control-card" class="card mb-4 border-primary {{ $mode === 'real' ? 'd-none' : '' }}" style="background: rgba(var(--bs-primary-rgb), 0.03); border: 1px solid rgba(var(--bs-primary-rgb), 0.2) !important; color: var(--text-primary);">
+    <div class="card-header bg-transparent border-bottom d-flex align-items-center justify-content-between py-3" style="border-color: rgba(var(--bs-primary-rgb), 0.2) !important;">
+        <span class="fw-bold text-primary d-flex align-items-center gap-2">
+            <i class="bi bi-flask fs-5"></i> 🧪 Pusat Kendali Simulasi &amp; Data Dummy
+        </span>
+        <span class="badge bg-secondary-subtle text-secondary-emphasis" id="simulator-status-badge">Simulator: MATI</span>
+    </div>
+    <div class="card-body">
+        <div class="row g-4">
+            {{-- Bagian 1: Generator Data Historis --}}
+            <div class="col-12 col-md-6 pe-md-4 simulator-col-left">
+                <div class="h-100 d-flex flex-column justify-content-between">
+                    <div>
+                        <h6 class="fw-bold mb-2"><i class="bi bi-database-fill-add text-info me-2"></i>1. Generator Data Historis</h6>
+                        <p class="small text-muted mb-3">ARIMA membutuhkan minimal 100 data untuk bekerja. Buat data dummy ke belakang (setiap 30 menit) selama beberapa hari untuk mengisi database secara instan.</p>
+                    </div>
+                    <div>
+                        <div class="row g-2 align-items-center">
+                            <div class="col-auto">
+                                <label for="generate-days" class="col-form-label col-form-label-sm text-muted">Jumlah Hari:</label>
+                            </div>
+                            <div class="col-3">
+                                <input type="number" id="generate-days" class="form-control form-control-sm" value="3" min="1" max="90" style="background: var(--form-bg); border-color: var(--form-border); color: var(--form-text);">
+                            </div>
+                            <div class="col">
+                                <button type="button" class="btn btn-sm btn-info w-100" id="btn-generate-dummy" onclick="generateHistoricalDummy()">
+                                    <i class="bi bi-magic me-1"></i>Generate Data
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Bagian 2: Simulasi Real-Time (Tiap 5 Detik) --}}
+            <div class="col-12 col-md-6 ps-md-4">
+                <div class="h-100 d-flex flex-column justify-content-between">
+                    <div>
+                        <h6 class="fw-bold mb-2"><i class="bi bi-cpu text-success me-2"></i>2. Simulasi Real-Time (Tiap 5 Detik)</h6>
+                        <p class="small text-muted mb-3">Simulasikan pengiriman data berkala setiap 5 detik. Anda dapat mengubah tipe kondisi kebun untuk memicu perubahan status dan mengirimkan notifikasi Telegram simulasi.</p>
+                    </div>
+                    <div>
+                        <div class="row g-2 align-items-center mb-3">
+                            <div class="col-auto">
+                                <label for="sim-condition" class="col-form-label col-form-label-sm text-muted">Kondisi Kebun:</label>
+                            </div>
+                            <div class="col">
+                                <select id="sim-condition" class="form-select form-select-sm" style="background: var(--form-bg); border-color: var(--form-border); color: var(--form-text);">
+                                    <option value="auto">Berfluktuasi Otomatis (Mengikuti Waktu)</option>
+                                    <option value="normal">Normal (Kelembapan ~55%)</option>
+                                    <option value="warning">Perlu Penyiraman (Kelembapan ~25%)</option>
+                                    <option value="critical">Kritis (Kelembapan ~15%)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-sm btn-success w-100" id="btn-start-sim" onclick="startSimulator()">
+                                <i class="bi bi-play-fill me-1"></i>Mulai Simulasi
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger w-100 d-none" id="btn-stop-sim" onclick="stopSimulator()">
+                                <i class="bi bi-stop-fill me-1"></i>Hentikan Simulasi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </div>
 
 {{-- Stat Cards --}}

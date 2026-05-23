@@ -1132,3 +1132,16 @@ body.light-mode .table {
     color: var(--text-secondary) !important;
     background-color: transparent !important;
 }
+
+/* ── Simulator Card Custom Responsive Border ── */
+.simulator-col-left {
+    border-right: 1px solid var(--border-color);
+}
+
+@media (max-width: 767.98px) {
+    .simulator-col-left {
+        border-right: none !important;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 1.5rem;
+    }
+}

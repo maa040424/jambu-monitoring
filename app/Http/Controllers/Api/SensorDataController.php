@@ -61,6 +61,15 @@ class SensorDataController extends Controller
     }
 
     /**
+     * Simulasikan data sensor masuk via web (menggunakan auth session).
+     */
+    public function simulate(Request $request)
+    {
+        // Menggunakan logika penyimpanan yang sama
+        return $this->store($request);
+    }
+
+    /**
      * Ambil data sensor berdasarkan source (terbaru duluan).
      *
      * Query params:
@@ -165,7 +174,9 @@ class SensorDataController extends Controller
             default             => '🟢',
         };
 
-        $message  = "{$emoji} <b>Status Kebun Berubah!</b>\n\n";
+        $prefix = $data->source === 'dummy' ? "⚠️ <b>[SIMULASI/DUMMY]</b>\n" : "";
+
+        $message  = "{$prefix}{$emoji} <b>Status Kebun Berubah!</b>\n\n";
         $message .= "Status: <b>{$newStatus}</b>\n";
         $message .= "Sebelumnya: " . ($oldStatus ?? '—') . "\n\n";
         $message .= "📊 <b>Data Sensor:</b>\n";
@@ -176,5 +187,114 @@ class SensorDataController extends Controller
         $message .= "🕐 Waktu: {$data->created_at}";
 
         app(TelegramService::class)->sendMessage($message);
+    }
+
+    /**
+     * Generate bulk historical dummy data based on user input.
+     */
+    public function generateDummy(Request $request)
+    {
+        $request->validate([
+            'days' => 'required|integer|min:1|max:90',
+        ]);
+
+        $days = (int) $request->days;
+
+        // Clear existing dummy data first
+        SensorData::where('source', 'dummy')->delete();
+
+        $records = [];
+        $now = now();
+        $start = $now->copy()->subDays($days);
+        $intervalMinutes = 30; // 30 mins interval is perfect for ARIMA
+        $totalPoints = ($days * 24 * 60) / $intervalMinutes;
+
+        $soil = 55.0; // initial soil moisture
+
+        for ($i = 0; $i < $totalPoints; $i++) {
+            $t = $start->copy()->addMinutes($intervalMinutes * $i);
+            $hour = (float) $t->format('H') + ((float) $t->format('i') / 60.0);
+
+            // ── Temperature: 22-38°C, peaks at ~14:00 ──
+            $tempBase = 28.0 + 7.0 * sin(pi() * ($hour - 6.0) / 12.0);
+            $temp = $tempBase + $this->randomGauss(0, 1.5);
+            $temp = max(20.0, min(40.0, $temp));
+
+            // ── Humidity: inverse of temp, 50-90% ──
+            $humBase = 75.0 - 15.0 * sin(pi() * ($hour - 6.0) / 12.0);
+            $hum = $humBase + $this->randomGauss(0, 3.0);
+            $hum = max(45.0, min(95.0, $hum));
+
+            // ── Light: 0 at night, peaks ~1200 at noon ──
+            if ($hour >= 6.0 && $hour <= 18.0) {
+                $lightBase = 800.0 * sin(pi() * ($hour - 6.0) / 12.0);
+                $light = $lightBase + $this->randomGauss(0, 80.0);
+                if ((mt_rand() / mt_getrandmax()) < 0.15) {
+                    $light *= 0.3;
+                }
+            } else {
+                $light = mt_rand(0, 50) / 10.0;
+            }
+            $light = max(0.0, min(2000.0, $light));
+
+            // ── Soil Moisture: decays, watered 2x ──
+            if ($hour >= 8.0 && $hour <= 16.0) {
+                $decay = mt_rand(15, 35) / 100.0;
+            } else {
+                $decay = mt_rand(2, 8) / 100.0;
+            }
+            $soil -= $decay;
+
+            // Watering at 07:00 and 17:00
+            if (abs($hour - 7.0) < 0.17 && $t->format('i') == '00') {
+                $soil = min(80.0, $soil + (mt_rand(250, 400) / 10.0));
+            }
+            if (abs($hour - 17.0) < 0.17 && $t->format('i') == '00') {
+                $soil = min(75.0, $soil + (mt_rand(200, 350) / 10.0));
+            }
+
+            // Rain event (random afternoon)
+            if ($hour >= 13.0 && $hour <= 16.0 && ((mt_rand() / mt_getrandmax()) < 0.05)) {
+                $soil = min(85.0, $soil + (mt_rand(150, 300) / 10.0));
+                $hum = min(95.0, $hum + 10.0);
+            }
+
+            $soil = max(5.0, min(90.0, $soil));
+            $status = $this->determineStatus($soil);
+
+            $records[] = [
+                'soil_moisture'   => round($soil, 1),
+                'temperature'     => round($temp, 1),
+                'humidity'        => round($hum, 1),
+                'light_intensity' => round($light, 1),
+                'status'          => $status,
+                'source'          => 'dummy',
+                'created_at'      => $t->toDateTimeString(),
+                'updated_at'      => $t->toDateTimeString(),
+            ];
+        }
+
+        // Insert records in chunks
+        $chunks = array_chunk($records, 500);
+        foreach ($chunks as $chunk) {
+            SensorData::insert($chunk);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => "Berhasil menghasilkan " . count($records) . " data dummy untuk " . $days . " hari terakhir.",
+            'count' => count($records)
+        ]);
+    }
+
+    /**
+     * Helper to generate normally distributed random variables.
+     */
+    private function randomGauss(float $mean, float $stdDev): float
+    {
+        $x = mt_rand() / mt_getrandmax();
+        $y = mt_rand() / mt_getrandmax();
+        if ($x == 0) $x = 0.00001;
+        return $mean + $stdDev * sqrt(-2.0 * log($x)) * cos(2.0 * pi() * $y);
     }
 }

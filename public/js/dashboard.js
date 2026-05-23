@@ -20,6 +20,9 @@ let currentMode = window.INITIAL_MODE || 'dummy';
 let currentTablePage = 1;
 const TABLE_PAGE_SIZE = 20;
 let selectedIds = new Set();
+let simulatorInterval = null;
+let simStep = 0;
+let lastSimSoil = 55.0;
 
 // ── DOM Elements ─────────────────────────────────────────
 const DOM = {
@@ -91,6 +94,7 @@ function updateModeUI() {
     const btnReal = DOM.btnModeReal();
     const badge = DOM.modeBadge();
     const clearLabel = DOM.clearModeLabel();
+    const simCard = document.getElementById('simulator-control-card');
 
     // Toggle active class on buttons
     if (btnDummy && btnReal) {
@@ -112,6 +116,17 @@ function updateModeUI() {
     // Update clear button label
     if (clearLabel) {
         clearLabel.textContent = currentMode === 'dummy' ? 'Dummy' : 'Real';
+    }
+
+    // Toggle simulator control card visibility
+    if (simCard) {
+        if (currentMode === 'dummy') {
+            simCard.classList.remove('d-none');
+        } else {
+            simCard.classList.add('d-none');
+            // Hentikan simulator jika sedang berjalan saat berpindah ke mode real
+            stopSimulator();
+        }
     }
 }
 
@@ -772,3 +787,179 @@ document.addEventListener('DOMContentLoaded', () => {
     // Auto-refresh
     refreshTimer = setInterval(fetchSensorData, CONFIG.REFRESH_INTERVAL);
 });
+
+// ══════════════════════════════════════════════════════════
+//  DUMMY SIMULATOR & GENERATOR
+// ══════════════════════════════════════════════════════════
+
+async function generateHistoricalDummy() {
+    const daysInput = document.getElementById('generate-days');
+    const btn = document.getElementById('btn-generate-dummy');
+    if (!daysInput || !btn) return;
+    
+    const days = parseInt(daysInput.value);
+    if (isNaN(days) || days < 1 || days > 90) {
+        showError('Jumlah hari harus antara 1 sampai 90.');
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Generating...';
+
+    try {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+        const res = await fetch('/sensor-data/generate-dummy', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({ days }),
+        });
+
+        if (!res.ok) {
+            const errData = await res.json().catch(() => null);
+            throw new Error(errData?.message || `HTTP ${res.status}: ${res.statusText}`);
+        }
+
+        const result = await res.json();
+        showSuccess(result.message || 'Berhasil menghasilkan data dummy.');
+        
+        // Re-fetch data to update charts & tables
+        fetchSensorData();
+    } catch (err) {
+        console.error('Generate dummy error:', err);
+        showError(err.message || 'Gagal menghasilkan data dummy.');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-magic me-1"></i>Generate Data';
+    }
+}
+
+function startSimulator() {
+    if (simulatorInterval) return;
+
+    const statusBadge = document.getElementById('simulator-status-badge');
+    const btnStart = document.getElementById('btn-start-sim');
+    const btnStop = document.getElementById('btn-stop-sim');
+
+    if (statusBadge) {
+        statusBadge.textContent = 'Simulator: BERJALAN (5s)';
+        statusBadge.className = 'badge bg-success';
+    }
+    if (btnStart) btnStart.classList.add('d-none');
+    if (btnStop) btnStop.classList.remove('d-none');
+
+    showSuccess('Simulator real-time telah dimulai (tiap 5 detik).');
+
+    simStep = 0;
+    
+    // Ambil nilai kelembapan tanah terakhir dari UI sebagai titik awal jika ada
+    const currentSoilText = document.getElementById('val-moisture')?.textContent;
+    const parsedSoil = parseFloat(currentSoilText);
+    if (!isNaN(parsedSoil)) {
+        lastSimSoil = parsedSoil;
+    } else {
+        lastSimSoil = 55.0;
+    }
+
+    simulatorInterval = setInterval(async () => {
+        simStep++;
+        const condition = document.getElementById('sim-condition')?.value || 'auto';
+        const now = new Date();
+        const hour = now.getHours() + now.getMinutes() / 60.0;
+
+        let moisture, temp, humidity, light;
+
+        // ── Temperature: 22-38°C, peaks at ~14:00 ──
+        const tempBase = 28.0 + 7.0 * Math.sin(Math.PI * (hour - 6.0) / 12.0);
+        temp = tempBase + (Math.random() * 3.0 - 1.5);
+        temp = Math.max(20.0, Math.min(40.0, temp));
+
+        // ── Humidity: inverse of temp, 50-90% ──
+        const humBase = 75.0 - 15.0 * Math.sin(Math.PI * (hour - 6.0) / 12.0);
+        humidity = humBase + (Math.random() * 6.0 - 3.0);
+        humidity = Math.max(45.0, Math.min(95.0, humidity));
+
+        // ── Light: 0 at night, peaks ~1200 at noon ──
+        if (hour >= 6.0 && hour <= 18.0) {
+            const lightBase = 800.0 * Math.sin(Math.PI * (hour - 6.0) / 12.0);
+            light = lightBase + (Math.random() * 160.0 - 80.0);
+        } else {
+            light = Math.random() * 5.0;
+        }
+        light = Math.max(0.0, Math.min(2000.0, light));
+
+        // Determine moisture based on selected condition
+        if (condition === 'normal') {
+            moisture = 50.0 + (Math.random() * 10.0 - 5.0); // 45% - 55%
+        } else if (condition === 'warning') {
+            moisture = 24.0 + (Math.random() * 4.0 - 2.0); // 22% - 26%
+        } else if (condition === 'critical') {
+            moisture = 14.0 + (Math.random() * 4.0 - 2.0); // 12% - 16%
+        } else {
+            // Auto/fluctuate
+            if (simStep % 15 === 0) {
+                // watering simulation
+                lastSimSoil = Math.min(80.0, lastSimSoil + 30.0);
+            } else {
+                lastSimSoil -= (Math.random() * 2.0 + 0.5);
+            }
+            lastSimSoil = Math.max(5.0, Math.min(90.0, lastSimSoil));
+            moisture = lastSimSoil;
+        }
+
+        // Round
+        moisture = Math.round(moisture * 10) / 10;
+        temp = Math.round(temp * 10) / 10;
+        humidity = Math.round(humidity * 10) / 10;
+        light = Math.round(light);
+
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+            const res = await fetch('/sensor-data/simulate', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    soil_moisture: moisture,
+                    temperature: temp,
+                    humidity: humidity,
+                    light_intensity: light,
+                    source: 'dummy'
+                }),
+            });
+
+            if (res.ok) {
+                // Instantly fetch updated values to update UI/charts
+                fetchSensorData();
+            }
+        } catch (err) {
+            console.error('Simulator tick error:', err);
+        }
+    }, 5000);
+}
+
+function stopSimulator() {
+    if (!simulatorInterval) return;
+
+    clearInterval(simulatorInterval);
+    simulatorInterval = null;
+
+    const statusBadge = document.getElementById('simulator-status-badge');
+    const btnStart = document.getElementById('btn-start-sim');
+    const btnStop = document.getElementById('btn-stop-sim');
+
+    if (statusBadge) {
+        statusBadge.textContent = 'Simulator: MATI';
+        statusBadge.className = 'badge bg-secondary-subtle text-secondary-emphasis';
+    }
+    if (btnStart) btnStart.classList.remove('d-none');
+    if (btnStop) btnStop.classList.add('d-none');
+
+    showSuccess('Simulator real-time telah dihentikan.');
+}

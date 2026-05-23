@@ -40,6 +40,10 @@ Route::middleware('auth')->group(function () {
     // Semua user bisa export PDF prediksi
     Route::get('/export-forecast-pdf', [\App\Http\Controllers\ForecastPdfController::class, 'export'])->name('export.forecast.pdf');
 
+    // Generate data dummy
+    Route::post('/sensor-data/generate-dummy', [App\Http\Controllers\Api\SensorDataController::class, 'generateDummy'])->name('sensor.generateDummy');
+    Route::post('/sensor-data/simulate', [App\Http\Controllers\Api\SensorDataController::class, 'simulate'])->name('sensor.simulate');
+
     // Hanya admin
     Route::middleware('admin')->group(function () {
         Route::get('/export-sensor-data', [ExportController::class, 'export'])->name('export.sensor');
