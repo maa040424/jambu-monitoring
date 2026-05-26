@@ -1262,4 +1262,80 @@ body.light-mode .light-status-card.state-gelap #ldr-status-text {
         transform: scale(1.1);
         filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.8));
     }
-}
+}
+
+/* GELAP SIANG (Mendung/Teduh) */
+.light-status-card.state-gelap-siang {
+    background: linear-gradient(135deg, rgba(148, 163, 184, 0.12) 0%, rgba(56, 189, 248, 0.15) 100%) !important;
+    border-color: rgba(148, 163, 184, 0.3) !important;
+    box-shadow: 0 8px 32px rgba(56, 189, 248, 0.08), var(--shadow-card) !important;
+}
+body.light-mode .light-status-card.state-gelap-siang {
+    background: linear-gradient(135deg, #f1f5f9 0%, #e0f2fe 100%) !important;
+    border-color: rgba(148, 163, 184, 0.25) !important;
+}
+.light-status-card.state-gelap-siang #ldr-status-text {
+    color: #38bdf8 !important;
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.15);
+}
+body.light-mode .light-status-card.state-gelap-siang #ldr-status-text {
+    color: #0284c7 !important;
+}
+.state-gelap-siang .light-icon-wrapper {
+    background: rgba(148, 163, 184, 0.15);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.15);
+}
+
+/* TERANG MALAM (Lampu Kebun Aktif) */
+.light-status-card.state-terang-malam {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(234, 179, 8, 0.15) 100%) !important;
+    border-color: rgba(234, 179, 8, 0.35) !important;
+    box-shadow: 0 8px 32px rgba(234, 179, 8, 0.1), var(--shadow-card) !important;
+}
+body.light-mode .light-status-card.state-terang-malam {
+    background: linear-gradient(135deg, #1e293b 0%, #453b1b 100%) !important;
+    border-color: rgba(234, 179, 8, 0.25) !important;
+    color: #fef08a !important;
+}
+body.light-mode .light-status-card.state-terang-malam .text-muted {
+    color: #fef08a !important;
+    opacity: 0.8;
+}
+.light-status-card.state-terang-malam #ldr-status-text {
+    color: #facc15 !important;
+    text-shadow: 0 0 10px rgba(234, 179, 8, 0.2);
+}
+body.light-mode .light-status-card.state-terang-malam #ldr-status-text {
+    color: #fef08a !important;
+}
+.state-terang-malam .light-icon-wrapper {
+    background: rgba(234, 179, 8, 0.15);
+    box-shadow: 0 0 15px rgba(234, 179, 8, 0.25);
+}
+
+/* Cloud Pulse Animation */
+.pulse-slow {
+    animation: pulse-slow-keyframes 4s ease-in-out infinite;
+    display: inline-block;
+}
+@keyframes pulse-slow-keyframes {
+    0%, 100% { transform: scale(1); filter: opacity(0.85); }
+    50% { transform: scale(1.08); filter: opacity(1); }
+}
+
+/* Lightbulb Glow Pulse Animation */
+.pulse-glow-yellow {
+    animation: pulse-glow-yellow-keyframes 2.5s ease-in-out infinite;
+    display: inline-block;
+}
+@keyframes pulse-glow-yellow-keyframes {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 2px rgba(234, 179, 8, 0.4));
+    }
+    50% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 15px rgba(234, 179, 8, 0.9));
+    }
+}
+

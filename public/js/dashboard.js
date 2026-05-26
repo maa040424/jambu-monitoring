@@ -274,23 +274,49 @@ function updateLightStatus(lightVal) {
         return;
     }
 
+    const now = new Date();
+    const hour = now.getHours();
+    const isDaytime = hour >= 6 && hour < 18;
+
     if (lightVal >= 100) {
-        // TERANG state
-        card.className = 'card status-card light-status-card h-100 state-terang';
-        statusText.textContent = 'Cahaya Cukup';
-        subText.textContent = 'Ideal untuk fotosintesis Jambu Kristal';
-        if (icon) {
-            icon.className = 'fs-2 spin-slow';
-            icon.innerHTML = '☀️';
+        if (isDaytime) {
+            // SIANG & TERANG (Cahaya Cukup)
+            card.className = 'card status-card light-status-card h-100 state-terang';
+            statusText.textContent = 'Cahaya Cukup';
+            subText.textContent = 'Ideal untuk fotosintesis Jambu Kristal';
+            if (icon) {
+                icon.className = 'fs-2 spin-slow';
+                icon.innerHTML = '☀️';
+            }
+        } else {
+            // MALAM & TERANG (Terdeteksi Pencahayaan Buatan)
+            card.className = 'card status-card light-status-card h-100 state-terang-malam';
+            statusText.textContent = 'Cahaya Cukup (Lampu Aktif)';
+            subText.textContent = 'Terdeteksi pencahayaan buatan di kebun';
+            if (icon) {
+                icon.className = 'fs-2 pulse-glow-yellow';
+                icon.innerHTML = '💡';
+            }
         }
     } else {
-        // GELAP state
-        card.className = 'card status-card light-status-card h-100 state-gelap';
-        statusText.textContent = 'Cahaya Minim / Malam Hari';
-        subText.textContent = 'Sistem dalam mode monitoring malam';
-        if (icon) {
-            icon.className = 'fs-2 pulse-glow-slow';
-            icon.innerHTML = '🌑';
+        if (isDaytime) {
+            // SIANG & GELAP (Mendung / Teduh)
+            card.className = 'card status-card light-status-card h-100 state-gelap-siang';
+            statusText.textContent = 'Cahaya Minim (Mendung/Teduh)';
+            subText.textContent = 'Kondisi kebun mendung atau sensor terhalang';
+            if (icon) {
+                icon.className = 'fs-2 pulse-slow';
+                icon.innerHTML = '☁️';
+            }
+        } else {
+            // MALAM & GELAP (Malam Hari Normal)
+            card.className = 'card status-card light-status-card h-100 state-gelap';
+            statusText.textContent = 'Cahaya Minim / Malam Hari';
+            subText.textContent = 'Sistem dalam mode monitoring malam';
+            if (icon) {
+                icon.className = 'fs-2 pulse-glow-slow';
+                icon.innerHTML = '🌑';
+            }
         }
     }
 }
