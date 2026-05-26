@@ -339,6 +339,7 @@ function renderForecastChartsStaggered(data, onAllDone) {
 
         // Annotation: vertical line at forecast start
         const forecastStartIndex = actual.length - 1;
+        const isLight = cfg.canvasId === 'chart-forecast-light';
 
         const chart = new Chart(document.getElementById(cfg.canvasId), {
             type: 'line',
@@ -353,7 +354,8 @@ function renderForecastChartsStaggered(data, onAllDone) {
                         borderWidth: 2.5,
                         pointRadius: 2,
                         pointHoverRadius: 5,
-                        tension: 0.4,
+                        tension: isLight ? 0 : 0.4,
+                        stepped: isLight,
                         fill: true,
                     },
                     {
@@ -366,7 +368,8 @@ function renderForecastChartsStaggered(data, onAllDone) {
                         pointRadius: 2,
                         pointHoverRadius: 5,
                         pointStyle: 'triangle',
-                        tension: 0.4,
+                        tension: isLight ? 0 : 0.4,
+                        stepped: isLight,
                         fill: true,
                     }
                 ]
@@ -393,7 +396,24 @@ function renderForecastChartsStaggered(data, onAllDone) {
                 },
                 scales: {
                     x: { ticks: { color: tc.tick, maxRotation: 45, font: { size: 10 } }, grid: { color: tc.grid } },
-                    y: { ticks: { color: tc.tick }, grid: { color: tc.grid } }
+                    y: isLight ? {
+                        min: 0,
+                        max: 500,
+                        ticks: {
+                            color: tc.tick,
+                            font: { size: 10, weight: 'bold' },
+                            stepSize: 500,
+                            callback: function(value) {
+                                if (value === 0) return '🌙 GELAP';
+                                if (value === 500) return '☀️ TERANG';
+                                return '';
+                            }
+                        },
+                        grid: { color: tc.grid }
+                    } : {
+                        ticks: { color: tc.tick },
+                        grid: { color: tc.grid }
+                    }
                 }
             }
         });
@@ -471,13 +491,17 @@ function renderForecastTable(forecast) {
 
         // Stagger animation delay per row
         const delay = i * 30;
+        const lightVal = parseFloat(d.light_intensity);
+        const lightBadge = lightVal >= 100 
+            ? `<span class="badge bg-warning-subtle text-warning-emphasis"><i class="bi bi-sun-fill me-1 text-warning"></i> Terang</span>` 
+            : `<span class="badge bg-indigo-subtle text-indigo-emphasis" style="background-color: rgba(99, 102, 241, 0.15); color: #818cf8;"><i class="bi bi-moon-stars-fill me-1" style="color: #818cf8;"></i> Gelap</span>`;
 
         return `<tr style="animation: table-row-in 0.3s ease ${delay}ms both;">
             <td class="text-nowrap"><span class="badge bg-success-subtle text-success-emphasis me-1">+${i + 1}</span>${timeStr}</td>
             <td>${parseFloat(d.soil_moisture).toFixed(1)}%</td>
             <td>${parseFloat(d.temperature).toFixed(1)}°C</td>
             <td>${parseFloat(d.humidity).toFixed(1)}%</td>
-            <td>${parseFloat(d.light_intensity).toFixed(0)} lux</td>
+            <td>${lightBadge}</td>
         </tr>`;
     }).join('');
 

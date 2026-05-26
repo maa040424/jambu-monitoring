@@ -359,7 +359,7 @@
 {{-- Stat Cards --}}
 <div class="row g-3 mb-4">
     {{-- Soil Moisture --}}
-    <div class="col-6 col-lg-3">
+    <div class="col-12 col-md-4">
         <div class="card stat-card stat-moisture">
             <div class="card-body">
                 <div class="stat-icon"><i class="bi bi-droplet-fill"></i></div>
@@ -370,7 +370,7 @@
         </div>
     </div>
     {{-- Temperature --}}
-    <div class="col-6 col-lg-3">
+    <div class="col-12 col-md-4">
         <div class="card stat-card stat-temp">
             <div class="card-body">
                 <div class="stat-icon"><i class="bi bi-thermometer-half"></i></div>
@@ -381,7 +381,7 @@
         </div>
     </div>
     {{-- Humidity --}}
-    <div class="col-6 col-lg-3">
+    <div class="col-12 col-md-4">
         <div class="card stat-card stat-humidity">
             <div class="card-body">
                 <div class="stat-icon"><i class="bi bi-moisture"></i></div>
@@ -391,33 +391,48 @@
             </div>
         </div>
     </div>
-    {{-- Light Intensity --}}
-    <div class="col-6 col-lg-3">
-        <div class="card stat-card stat-light">
-            <div class="card-body">
-                <div class="stat-icon"><i class="bi bi-brightness-high-fill"></i></div>
-                <div class="stat-label">Intensitas Cahaya</div>
-                <div class="stat-value" id="val-light">--</div>
-                <div class="stat-unit">lux</div>
-            </div>
-        </div>
-    </div>
 </div>
 
-{{-- Condition Status --}}
-<div class="card status-card mb-4">
-    <div class="card-body d-flex flex-wrap align-items-center justify-content-between gap-3 py-3">
-        <div class="d-flex align-items-center gap-3">
-            <i class="bi bi-clipboard2-pulse fs-4 text-muted"></i>
-            <div>
-                <div class="small text-muted fw-semibold text-uppercase">Status Kondisi Tanaman</div>
-                <div class="mt-1">
-                    <span class="badge status-badge fs-6" id="status-badge">Menunggu data...</span>
+{{-- Status Row (Tanaman & Cahaya) --}}
+<div class="row g-3 mb-4">
+    {{-- Condition Status (Soil Moisture) --}}
+    <div class="col-12 col-md-6">
+        <div class="card status-card h-100">
+            <div class="card-body d-flex flex-column justify-content-between py-3">
+                <div class="d-flex align-items-center gap-3">
+                    <i class="bi bi-clipboard2-pulse fs-4 text-muted"></i>
+                    <div>
+                        <div class="small text-muted fw-semibold text-uppercase">Status Kondisi Tanaman</div>
+                        <div class="mt-1">
+                            <span class="badge status-badge fs-6" id="status-badge">Menunggu data...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-muted small mt-2" id="last-updated">
+                    <i class="bi bi-clock me-1"></i>Terakhir diperbarui: --
                 </div>
             </div>
         </div>
-        <div class="text-muted small" id="last-updated">
-            <i class="bi bi-clock me-1"></i>Terakhir diperbarui: --
+    </div>
+
+    {{-- Light Intensity Status Card --}}
+    <div class="col-12 col-md-6">
+        <div class="card status-card light-status-card h-100" id="ldr-status-card">
+            <div class="card-body d-flex align-items-center justify-content-between py-3 gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="light-icon-wrapper" id="ldr-icon-wrapper">
+                        <span id="ldr-icon" class="fs-2">☀️</span>
+                    </div>
+                    <div>
+                        <div class="small text-muted fw-semibold text-uppercase">Intensitas Cahaya (LDR)</div>
+                        <div class="light-status-text fw-bold fs-5 mt-1" id="ldr-status-text">Menunggu data...</div>
+                        <div class="light-sub-text small text-muted mt-1" id="ldr-sub-text">Memuat kondisi cahaya...</div>
+                    </div>
+                </div>
+                <div id="ldr-lux-badge" class="badge bg-secondary-subtle text-secondary-emphasis small px-2 py-1">
+                    <span id="val-light">--</span> lux
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -545,10 +560,26 @@ if (backupModal) {
         if (!infoEl) return;
         infoEl.innerHTML = '<i class="bi bi-arrow-repeat spin-icon me-1"></i> Memuat info...';
         fetch('/backup/info', {
-            headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json',
+            },
+            credentials: 'same-origin',
         })
-        .then(r => r.json())
+        .then(r => {
+            if (!r.ok) {
+                return r.json().catch(() => null).then(data => {
+                    const msg = data?.message || `Server error (${r.status})`;
+                    throw new Error(msg);
+                });
+            }
+            return r.json();
+        })
         .then(d => {
+            if (d.error) {
+                infoEl.innerHTML = `<span class="text-danger"><i class="bi bi-x-circle me-1"></i>${d.message || 'Terjadi kesalahan.'}</span>`;
+                return;
+            }
             if (d.count === 0) {
                 infoEl.innerHTML = '<span class="text-warning"><i class="bi bi-exclamation-triangle me-1"></i>Belum ada data real tersimpan.</span>';
             } else {
@@ -561,8 +592,9 @@ if (backupModal) {
                     `Terbaru: <strong>${newest}</strong>`;
             }
         })
-        .catch(() => {
-            infoEl.innerHTML = '<span class="text-danger"><i class="bi bi-x-circle me-1"></i>Gagal memuat info.</span>';
+        .catch(err => {
+            console.error('Backup info error:', err);
+            infoEl.innerHTML = `<span class="text-danger"><i class="bi bi-x-circle me-1"></i>${err.message || 'Gagal memuat info.'}</span>`;
         });
     });
 

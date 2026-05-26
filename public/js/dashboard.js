@@ -239,6 +239,7 @@ function updateStatCards(data) {
         animateValue(DOM.valTemp(), '--');
         animateValue(DOM.valHumidity(), '--');
         animateValue(DOM.valLight(), '--');
+        updateLightStatus(null);
         return;
     }
 
@@ -248,6 +249,50 @@ function updateStatCards(data) {
     animateValue(DOM.valTemp(), parseFloat(latest.temperature).toFixed(1));
     animateValue(DOM.valHumidity(), parseFloat(latest.humidity).toFixed(1));
     animateValue(DOM.valLight(), parseFloat(latest.light_intensity).toFixed(0));
+    updateLightStatus(parseFloat(latest.light_intensity));
+}
+
+/**
+ * Update the premium Glassmorphic LDR Status Card
+ */
+function updateLightStatus(lightVal) {
+    const card = document.getElementById('ldr-status-card');
+    const icon = document.getElementById('ldr-icon');
+    const statusText = document.getElementById('ldr-status-text');
+    const subText = document.getElementById('ldr-sub-text');
+
+    if (!card || !statusText) return;
+
+    if (lightVal === null || isNaN(lightVal)) {
+        statusText.textContent = 'Menunggu data...';
+        subText.textContent = 'Memuat kondisi cahaya...';
+        card.className = 'card status-card light-status-card h-100';
+        if (icon) {
+            icon.className = 'fs-2';
+            icon.innerHTML = '☀️';
+        }
+        return;
+    }
+
+    if (lightVal >= 100) {
+        // TERANG state
+        card.className = 'card status-card light-status-card h-100 state-terang';
+        statusText.textContent = 'Cahaya Cukup';
+        subText.textContent = 'Ideal untuk fotosintesis Jambu Kristal';
+        if (icon) {
+            icon.className = 'fs-2 spin-slow';
+            icon.innerHTML = '☀️';
+        }
+    } else {
+        // GELAP state
+        card.className = 'card status-card light-status-card h-100 state-gelap';
+        statusText.textContent = 'Cahaya Minim / Malam Hari';
+        subText.textContent = 'Sistem dalam mode monitoring malam';
+        if (icon) {
+            icon.className = 'fs-2 pulse-glow-slow';
+            icon.innerHTML = '🌑';
+        }
+    }
 }
 
 /**
@@ -476,18 +521,38 @@ function renderCharts(data) {
         data: {
             labels,
             datasets: [{
-                label: 'Intensitas Cahaya (lux)',
+                label: 'Status Cahaya',
                 data: lightVals,
                 borderColor: '#ffa726',
-                backgroundColor: 'rgba(255, 167, 38, 0.1)',
-                borderWidth: 2,
+                backgroundColor: 'rgba(255, 167, 38, 0.15)',
+                borderWidth: 2.5,
                 pointRadius: 3,
                 pointBackgroundColor: '#ffa726',
-                tension: 0.4,
+                stepped: true,
                 fill: true,
             }]
         },
-        options: commonOptions
+        options: {
+            ...commonOptions,
+            scales: {
+                ...commonOptions.scales,
+                y: {
+                    min: 0,
+                    max: 500,
+                    ticks: {
+                        color: tc.tick,
+                        font: { size: 10, weight: 'bold' },
+                        stepSize: 500,
+                        callback: function(value) {
+                            if (value === 0) return '🌙 GELAP';
+                            if (value === 500) return '☀️ TERANG';
+                            return '';
+                        }
+                    },
+                    grid: { color: tc.grid }
+                }
+            }
+        }
     });
 }
 
@@ -622,6 +687,11 @@ function renderTable(data) {
             ? `<td><input class="form-check-input row-checkbox" type="checkbox" value="${d.id}" ${checked} onchange="onRowCheckboxChange(this)"></td>`
             : '';
 
+        const lightVal = parseFloat(d.light_intensity);
+        const lightBadge = lightVal >= 100 
+            ? `<span class="badge bg-warning-subtle text-warning-emphasis"><i class="bi bi-sun-fill me-1 text-warning"></i> Terang</span>` 
+            : `<span class="badge bg-indigo-subtle text-indigo-emphasis" style="background-color: rgba(99, 102, 241, 0.15); color: #818cf8;"><i class="bi bi-moon-stars-fill me-1" style="color: #818cf8;"></i> Gelap</span>`;
+
         return `<tr class="${checked ? 'table-row-selected' : ''}">
             ${checkboxTd}
             <td>${rowNum}</td>
@@ -629,7 +699,7 @@ function renderTable(data) {
             <td>${parseFloat(d.soil_moisture).toFixed(1)}%</td>
             <td>${parseFloat(d.temperature).toFixed(1)}°C</td>
             <td>${parseFloat(d.humidity).toFixed(1)}%</td>
-            <td>${parseFloat(d.light_intensity).toFixed(0)} lux</td>
+            <td>${lightBadge}</td>
             <td><span class="${statusClass} fw-semibold">${d.status}</span></td>
         </tr>`;
     }).join('');
@@ -882,14 +952,12 @@ function startSimulator() {
         humidity = humBase + (Math.random() * 6.0 - 3.0);
         humidity = Math.max(45.0, Math.min(95.0, humidity));
 
-        // ── Light: 0 at night, peaks ~1200 at noon ──
+        // ── Light: Biner 2.0 (GELAP) atau 500.0 (TERANG) sesuai waktu kebun (siang/malam) ──
         if (hour >= 6.0 && hour <= 18.0) {
-            const lightBase = 800.0 * Math.sin(Math.PI * (hour - 6.0) / 12.0);
-            light = lightBase + (Math.random() * 160.0 - 80.0);
+            light = 500.0;
         } else {
-            light = Math.random() * 5.0;
+            light = 2.0;
         }
-        light = Math.max(0.0, Math.min(2000.0, light));
 
         // Determine moisture based on selected condition
         if (condition === 'normal') {

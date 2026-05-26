@@ -52,6 +52,14 @@ class SensorDataController extends Controller
             $this->sendTelegramNotification($data, $status, $previousStatus);
         }
 
+        // ── 6. Trigger Telegram SQL Backup (Setiap Kelipatan 10 Data Real) ──
+        if ($source === 'real') {
+            $realCount = SensorData::where('source', 'real')->count();
+            if ($realCount > 0 && $realCount % 10 === 0) {
+                $this->triggerTelegramBackup($realCount);
+            }
+        }
+
         // ── 6. Response ──────────────────────────────────────
         return response()->json([
             'status'  => 'success',
@@ -176,6 +184,8 @@ class SensorDataController extends Controller
 
         $prefix = $data->source === 'dummy' ? "⚠️ <b>[SIMULASI/DUMMY]</b>\n" : "";
 
+        $lightStatus = $data->light_intensity >= 100 ? "TERANG (Cukup Cahaya)" : "GELAP (Kurang Cahaya)";
+
         $message  = "{$prefix}{$emoji} <b>Status Kebun Berubah!</b>\n\n";
         $message .= "Status: <b>{$newStatus}</b>\n";
         $message .= "Sebelumnya: " . ($oldStatus ?? '—') . "\n\n";
@@ -183,10 +193,60 @@ class SensorDataController extends Controller
         $message .= "💧 Kelembaban Tanah: {$data->soil_moisture}%\n";
         $message .= "🌡️ Suhu: {$data->temperature}°C\n";
         $message .= "💨 Kelembaban Udara: {$data->humidity}%\n";
-        $message .= "☀️ Intensitas Cahaya: {$data->light_intensity} lux\n\n";
+        $message .= "☀️ Intensitas Cahaya: <b>{$lightStatus}</b>\n\n";
         $message .= "🕐 Waktu: {$data->created_at}";
 
         app(TelegramService::class)->sendMessage($message);
+    }
+
+    /**
+     * Trigger cadangan/backup otomatis data real ke Telegram.
+     */
+    private function triggerTelegramBackup(int $count): void
+    {
+        $data = SensorData::where('source', 'real')->orderBy('created_at', 'asc')->get();
+        if ($data->isEmpty()) {
+            return;
+        }
+
+        $now = now()->format('Y-m-d_H-i-s');
+        $filename = "backup_sensor_real_{$count}_{$now}.sql";
+
+        $sql  = "-- ============================================================\n";
+        $sql .= "-- Backup Data Sensor Real - Jambu Monitoring\n";
+        $sql .= "-- Dibuat Otomatis via Telegram (Setiap 10 Data)\n";
+        $sql .= "-- Dibuat: " . now()->format('d/m/Y H:i:s') . " WIB\n";
+        $sql .= "-- Total record: {$count}\n";
+        $sql .= "-- ============================================================\n\n";
+        $sql .= "SET NAMES utf8mb4;\n";
+        $sql .= "SET FOREIGN_KEY_CHECKS = 0;\n\n";
+        $sql .= "INSERT INTO `sensor_data` (`id`, `soil_moisture`, `temperature`, `humidity`, `light_intensity`, `status`, `source`, `created_at`, `updated_at`) VALUES\n";
+
+        $rows = [];
+        foreach ($data as $row) {
+            $id            = (int) $row->id;
+            $soil          = (float) $row->soil_moisture;
+            $temp          = (float) $row->temperature;
+            $hum           = (float) $row->humidity;
+            $light         = (float) $row->light_intensity;
+            $status        = addslashes($row->status ?? '');
+            $source        = addslashes($row->source ?? 'real');
+            $created_at    = $row->created_at;
+            $updated_at    = $row->updated_at;
+
+            $rows[] = "({$id}, {$soil}, {$temp}, {$hum}, {$light}, '{$status}', '{$source}', '{$created_at}', '{$updated_at}')";
+        }
+
+        $sql .= implode(",\n", $rows) . ";\n\n";
+        $sql .= "SET FOREIGN_KEY_CHECKS = 1;\n";
+        $sql .= "-- ===== END OF BACKUP =====\n";
+
+        $caption  = "💾 <b>Backup Otomatis Jambu Monitor</b>\n\n";
+        $caption .= "Data real ke-{$count} berhasil disimpan!\n";
+        $caption .= "Sistem mendeteksi kelipatan 10 data, mencadangkan total <b>{$count}</b> data real saat ini.\n\n";
+        $caption .= "Format berkas SQL ini kompatibel dengan sistem Restore di web dashboard.";
+
+        app(TelegramService::class)->sendDocument($sql, $filename, $caption);
     }
 
     /**
@@ -225,17 +285,12 @@ class SensorDataController extends Controller
             $hum = $humBase + $this->randomGauss(0, 3.0);
             $hum = max(45.0, min(95.0, $hum));
 
-            // ── Light: 0 at night, peaks ~1200 at noon ──
+            // ── Light: Biner 2.0 (GELAP) atau 500.0 (TERANG) sesuai waktu kebun (siang/malam) ──
             if ($hour >= 6.0 && $hour <= 18.0) {
-                $lightBase = 800.0 * sin(pi() * ($hour - 6.0) / 12.0);
-                $light = $lightBase + $this->randomGauss(0, 80.0);
-                if ((mt_rand() / mt_getrandmax()) < 0.15) {
-                    $light *= 0.3;
-                }
+                $light = 500.0;
             } else {
-                $light = mt_rand(0, 50) / 10.0;
+                $light = 2.0;
             }
-            $light = max(0.0, min(2000.0, $light));
 
             // ── Soil Moisture: decays, watered 2x ──
             if ($hour >= 8.0 && $hour <= 16.0) {

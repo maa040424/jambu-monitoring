@@ -1145,3 +1145,121 @@ body.light-mode .table {
         padding-bottom: 1.5rem;
     }
 }
+
+/* ── Light Status Card (Premium LDR Glassmorphism) ── */
+.light-status-card {
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-card);
+    background: var(--bg-card);
+}
+
+/* Glassmorphism overlays */
+.light-status-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    pointer-events: none;
+}
+
+.light-status-card .card-body {
+    position: relative;
+    z-index: 1;
+}
+
+/* TERANG State styling */
+.light-status-card.state-terang {
+    background: linear-gradient(135deg, rgba(254, 240, 138, 0.15) 0%, rgba(253, 186, 116, 0.25) 100%) !important;
+    border-color: rgba(234, 179, 8, 0.4) !important;
+    box-shadow: 0 8px 32px rgba(234, 179, 8, 0.12), var(--shadow-card) !important;
+}
+body.light-mode .light-status-card.state-terang {
+    background: linear-gradient(135deg, #fef9c3 0%, #ffedd5 100%) !important;
+    border-color: rgba(234, 179, 8, 0.3) !important;
+}
+
+.light-status-card.state-terang #ldr-status-text {
+    color: #eab308 !important;
+    text-shadow: 0 0 10px rgba(234, 179, 8, 0.1);
+}
+body.light-mode .light-status-card.state-terang #ldr-status-text {
+    color: #ca8a04 !important;
+}
+
+/* GELAP State styling */
+.light-status-card.state-gelap {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(88, 28, 135, 0.25) 100%) !important;
+    border-color: rgba(168, 85, 247, 0.3) !important;
+    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.1), var(--shadow-card) !important;
+}
+body.light-mode .light-status-card.state-gelap {
+    background: linear-gradient(135deg, #1e1b4b 0%, #311042 100%) !important;
+    border-color: rgba(168, 85, 247, 0.25) !important;
+    color: #f3e8ff !important;
+}
+body.light-mode .light-status-card.state-gelap .text-muted {
+    color: #d8b4fe !important;
+}
+
+.light-status-card.state-gelap #ldr-status-text {
+    color: #c084fc !important;
+    text-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
+}
+body.light-mode .light-status-card.state-gelap #ldr-status-text {
+    color: #e9d5ff !important;
+}
+
+/* Icon Wrappers and Animations */
+.light-icon-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.5s ease;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.state-terang .light-icon-wrapper {
+    background: rgba(234, 179, 8, 0.15);
+    box-shadow: 0 0 15px rgba(234, 179, 8, 0.2);
+}
+
+.state-gelap .light-icon-wrapper {
+    background: rgba(168, 85, 247, 0.15);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.2);
+}
+
+/* Sun Rotation Animation */
+.spin-slow {
+    animation: spin-slow-keyframes 12s linear infinite;
+    display: inline-block;
+}
+@keyframes spin-slow-keyframes {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Moon Pulsing Animation */
+.pulse-glow-slow {
+    animation: pulse-glow-slow-keyframes 3s ease-in-out infinite;
+    display: inline-block;
+}
+@keyframes pulse-glow-slow-keyframes {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 2px rgba(168, 85, 247, 0.4));
+    }
+    50% {
+        transform: scale(1.1);
+        filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.8));
+    }
+}

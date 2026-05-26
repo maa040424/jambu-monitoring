@@ -10,7 +10,14 @@ class AdminMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->user()?->role !== 'admin') {
+        if (!auth()->user()?->isAdmin()) {
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'error'   => true,
+                    'message' => 'Anda tidak memiliki akses.',
+                ], 403);
+            }
+
             return redirect()->route('dashboard')
                 ->with('error', 'Anda tidak memiliki akses ke halaman tersebut.');
         }

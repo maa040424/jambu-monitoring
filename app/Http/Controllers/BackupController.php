@@ -155,14 +155,21 @@ class BackupController extends Controller
      */
     public function info()
     {
-        $count  = SensorData::where('source', 'real')->count();
-        $oldest = SensorData::where('source', 'real')->oldest()->value('created_at');
-        $newest = SensorData::where('source', 'real')->latest()->value('created_at');
+        try {
+            $count  = SensorData::where('source', 'real')->count();
+            $oldest = SensorData::where('source', 'real')->oldest()->value('created_at');
+            $newest = SensorData::where('source', 'real')->latest()->value('created_at');
 
-        return response()->json([
-            'count'  => $count,
-            'oldest' => $oldest,
-            'newest' => $newest,
-        ]);
+            return response()->json([
+                'count'  => $count,
+                'oldest' => $oldest,
+                'newest' => $newest,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error'   => true,
+                'message' => 'Gagal mengambil info data: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 }
