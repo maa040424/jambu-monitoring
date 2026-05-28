@@ -25,6 +25,7 @@ class SensorDataController extends Controller
             'humidity'        => 'required|numeric',
             'light_intensity' => 'required|numeric',
             'source'          => 'sometimes|in:dummy,real',
+            'recorded_at'     => 'sometimes|date',
         ]);
 
         // ── 2. Hitung status berdasarkan soil_moisture ───────
@@ -33,10 +34,14 @@ class SensorDataController extends Controller
         // ── 3. Source: default 'real' (Arduino tidak perlu kirim param ini)
         $source = $validated['source'] ?? 'real';
 
-        // ── 4. Simpan data + status + source ke database ─────
+        // ── 3b. recorded_at: waktu data direkam ESP32, fallback ke now()
+        $recordedAt = $validated['recorded_at'] ?? now();
+
+        // ── 4. Simpan data + status + source + recorded_at ke database ─────
         $data = SensorData::create(array_merge($validated, [
-            'status' => $status,
-            'source' => $source,
+            'status'      => $status,
+            'source'      => $source,
+            'recorded_at' => $recordedAt,
         ]));
 
         // ── 5. Cek status sebelumnya & kirim Telegram ────────
@@ -194,7 +199,8 @@ class SensorDataController extends Controller
         $message .= "🌡️ Suhu: {$data->temperature}°C\n";
         $message .= "💨 Kelembaban Udara: {$data->humidity}%\n";
         $message .= "☀️ Intensitas Cahaya: <b>{$lightStatus}</b>\n\n";
-        $message .= "🕐 Waktu: {$data->created_at}";
+        $message .= "🕐 Direkam: " . ($data->recorded_at ?? $data->created_at) . "\n";
+        $message .= "📤 Diterima: {$data->created_at}";
 
         app(TelegramService::class)->sendMessage($message);
     }
@@ -220,7 +226,7 @@ class SensorDataController extends Controller
         $sql .= "-- ============================================================\n\n";
         $sql .= "SET NAMES utf8mb4;\n";
         $sql .= "SET FOREIGN_KEY_CHECKS = 0;\n\n";
-        $sql .= "INSERT INTO `sensor_data` (`id`, `soil_moisture`, `temperature`, `humidity`, `light_intensity`, `status`, `source`, `created_at`, `updated_at`) VALUES\n";
+        $sql .= "INSERT INTO `sensor_data` (`id`, `soil_moisture`, `temperature`, `humidity`, `light_intensity`, `status`, `source`, `recorded_at`, `created_at`, `updated_at`) VALUES\n";
 
         $rows = [];
         foreach ($data as $row) {
@@ -231,10 +237,11 @@ class SensorDataController extends Controller
             $light         = (float) $row->light_intensity;
             $status        = addslashes($row->status ?? '');
             $source        = addslashes($row->source ?? 'real');
+            $recorded_at   = $row->recorded_at ?? $row->created_at;
             $created_at    = $row->created_at;
             $updated_at    = $row->updated_at;
 
-            $rows[] = "({$id}, {$soil}, {$temp}, {$hum}, {$light}, '{$status}', '{$source}', '{$created_at}', '{$updated_at}')";
+            $rows[] = "({$id}, {$soil}, {$temp}, {$hum}, {$light}, '{$status}', '{$source}', '{$recorded_at}', '{$created_at}', '{$updated_at}')";
         }
 
         $sql .= implode(",\n", $rows) . ";\n\n";

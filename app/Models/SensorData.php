@@ -13,5 +13,10 @@ class SensorData extends Model
         'light_intensity',
         'status',
         'source',
+        'recorded_at',
+    ];
+
+    protected $casts = [
+        'recorded_at' => 'datetime',
     ];
 }
