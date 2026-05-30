@@ -22,5 +22,6 @@ Route::post('/sensor-data', [SensorDataController::class, 'store'])
 // Dashboard ambil data — hanya user yang sudah login
 Route::middleware('web', 'auth')->group(function () {
     Route::get('/sensor-data', [SensorDataController::class, 'index']);
+    Route::get('/device-status', [SensorDataController::class, 'deviceStatus']);
     Route::get('/forecast', [ForecastController::class, 'index']);
 });

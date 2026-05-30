@@ -74,6 +74,44 @@ class SensorDataController extends Controller
     }
 
     /**
+     * Status alat ESP32 — Online/Offline berdasarkan data terakhir.
+     *
+     * Logika:
+     *   - Data real terakhir < 45 menit → Online
+     *   - Data real terakhir > 45 menit → Offline
+     *   - Belum ada data real → Unknown
+     *
+     * Threshold 45 menit = 1.5× interval kirim (30 menit),
+     * memberi toleransi untuk retry + network delay.
+     */
+    public function deviceStatus()
+    {
+        $thresholdMinutes = 45;
+
+        $latest = SensorData::where('source', 'real')
+            ->latest()
+            ->first();
+
+        if (!$latest) {
+            return response()->json([
+                'status'      => 'unknown',
+                'message'     => 'Belum ada data real dari ESP32',
+                'last_seen'   => null,
+                'minutes_ago' => null,
+            ]);
+        }
+
+        $minutesAgo = (int) $latest->created_at->diffInMinutes(now());
+        $isOnline = $minutesAgo <= $thresholdMinutes;
+
+        return response()->json([
+            'status'      => $isOnline ? 'online' : 'offline',
+            'last_seen'   => $latest->created_at->toDateTimeString(),
+            'minutes_ago' => $minutesAgo,
+        ]);
+    }
+
+    /**
      * Simulasikan data sensor masuk via web (menggunakan auth session).
      */
     public function simulate(Request $request)

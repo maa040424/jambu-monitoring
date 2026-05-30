@@ -44,6 +44,12 @@ const DOM = {
     dataCount: () => document.getElementById('data-count'),
     connBadge: () => document.getElementById('connection-badge'),
     modeBadge: () => document.getElementById('mode-badge'),
+    deviceBadge: () => document.getElementById('device-badge'),
+    deviceLastSeen: () => document.getElementById('device-last-seen'),
+    deviceStatusBadgeNav: () => document.getElementById('device-status-badge'),
+    deviceStatusText: () => document.getElementById('device-status-text'),
+    deviceIcon: () => document.getElementById('device-icon'),
+    deviceCard: () => document.getElementById('device-status-card'),
     btnModeDummy: () => document.getElementById('btn-mode-dummy'),
     btnModeReal: () => document.getElementById('btn-mode-real'),
     clearModeLabel: () => document.getElementById('clear-mode-label'),
@@ -665,6 +671,91 @@ function setConnectionStatus(connected) {
 
 
 // ══════════════════════════════════════════════════════════
+//  DEVICE STATUS (ESP32 Online/Offline)
+// ══════════════════════════════════════════════════════════
+
+async function fetchDeviceStatus() {
+    try {
+        const res = await fetch('/api/device-status', {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json',
+            },
+            credentials: 'same-origin',
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        updateDeviceStatusUI(data);
+    } catch (err) {
+        console.error('Device status error:', err);
+        updateDeviceStatusUI({ status: 'unknown', last_seen: null, minutes_ago: null });
+    }
+}
+
+function updateDeviceStatusUI(data) {
+    const badge = DOM.deviceBadge();
+    const lastSeen = DOM.deviceLastSeen();
+    const navBadge = DOM.deviceStatusBadgeNav();
+    const navText = DOM.deviceStatusText();
+    const icon = DOM.deviceIcon();
+    const card = DOM.deviceCard();
+
+    if (!badge) return;
+
+    if (data.status === 'online') {
+        // Online state
+        badge.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i>Online';
+        badge.className = 'badge device-badge device-online fs-6';
+        if (icon) { icon.innerHTML = '📡'; icon.className = 'fs-2 pulse-slow'; }
+        if (card) card.className = 'card status-card device-status-card h-100 device-state-online';
+
+        if (navBadge) navBadge.className = 'nav-badge nav-badge-device device-nav-online';
+        if (navText) navText.innerHTML = '<i class="bi bi-circle-fill pulse-dot me-1"></i>ESP32 Online';
+
+        const agoText = formatMinutesAgo(data.minutes_ago);
+        if (lastSeen) lastSeen.innerHTML = `<i class="bi bi-clock-history me-1"></i>Data terakhir: ${agoText}`;
+
+    } else if (data.status === 'offline') {
+        // Offline state
+        badge.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-1"></i>Offline';
+        badge.className = 'badge device-badge device-offline fs-6';
+        if (icon) { icon.innerHTML = '⚠️'; icon.className = 'fs-2 pulse-slow'; }
+        if (card) card.className = 'card status-card device-status-card h-100 device-state-offline';
+
+        if (navBadge) navBadge.className = 'nav-badge nav-badge-device device-nav-offline';
+        if (navText) navText.innerHTML = '<i class="bi bi-circle-fill me-1"></i>ESP32 Offline';
+
+        const agoText = formatMinutesAgo(data.minutes_ago);
+        if (lastSeen) lastSeen.innerHTML = `<i class="bi bi-clock-history me-1"></i>Terakhir: ${agoText}`;
+
+    } else {
+        // Unknown state
+        badge.innerHTML = '<i class="bi bi-question-circle me-1"></i>Belum Ada Data';
+        badge.className = 'badge device-badge device-unknown fs-6';
+        if (icon) { icon.innerHTML = '⚪'; icon.className = 'fs-2'; }
+        if (card) card.className = 'card status-card device-status-card h-100';
+
+        if (navBadge) navBadge.className = 'nav-badge nav-badge-device device-nav-unknown';
+        if (navText) navText.textContent = 'ESP32 N/A';
+
+        if (lastSeen) lastSeen.innerHTML = '<i class="bi bi-clock-history me-1"></i>Belum ada data dari sensor';
+    }
+}
+
+function formatMinutesAgo(minutes) {
+    if (minutes === null || minutes === undefined) return '--';
+    if (minutes < 1) return 'Baru saja';
+    if (minutes < 60) return `${minutes} menit lalu`;
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    if (hours < 24) return `${hours} jam ${mins > 0 ? mins + ' menit' : ''} lalu`;
+    const days = Math.floor(hours / 24);
+    return `${days} hari lalu`;
+}
+
+
+// ══════════════════════════════════════════════════════════
 //  DATA TABLE
 // ══════════════════════════════════════════════════════════
 
@@ -879,9 +970,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial fetch
     fetchSensorData();
+    fetchDeviceStatus();
 
     // Auto-refresh
-    refreshTimer = setInterval(fetchSensorData, CONFIG.REFRESH_INTERVAL);
+    refreshTimer = setInterval(() => {
+        fetchSensorData();
+        fetchDeviceStatus();
+    }, CONFIG.REFRESH_INTERVAL);
 });
 
 // ══════════════════════════════════════════════════════════

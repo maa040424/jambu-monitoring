@@ -393,10 +393,10 @@
     </div>
 </div>
 
-{{-- Status Row (Tanaman & Cahaya) --}}
+{{-- Status Row (Tanaman, Cahaya & Status Alat) --}}
 <div class="row g-3 mb-4">
     {{-- Condition Status (Soil Moisture) --}}
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-4">
         <div class="card status-card h-100">
             <div class="card-body d-flex flex-column justify-content-between py-3">
                 <div class="d-flex align-items-center gap-3">
@@ -416,7 +416,7 @@
     </div>
 
     {{-- Light Intensity Status Card --}}
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-4">
         <div class="card status-card light-status-card h-100" id="ldr-status-card">
             <div class="card-body d-flex align-items-center justify-content-between py-3 gap-3">
                 <div class="d-flex align-items-center gap-3">
@@ -431,6 +431,30 @@
                 </div>
                 <div id="ldr-lux-badge" class="badge bg-secondary-subtle text-secondary-emphasis small px-2 py-1">
                     <span id="val-light">--</span> lux
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Device Status Card (ESP32 Online/Offline) --}}
+    <div class="col-12 col-md-4">
+        <div class="card status-card device-status-card h-100" id="device-status-card">
+            <div class="card-body d-flex flex-column justify-content-between py-3">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="device-icon-wrapper" id="device-icon-wrapper">
+                        <span id="device-icon" class="fs-2">📡</span>
+                    </div>
+                    <div>
+                        <div class="small text-muted fw-semibold text-uppercase">Status Alat (ESP32)</div>
+                        <div class="mt-1">
+                            <span class="badge device-badge fs-6" id="device-badge">
+                                <i class="bi bi-arrow-repeat spin-icon me-1"></i>Mengecek...
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-muted small mt-2" id="device-last-seen">
+                    <i class="bi bi-clock-history me-1"></i>Terakhir terlihat: --
                 </div>
             </div>
         </div>

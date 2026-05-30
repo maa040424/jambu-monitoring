@@ -87,6 +87,11 @@
                         <i class="bi bi-circle-fill pulse-dot"></i> Live
                     </span>
 
+                    {{-- Device status (ESP32 di kebun) --}}
+                    <span class="nav-badge nav-badge-device" id="device-status-badge" title="Status alat ESP32 di kebun">
+                        <i class="bi bi-cpu"></i> <span id="device-status-text">Cek...</span>
+                    </span>
+
                     {{-- Live clock --}}
                     <span class="nav-clock" id="nav-clock" title="Waktu saat ini (WIB)">
                         <i class="bi bi-clock"></i>
