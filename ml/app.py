@@ -12,6 +12,8 @@ from datetime import datetime, timedelta
 from flask import Flask, jsonify, request
 from dotenv import load_dotenv
 from statsmodels.tsa.arima.model import ARIMA
+from sklearn.model_selection import TimeSeriesSplit
+from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 # Suppress convergence warnings from statsmodels
 warnings.filterwarnings('ignore')
@@ -88,6 +90,86 @@ def fit_arima_forecast(series, steps=FORECAST_STEPS, order=(2, 1, 2)):
         return None, str(e)
 
 
+def cross_validate_arima(series, n_splits=5, order=(2, 1, 2)):
+    """
+    Perform 5-Fold Time Series Cross-Validation on ARIMA.
+    Uses sklearn's TimeSeriesSplit to preserve temporal ordering.
+
+    Returns dict with per-fold and average metrics (MAE, RMSE, MAPE).
+    """
+    series = series.dropna().astype(float).reset_index(drop=True)
+
+    if len(series) < 30:
+        return {
+            'avg_mae': None, 'avg_rmse': None, 'avg_mape': None,
+            'folds': [],
+            'error': f'Data terlalu sedikit untuk cross-validation ({len(series)} < 30)'
+        }
+
+    tscv = TimeSeriesSplit(n_splits=n_splits)
+    fold_results = []
+
+    for fold_idx, (train_idx, test_idx) in enumerate(tscv.split(series), start=1):
+        train = series.iloc[train_idx]
+        test = series.iloc[test_idx]
+
+        try:
+            model = ARIMA(train, order=order)
+            fitted = model.fit()
+            predictions = fitted.forecast(steps=len(test))
+
+            # Compute metrics
+            mae = mean_absolute_error(test, predictions)
+            rmse = np.sqrt(mean_squared_error(test, predictions))
+
+            # MAPE — avoid division by zero
+            non_zero_mask = test != 0
+            if non_zero_mask.sum() > 0:
+                mape = np.mean(
+                    np.abs((test[non_zero_mask] - predictions[non_zero_mask.values])
+                           / test[non_zero_mask])
+                ) * 100
+            else:
+                mape = 0.0
+
+            fold_results.append({
+                'fold': fold_idx,
+                'train_size': len(train),
+                'test_size': len(test),
+                'mae': round(float(mae), 4),
+                'rmse': round(float(rmse), 4),
+                'mape': round(float(mape), 2),
+            })
+
+        except Exception as e:
+            fold_results.append({
+                'fold': fold_idx,
+                'train_size': len(train),
+                'test_size': len(test),
+                'mae': None, 'rmse': None, 'mape': None,
+                'error': str(e)[:100],
+            })
+
+    # Calculate average metrics (only from successful folds)
+    successful = [f for f in fold_results if f['mae'] is not None]
+
+    if successful:
+        avg_mae = round(np.mean([f['mae'] for f in successful]), 4)
+        avg_rmse = round(np.mean([f['rmse'] for f in successful]), 4)
+        avg_mape = round(np.mean([f['mape'] for f in successful]), 2)
+    else:
+        avg_mae = avg_rmse = avg_mape = None
+
+    return {
+        'n_folds': n_splits,
+        'successful_folds': len(successful),
+        'avg_mae': avg_mae,
+        'avg_rmse': avg_rmse,
+        'avg_mape': avg_mape,
+        'folds': fold_results,
+    }
+
+
 # ── Routes ────────────────────────────────────────────────
 
 @app.route('/health', methods=['GET'])
@@ -145,9 +227,10 @@ def predict():
 
     last_time = df['created_at'].iloc[-1]
 
-    # Run ARIMA for each sensor
+    # Run ARIMA for each sensor + cross-validation
     results = {}
     warnings_list = []
+    validation_metrics = {}
 
     for sensor in SENSORS:
         series = df[sensor]
@@ -176,6 +259,10 @@ def predict():
             clamped.append(round(val, 1))
 
         results[sensor] = clamped
+
+        # 5-Fold Time Series Cross-Validation
+        cv_result = cross_validate_arima(series, n_splits=5)
+        validation_metrics[sensor] = cv_result
 
     # Build forecast timestamps
     forecast_times = []
@@ -215,6 +302,11 @@ def predict():
         'actual': actual_data,
         'forecast': forecast_data,
         'warnings': warnings_list if warnings_list else None,
+        'cross_validation': {
+            'method': '5-Fold Time Series Split',
+            'n_folds': 5,
+            'metrics': validation_metrics,
+        },
     })
 
 
@@ -260,8 +352,9 @@ def predict_pdf():
 
     last_time = df['created_at'].iloc[-1]
 
-    # Run ARIMA predictions
+    # Run ARIMA predictions + cross-validation
     all_forecasts = {}
+    all_cv_results = {}
     for sensor in SENSORS:
         series = df[sensor]
         forecast, warn = fit_arima_forecast(series, steps=steps)
@@ -280,6 +373,10 @@ def predict_pdf():
                 val = max(0, min(10000, val))
             clamped.append(round(val, 1))
         all_forecasts[sensor] = clamped
+
+        # 5-Fold Cross-Validation for PDF
+        cv_result = cross_validate_arima(series, n_splits=5)
+        all_cv_results[sensor] = cv_result
 
     # Build forecast timestamps
     forecast_times = [last_time + avg_interval * (i + 1) for i in range(steps)]
@@ -520,6 +617,124 @@ def predict_pdf():
         elements.append(Paragraph(item, step_style))
 
     elements.append(Spacer(1, 16))
+
+    # ── 5-Fold Cross-Validation Evaluation Section ──
+    elements.append(Paragraph("Evaluasi Model — 5-Fold Cross-Validation", heading_style))
+
+    elements.append(Paragraph(
+        "Untuk memastikan model ARIMA memberikan prediksi yang akurat, dilakukan evaluasi "
+        "menggunakan metode <b>5-Fold Time Series Cross-Validation</b>. Data historis dibagi "
+        "menjadi 5 bagian secara berurutan (menjaga urutan waktu). Pada setiap fold, model "
+        "dilatih pada data sebelumnya dan diuji pada data berikutnya.",
+        method_body
+    ))
+    elements.append(Spacer(1, 8))
+
+    # Metric explanation
+    elements.append(Paragraph("<b>Penjelasan Metric:</b>", method_bold))
+    metric_explanations = [
+        "• <b>MAE</b> (Mean Absolute Error): Rata-rata selisih absolut antara prediksi dan aktual. Semakin kecil semakin baik.",
+        "• <b>RMSE</b> (Root Mean Squared Error): Akar rata-rata kuadrat error. Lebih sensitif terhadap error besar.",
+        "• <b>MAPE</b> (Mean Absolute Percentage Error): Error dalam persen. Di bawah 10% = sangat baik, 10-20% = baik.",
+    ]
+    for exp in metric_explanations:
+        elements.append(Paragraph(exp, step_style))
+    elements.append(Spacer(1, 10))
+
+    # Summary table of CV results
+    sensor_display_names = {
+        'soil_moisture': 'Kel. Tanah (%)',
+        'temperature': 'Suhu (°C)',
+        'humidity': 'Kel. Udara (%)',
+        'light_intensity': 'Cahaya (lux)',
+    }
+
+    cv_summary_data = [['Sensor', 'MAE', 'RMSE', 'MAPE (%)', 'Fold Berhasil']]
+    for sensor in SENSORS:
+        cv = all_cv_results.get(sensor, {})
+        cv_summary_data.append([
+            sensor_display_names.get(sensor, sensor),
+            str(cv.get('avg_mae', 'N/A')),
+            str(cv.get('avg_rmse', 'N/A')),
+            str(cv.get('avg_mape', 'N/A')),
+            f"{cv.get('successful_folds', 0)}/{cv.get('n_folds', 5)}",
+        ])
+
+    cv_table = Table(cv_summary_data, colWidths=[4*cm, 2.8*cm, 2.8*cm, 2.8*cm, 3*cm])
+    cv_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1565c0')),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+        ('FONTSIZE', (0, 0), (-1, 0), 8),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 1), (-1, -1), 8),
+        ('FONTNAME', (0, 1), (0, -1), 'Helvetica-Bold'),
+        ('ALIGN', (1, 0), (-1, -1), 'CENTER'),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#cccccc')),
+        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [
+            colors.HexColor('#ffffff'), colors.HexColor('#e8f0fe')
+        ]),
+        ('TOPPADDING', (0, 0), (-1, -1), 6),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+    ]))
+    elements.append(cv_table)
+    elements.append(Spacer(1, 12))
+
+    # Detail per fold table
+    elements.append(Paragraph("<b>Detail Per Fold:</b>", method_bold))
+    elements.append(Spacer(1, 4))
+
+    for sensor in SENSORS:
+        cv = all_cv_results.get(sensor, {})
+        folds = cv.get('folds', [])
+        if not folds:
+            continue
+
+        elements.append(Paragraph(
+            f"<b>{sensor_display_names.get(sensor, sensor)}</b>",
+            ParagraphStyle('FoldSensor', parent=body_style, fontSize=8,
+                          textColor=colors.HexColor('#1565c0'), spaceAfter=4)
+        ))
+
+        fold_data = [['Fold', 'Train', 'Test', 'MAE', 'RMSE', 'MAPE (%)']]
+        for f in folds:
+            fold_data.append([
+                str(f.get('fold', '')),
+                str(f.get('train_size', '')),
+                str(f.get('test_size', '')),
+                str(f.get('mae', 'Error')),
+                str(f.get('rmse', 'Error')),
+                str(f.get('mape', 'Error')),
+            ])
+
+        fold_table = Table(fold_data, colWidths=[1.5*cm, 2.2*cm, 2.2*cm, 3*cm, 3*cm, 3*cm])
+        fold_table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#455a64')),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ('FONTSIZE', (0, 0), (-1, -1), 7),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('GRID', (0, 0), (-1, -1), 0.4, colors.HexColor('#dddddd')),
+            ('ROWBACKGROUNDS', (0, 1), (-1, -1), [
+                colors.HexColor('#ffffff'), colors.HexColor('#f5f5f5')
+            ]),
+            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
+        ]))
+        elements.append(fold_table)
+        elements.append(Spacer(1, 8))
+
+    # Interpretation helper
+    elements.append(Spacer(1, 6))
+    elements.append(Paragraph(
+        "<b>Interpretasi MAPE:</b> &lt; 10% = Sangat Baik | 10–20% = Baik | "
+        "20–50% = Cukup | &gt; 50% = Perlu Perbaikan Model",
+        ParagraphStyle('MapeGuide', parent=body_style, fontSize=8,
+                      textColor=colors.HexColor('#666666'),
+                      backColor=colors.HexColor('#fff3e0'),
+                      borderPadding=6, spaceAfter=16)
+    ))
 
     # Charts
     elements.append(Paragraph("Grafik Aktual vs Prediksi", heading_style))
