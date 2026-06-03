@@ -1,6 +1,6 @@
 FROM python:3.12-alpine
 
-RUN apk add --no-cache gcc musl-dev mariadb-connector-c-dev
+RUN apk add --no-cache gcc g++ gfortran musl-dev mariadb-connector-c-dev openblas-dev
 
 WORKDIR /app
 COPY requirements.txt .
