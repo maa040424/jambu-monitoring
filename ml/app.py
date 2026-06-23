@@ -8,7 +8,7 @@ import warnings
 import pymysql
 import pandas as pd
 import numpy as np
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from flask import Flask, jsonify, request
 from dotenv import load_dotenv
 from statsmodels.tsa.arima.model import ARIMA
@@ -35,6 +35,9 @@ DB_CONFIG = {
 SENSORS = ['soil_moisture', 'temperature', 'humidity', 'light_intensity']
 FORECAST_STEPS = 24  # predict 24 steps ahead
 
+# Timezone: WITA (UTC+8) — Asia/Makassar
+WITA = timezone(timedelta(hours=8))
+
 
 def get_sensor_data(source='dummy', limit=500):
     """Fetch sensor data from MySQL — ambil data TERBARU."""
@@ -52,6 +55,18 @@ def get_sensor_data(source='dummy', limit=500):
             ORDER BY created_at ASC
         """
         df = pd.read_sql(query, conn, params=[source, limit])
+
+        # Koreksi timezone: jika server pakai UTC, konversi ke WITA
+        if not df.empty:
+            df['created_at'] = pd.to_datetime(df['created_at'])
+            now_local = datetime.now()
+            now_utc = datetime.now(timezone.utc)
+            server_offset_hours = round((now_local - now_utc.replace(tzinfo=None)).total_seconds() / 3600)
+
+            # Jika server berjalan di UTC (offset 0), data perlu digeser ke WITA (+8)
+            if server_offset_hours == 0:
+                df['created_at'] = df['created_at'] + timedelta(hours=8)
+
         return df
     finally:
         conn.close()
