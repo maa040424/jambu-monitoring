@@ -57,7 +57,7 @@ class BackupController extends Controller
         $sql .= "-- ATAU jalankan melalui fitur Restore di halaman Dashboard\n\n";
         $sql .= "SET NAMES utf8mb4;\n";
         $sql .= "SET FOREIGN_KEY_CHECKS = 0;\n\n";
-        $sql .= "INSERT INTO `sensor_data` (`id`, `soil_moisture`, `temperature`, `humidity`, `light_intensity`, `status`, `source`, `created_at`, `updated_at`) VALUES\n";
+        $sql .= "INSERT INTO `sensor_data` (`id`, `soil_moisture`, `temperature`, `humidity`, `light_intensity`, `status`, `source`, `recorded_at`, `created_at`, `updated_at`) VALUES\n";
 
         $rows = [];
         foreach ($data as $row) {
@@ -68,10 +68,11 @@ class BackupController extends Controller
             $light         = (float) $row->light_intensity;
             $status        = addslashes($row->status ?? '');
             $source        = addslashes($row->source ?? 'real');
+            $recorded_at   = $row->recorded_at ?? $row->created_at;
             $created_at    = $row->created_at;
             $updated_at    = $row->updated_at;
 
-            $rows[] = "({$id}, {$soil}, {$temp}, {$hum}, {$light}, '{$status}', '{$source}', '{$created_at}', '{$updated_at}')";
+            $rows[] = "({$id}, {$soil}, {$temp}, {$hum}, {$light}, '{$status}', '{$source}', '{$recorded_at}', '{$created_at}', '{$updated_at}')";
         }
 
         $sql .= implode(",\n", $rows) . ";\n\n";
@@ -102,13 +103,25 @@ class BackupController extends Controller
             return redirect()->back()->with('backup_error', 'File bukan backup yang valid. Pastikan file berasal dari fitur backup ini.');
         }
 
-        // Ekstrak INSERT VALUES
+        // Coba deteksi format 10 kolom terlebih dahulu (termasuk recorded_at)
         preg_match_all(
-            '/\((\d+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*\'([^\']*)\',\s*\'([^\']*)\',\s*\'([^\']+)\',\s*\'([^\']+)\'\)/',
+            '/\((\d+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*\'([^\']*)\',\s*\'([^\']*)\',\s*\'([^\']*)\',\s*\'([^\']+)\',\s*\'([^\']+)\'\)/',
             $content,
             $matches,
             PREG_SET_ORDER
         );
+
+        $isTenColumns = !empty($matches);
+
+        // Jika tidak cocok, coba format 9 kolom (tanpa recorded_at)
+        if (!$isTenColumns) {
+            preg_match_all(
+                '/\((\d+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*([\d.]+),\s*\'([^\']*)\',\s*\'([^\']*)\',\s*\'([^\']+)\',\s*\'([^\']+)\'\)/',
+                $content,
+                $matches,
+                PREG_SET_ORDER
+            );
+        }
 
         if (empty($matches)) {
             return redirect()->back()->with('backup_error', 'Tidak ada data valid yang ditemukan dalam file backup.');
@@ -126,17 +139,33 @@ class BackupController extends Controller
                 continue;
             }
 
-            SensorData::insert([
-                'id'              => (int)    $m[1],
-                'soil_moisture'   => (float)  $m[2],
-                'temperature'     => (float)  $m[3],
-                'humidity'        => (float)  $m[4],
-                'light_intensity' => (float)  $m[5],
-                'status'          =>           $m[6],
-                'source'          =>           $m[7],
-                'created_at'      =>           $m[8],
-                'updated_at'      =>           $m[9],
-            ]);
+            if ($isTenColumns) {
+                SensorData::insert([
+                    'id'              => (int)    $m[1],
+                    'soil_moisture'   => (float)  $m[2],
+                    'temperature'     => (float)  $m[3],
+                    'humidity'        => (float)  $m[4],
+                    'light_intensity' => (float)  $m[5],
+                    'status'          =>           $m[6],
+                    'source'          =>           $m[7],
+                    'recorded_at'     =>           $m[8],
+                    'created_at'      =>           $m[9],
+                    'updated_at'      =>           $m[10],
+                ]);
+            } else {
+                SensorData::insert([
+                    'id'              => (int)    $m[1],
+                    'soil_moisture'   => (float)  $m[2],
+                    'temperature'     => (float)  $m[3],
+                    'humidity'        => (float)  $m[4],
+                    'light_intensity' => (float)  $m[5],
+                    'status'          =>           $m[6],
+                    'source'          =>           $m[7],
+                    'recorded_at'     =>           $m[8], // fallback ke created_at jika 9 kolom
+                    'created_at'      =>           $m[8],
+                    'updated_at'      =>           $m[9],
+                ]);
+            }
             $imported++;
         }
 
