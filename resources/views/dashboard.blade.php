@@ -5,7 +5,7 @@
 {{-- Loading Overlay --}}
 <div id="loading-overlay" class="loading-overlay">
     <lottie-player
-        src="{{ asset('img/signal-analysis.json') }}"
+        src="{{ asset('img/radar-scan.json') }}"
         background="transparent"
         speed="1"
         loop autoplay
