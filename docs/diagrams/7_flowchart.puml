@@ -1,45 +1,57 @@
 @startuml Flowchart
-skinparam monochrome true
-skinparam shadowing false
-skinparam backgroundColor white
-skinparam defaultFontName Arial
-skinparam defaultFontSize 12
 
-title Flowchart\nProses Penerimaan dan Pengolahan Data Sensor
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
+skinparam conditionStyle inside
+
+title **Flowchart Penerimaan dan Pengolahan Data Sensor**
 
 start
 
-:Sensor membaca data\n(suhu, kelembaban udara,\nkelembaban tanah,\nintensitas cahaya);
+:Perangkat ESP32 membaca sensor\n(Kelembaban Tanah, Suhu, Kelembaban Udara, Cahaya);
+:Kirim data sensor ke server backend\nvia HTTP POST /api/sensor-data;
 
-:Perangkat IoT mengirim\ndata ke server;
-
-:Server menerima data;
-
-if (Data valid?) then (Ya)
-else (Tidak)
-    :Tampilkan\npesan kesalahan;
+if (Apakah API Key valid?) then (Tidak)
+    :Kirim status 401 Unauthorized;
     stop
+else (Ya)
+    if (Apakah validasi payload sukses?) then (Tidak)
+        :Kirim status 422 Unprocessable;
+        stop
+    else (Ya)
+        :Klasifikasi status kelembaban tanah\nberdasarkan aturan threshold;
+        
+        if (Kelembaban tanah < 20%?) then (Ya)
+            :Status = **Kritis**;
+        elseif (Kelembaban tanah < 30%?) then (Ya)
+            :Status = **Perlu Penyiraman**;
+        else (Tidak)
+            :Status = **Normal**;
+        endif
+        
+        :Simpan data sensor, status,\ndan source ('real') ke database MySQL;
+        
+        :Ambil record data sensor sebelumnya;
+        
+        if (Apakah status saat ini != status sebelumnya?) then (Ya)
+            :Kirim notifikasi alert perubahan status\nke Telegram Bot;
+        else (Tidak)
+        endif
+        
+        :Hitung jumlah record real di database;
+        
+        if (Apakah jumlah record kelipatan 10?) then (Ya)
+            :Generate berkas SQL backup;\n:Kirim file SQL ke Telegram Bot;
+        else (Tidak)
+        endif
+        
+        :Kembalikan respon HTTP 201 Created;
+        stop
+    endif
 endif
-
-if (Kelembaban tanah\n< 20%?) then (Ya)
-    :Status = **Kritis**;
-elseif (Kelembaban tanah\n< 30%?) then (Ya)
-    :Status = **Perlu Penyiraman**;
-else (Tidak)
-    :Status = **Normal**;
-endif
-
-:Simpan data sensor dan\nstatus ke basis data;
-
-:Ambil status data\nsebelumnya;
-
-if (Status berubah?) then (Ya)
-    :Kirim notifikasi\nke Petani melalui\nSistem Notifikasi;
-else (Tidak)
-endif
-
-:Data tersedia di\ndashboard untuk\nAdmin dan Petani;
-
-stop
 
 @enduml

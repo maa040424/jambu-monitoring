@@ -1,0 +1,90 @@
+@startuml Arsitektur_Sistem_IoT
+skinparam backgroundColor white
+skinparam defaultFontName "Arial"
+skinparam shadowing false
+skinparam roundCorner 8
+skinparam linetype ortho
+skinparam ArrowColor #333333
+
+title Diagram Arsitektur Sistem Monitoring dan Prediksi Kebun Jambu Kristal
+
+package "1. Hardware Layer (Edge Device)" {
+    node "ESP32 (Mikrokontroler)" as ESP32
+    rectangle "Sensor Soil Moisture" as S_Soil
+    rectangle "Sensor DHT22" as S_DHT
+    rectangle "LDR Module" as S_Light
+    
+    S_Soil --> ESP32 : Kelembapan Tanah
+    S_DHT --> ESP32 : Suhu & Kelembapan Udara
+    S_Light --> ESP32 : Intensitas Cahaya
+}
+
+package "2. Communication Layer" {
+    cloud "Jaringan WiFi" as Network
+    interface "REST API" as API
+    
+    ESP32 --> Network : Mengirim Data\n(Periodik)
+    Network --> API : Request HTTP POST
+}
+
+package "3. Backend Layer" {
+    component "Backend API Server\n(Laravel / Node.js)" as Backend
+    note right of Backend
+      • Menerima & Validasi Data
+      • Menyimpan Data ke Database
+      • Menyediakan Endpoint API
+    end note
+    
+    API --> Backend : Data Sensor Baru
+}
+
+package "4. Database Layer" {
+    database "MySQL Database" as DB
+    note right of DB
+      Tabel Data Sensor:
+      • soil_moisture
+      • temperature
+      • humidity
+      • light_intensity
+      • timestamp
+      • status_kondisi
+    end note
+    
+    Backend --> DB : Simpan Data Historis
+}
+
+package "5. Prediction Layer" {
+    component "Modul Forecasting\n(Metode ARIMA)" as ARIMA
+    note right of ARIMA
+      • Prediksi Tren Kelembapan Tanah
+      • Prediksi Tren Suhu Lingkungan
+    end note
+    
+    DB --> ARIMA : Ambil Data Historis
+    ARIMA --> Backend : Output Prediksi\n(Beberapa Periode ke Depan)
+}
+
+package "6. Frontend Dashboard Layer" {
+    component "Web Dashboard" as Dashboard
+    note right of Dashboard
+      • Data Sensor Real-time
+      • Grafik Historis (Chart.js)
+      • Hasil Prediksi ARIMA
+      • Status Lahan (Normal, Kritis, dll)
+    end note
+    
+    Backend --> Dashboard : Sediakan Data (JSON) via API
+}
+
+package "7. User Layer" {
+    actor "User" as User
+    note right of User
+      • Monitoring Data
+      • Melihat Grafik & Prediksi
+      (Sistem Pasif, Tanpa Kontrol)
+    end note
+    
+    Dashboard --> User : Visualisasi Antarmuka
+}
+
+@enduml

@@ -1,0 +1,32 @@
+@startuml Alur_Prediction_Pipeline
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+skinparam ArrowColor #37474F
+skinparam ArrowThickness 1.5
+
+title **Alur Prediction Pipeline**
+
+start
+
+:MySQL Database
+Menyimpan data sensor historis;
+
+:Backend API Service
+Mengambil historical dataset;
+
+:Flask Prediction Microservice
+Preprocessing data time-series;
+
+:ARIMA Forecasting Model
+Melakukan prediksi;
+
+:Prediction Result
+Dikirim ke dashboard;
+
+stop
+
+@enduml

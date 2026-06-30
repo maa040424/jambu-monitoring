@@ -1,29 +1,44 @@
 @startuml DFD Level 0
-skinparam monochrome true
-skinparam shadowing false
+
 skinparam backgroundColor white
-skinparam defaultFontName Arial
-skinparam defaultFontSize 12
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
 
-title Data Flow Diagram Level 0 (Context Diagram)\nSistem Monitoring Tanaman Jambu Kristal
+skinparam rectangle {
+    BorderColor #37474F
+    BackgroundColor #ECEFF1
+    FontStyle bold
+}
 
-rectangle "Admin" as admin
-rectangle "Petani" as petani
-rectangle "Perangkat IoT" as iot
-rectangle "Sistem Notifikasi" as notif
+skinparam usecase {
+    BorderColor #1565C0
+    BackgroundColor #E3F2FD
+    FontStyle bold
+}
 
-usecase "Sistem Monitoring\nTanaman Jambu\nKristal" as sistem
+title **Data Flow Diagram (DFD) Level 0 — Context Diagram**\nSistem Monitoring Tanaman Jambu Kristal
 
-iot -right-> sistem : Data Sensor
+rectangle "**Admin**\n(Pengelola)" as admin #ECEFF1
+rectangle "**Petani**\n(Pengguna)" as petani #ECEFF1
+rectangle "**Perangkat IoT (ESP32)**\n(Device Layer)" as esp32 #FFF9C4
+rectangle "**Telegram Bot API**\n(Notification Gateway)" as telegram #E8F5E9
 
-admin -down-> sistem : Permintaan Data,\nLogin, Kelola Data
+usecase "**Sistem Monitoring**\n**Jambu Kristal (Laravel + Flask)**" as sistem #E3F2FD
 
-sistem -up-> admin : Informasi Dashboard,\nData Sensor,\nHasil Prediksi,\nBerkas Ekspor
+' === Aliran Data ===
+esp32 -down-> sistem : **Data Sensor Raw**\n(Suhu, Kelembaban Udara,\nKelembaban Tanah, Cahaya) + API Key
 
-petani -down-> sistem : Permintaan Data,\nLogin
+admin -right-> sistem : **Manajemen Data**\n(Kredensial Pengguna,\nRequest Hapus, Config)
 
-sistem -up-> petani : Informasi Dashboard,\nData Sensor,\nHasil Prediksi
+sistem -left-> admin : **Informasi Dashboard**\n(Tabel Data, Grafik ARIMA,\nLog Sistem, File Ekspor PDF)
 
-sistem -right-> notif : Pesan Notifikasi\nPerubahan Status
+petani -down-> sistem : **Akses Monitoring**\n(Request Dashboard, Request Forecast)
+
+sistem -up-> petani : **Informasi Monitoring**\n(Visualisasi Data, Hasil Prediksi)
+
+sistem -right-> telegram : **Payload Notifikasi**\n(Alert Status Kelembaban,\nDokumen SQL Backup)
 
 @enduml

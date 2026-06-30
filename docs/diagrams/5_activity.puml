@@ -1,63 +1,59 @@
 @startuml Activity Diagram
-skinparam monochrome true
-skinparam shadowing false
+
 skinparam backgroundColor white
-skinparam defaultFontName Arial
-skinparam defaultFontSize 12
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
+skinparam conditionStyle inside
 
-title Activity Diagram\nAlur Kerja Sistem Monitoring Tanaman Jambu Kristal
+title **Activity Diagram — Alur Kerja Sistem Terintegrasi**
 
-|Perangkat IoT|
+|**Perangkat IoT (ESP32)**|
 start
-:Sensor membaca data\n(Suhu, Kelembaban Udara,\nKelembaban Tanah,\nIntensitas Cahaya);
+:Baca Data Sensor\n(Suhu, Kelembaban Udara/Tanah, Cahaya);
+:Kirim Payload HTTP POST\nke /api/sensor-data\nHeader: X-API-KEY;
 
-:Kirim data sensor\nke server;
+|**Reverse Proxy (Nginx)**|
+:Terima Request HTTP;
+:Lakukan Routing & Pass\nke PHP-FPM (port 9000);
 
-|Server Aplikasi|
-:Terima data sensor;
-
-if (Data valid?) then (Ya)
+|**Server Aplikasi (Laravel)**|
+:Validasi API Key via Middleware;
+if (API Key Valid?) then (Ya)
+    :Validasi Struktur Data & Payload;
+    if (Data Valid?) then (Ya)
+        :Tentukan Status Kelembaban\n(Kritis / Perlu / Normal);
+        :Simpan Data Sensor & Status\nke Database (MySQL);
+        
+        :Ambil Status dari Data\nSebelumnya (Source Segregated);
+        if (Status Berubah?) then (Ya)
+            |**Telegram Gateway**|
+            :Kirim Notifikasi Alert\n(Status Lingkungan Berubah);
+        else (Tidak)
+        endif
+        
+        |**Server Aplikasi (Laravel)**|
+        :Hitung Jumlah Data Real;
+        if (Kelipatan 10?) then (Ya)
+            :Generate Berkas SQL Backup;
+            |**Telegram Gateway**|
+            :Kirim File SQL Backup;
+        else (Tidak)
+        endif
+        
+        |**Server Aplikasi (Laravel)**|
+        :Kembalikan HTTP Respon 201;
+    else (Tidak)
+        :Kembalikan HTTP Respon 422;
+    endif
 else (Tidak)
-    :Tolak data;
-    stop
+    :Kembalikan HTTP Respon 401;
 endif
 
-:Tentukan status\nkelembaban tanah;
-
-if (Kelembaban tanah < 20%) then (Ya)
-    :Status = Kritis;
-elseif (Kelembaban tanah < 30%) then (Ya)
-    :Status = Perlu Penyiraman;
-else (Tidak)
-    :Status = Normal;
-endif
-
-:Simpan data sensor\nke basis data;
-
-:Periksa status sebelumnya;
-
-if (Status berubah?) then (Ya)
-    |Sistem Notifikasi|
-    :Kirim notifikasi\nperubahan status\nke Petani;
-    |Server Aplikasi|
-else (Tidak)
-endif
-
-|Admin / Petani|
-:Buka dashboard monitoring;
-
-:Lihat data sensor terkini;
-
-if (Ingin melihat prediksi?) then (Ya)
-    |Sistem Prediksi|
-    :Ambil data historis;
-    :Proses prediksi\ndengan metode ARIMA;
-    :Kirim hasil prediksi;
-    |Admin / Petani|
-    :Lihat hasil prediksi;
-else (Tidak)
-endif
-
+|**Perangkat IoT (ESP32)**|
+:Terima Respon & Masuk Deep Sleep;
 stop
 
 @enduml

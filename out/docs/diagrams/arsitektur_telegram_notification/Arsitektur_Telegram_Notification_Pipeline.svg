@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="1499px" preserveAspectRatio="none" style="width:524px;height:1499px;" version="1.1" viewBox="0 0 524 1499" width="524px" zoomAndPan="magnify"><defs/><g><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="212" x="149.75" y="15.8701">Arsitektur Telegram Notification Pipeline</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="201" x="155.25" y="30.501">Sistem Monitoring Kebun Jambu Kristal</text><!--MD5=[319ee75c8f406d79e65d91285d4e6e53]
+cluster edge--><rect fill="#FFFDE7" height="164" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="222" x="7" y="44.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="57" x="89.5" y="62.1318">Edge Layer</text><!--MD5=[47c14c564e796a575e671c2b0469a7bb]
+cluster backend--><rect fill="#E8F5E9" height="797" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="386" x="14" y="278.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="119" x="147.5" y="296.1318">Laravel Backend Server</text><!--MD5=[3d15fd212a4bff22fb41b884aeefe184]
+entity esp32--><rect fill="#FFF9C4" height="81.8926" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="190" x="23" y="110.2617"/><rect fill="#FFF9C4" height="10" style="stroke:#555555;stroke-width:1.5;" width="15" x="193" y="115.2617"/><rect fill="#FFF9C4" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="191" y="117.2617"/><rect fill="#FFF9C4" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="191" y="121.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="101" x="42" y="146.1318">ESP32 Sensor Node</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="142" x="42" y="160.7627">Soil Moisture | Temperature</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="128" x="42" y="175.3936">Humidity | Light Intensity</text><!--MD5=[e2307af040e3f87d22824e7603ca28ec]
+entity api--><rect fill="#C8E6C9" height="81.8926" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="163" x="36.5" y="344.2617"/><rect fill="#C8E6C9" height="10" style="stroke:#555555;stroke-width:1.5;" width="15" x="179.5" y="349.2617"/><rect fill="#C8E6C9" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="177.5" y="351.2617"/><rect fill="#C8E6C9" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="177.5" y="355.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="97" x="55.5" y="380.1318">REST API Endpoint</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="115" x="55.5" y="394.7627">POST /api/sensor-data</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-style="italic" lengthAdjust="spacing" textLength="92" x="55.5" y="409.3936">middleware: api.key</text><!--MD5=[c05fcadc036a699206cfdfa4a4fdb889]
+entity controller--><rect fill="#C8E6C9" height="67.2617" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="159" x="38.5" y="510.2617"/><rect fill="#C8E6C9" height="10" style="stroke:#555555;stroke-width:1.5;" width="15" x="177.5" y="515.2617"/><rect fill="#C8E6C9" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="175.5" y="517.2617"/><rect fill="#C8E6C9" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="175.5" y="521.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="111" x="57.5" y="546.1318">SensorDataController</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="32" x="57.5" y="560.7627">store()</text><!--MD5=[b1423f40bae79ea2f4c92af23cbb6ada]
+entity db_persist--><rect fill="#C8E6C9" height="67.2617" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="157" x="30.5" y="661.2617"/><rect fill="#C8E6C9" height="10" style="stroke:#555555;stroke-width:1.5;" width="15" x="167.5" y="666.2617"/><rect fill="#C8E6C9" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="165.5" y="668.2617"/><rect fill="#C8E6C9" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="165.5" y="672.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="109" x="49.5" y="697.1318">Database Persistence</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="102" x="49.5" y="711.7627">SensorData::create()</text><!--MD5=[c309278a784b313c583eff121e1e2849]
+entity threshold--><rect fill="#C8E6C9" height="67.2617" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="157" x="222.5" y="661.2617"/><rect fill="#C8E6C9" height="10" style="stroke:#555555;stroke-width:1.5;" width="15" x="359.5" y="666.2617"/><rect fill="#C8E6C9" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="357.5" y="668.2617"/><rect fill="#C8E6C9" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="357.5" y="672.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="93" x="241.5" y="697.1318">determineStatus()</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="109" x="241.5" y="711.7627">Threshold Evaluation</text><!--MD5=[677efdeb958d69308c1ff3d164f703eb]
+entity detection--><rect fill="#C8E6C9" height="67.2617" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="203" x="163.5" y="827.2617"/><rect fill="#C8E6C9" height="10" style="stroke:#555555;stroke-width:1.5;" width="15" x="346.5" y="832.2617"/><rect fill="#C8E6C9" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="344.5" y="834.2617"/><rect fill="#C8E6C9" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="344.5" y="838.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="128" x="182.5" y="863.1318">Status Change Detection</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="155" x="182.5" y="877.7627">previousStatus !== newStatus</text><!--MD5=[05b9ffa80601a32c4b97ce960e8c354f]
+entity tg_service--><rect fill="#C8E6C9" height="67.2617" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="132" x="199" y="992.2617"/><rect fill="#C8E6C9" height="10" style="stroke:#555555;stroke-width:1.5;" width="15" x="311" y="997.2617"/><rect fill="#C8E6C9" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="309" y="999.2617"/><rect fill="#C8E6C9" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="309" y="1003.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="84" x="218" y="1028.1318">TelegramService</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="76" x="218" y="1042.7627">sendMessage()</text><!--MD5=[34f97e8fbad401bd73fe74b90f0f912a]
+entity tg_api--><rect fill="#E3F2FD" height="57.2617" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="154" x="188" y="1159.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="90" x="202" y="1185.1318">Telegram Bot API</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="126" x="202" y="1199.7627">https://api.telegram.org</text><!--MD5=[5de8a05f44d553d4e77626c0eeb29e72]
+entity tg_user--><rect fill="#E3F2FD" height="57.2617" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="135" x="197.5" y="1300.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="107" x="211.5" y="1326.1318">User Telegram Client</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="79" x="211.5" y="1340.7627">Admin / Petani</text><!--MD5=[95056b5cbad1279cc73d9cc5c17a1af7]
+entity mysql--><path d="M434.5,678.7617 C434.5,668.7617 476,668.7617 476,668.7617 C476,668.7617 517.5,668.7617 517.5,678.7617 L517.5,710.3926 C517.5,720.3926 476,720.3926 476,720.3926 C476,720.3926 434.5,720.3926 434.5,710.3926 L434.5,678.7617 " fill="#E3F2FD" style="stroke:#000000;stroke-width:1.5;"/><path d="M434.5,678.7617 C434.5,688.7617 476,688.7617 476,688.7617 C476,688.7617 517.5,688.7617 517.5,678.7617 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="55" x="448.5" y="708.6318">MySQL 8.0</text><!--MD5=[79a3adb4dfe06f503d4f9616f2fcfa66]
+link esp32 to api--><path d="M118,192.4117 C118,233.2817 118,296.5417 118,339.1317 " fill="none" id="esp32-to-api" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="118,344.2217,122,335.2217,118,339.2217,114,335.2217,118,344.2217" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="monospace" font-size="11" lengthAdjust="spacing" textLength="63" x="143.5" y="240.3208">HTTP POST</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-style="italic" lengthAdjust="spacing" textLength="104" x="123" y="255.4941">sensor data + API Key</text><!--MD5=[21f5a3507a015f345dcc876e2df47824]
+link api to controller--><path d="M118,426.5617 C118,450.7317 118,481.2617 118,504.9717 " fill="none" id="api-to-controller" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="118,510.2217,122,501.2217,118,505.2217,114,501.2217,118,510.2217" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="92" x="123" y="473.1318">Request validated</text><!--MD5=[4c2859de963e0957a40979a1b0f919ed]
+link controller to db_persist--><path d="M80.89,577.3317 C73.19,586.1917 66.16,596.3717 62,607.2617 C55.53,624.1917 62.48,641.9317 72.84,656.9117 " fill="none" id="controller-to-db_persist" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="75.85,661.0617,73.7874,651.4313,72.9074,657.0193,67.3194,656.1394,75.85,661.0617" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="101" x="67" y="624.1318">Simpan data sensor</text><!--MD5=[2ae48684d92de501b365f71018e6b3c5]
+link db_persist to mysql--><path d="M187.72,666.6817 C243.16,648.6017 319.58,627.0817 389,619.2617 C409.32,616.9717 417.43,608.8117 435,619.2617 C451.15,628.8717 461.33,647.3017 467.51,663.5517 " fill="none" id="db_persist-to-mysql" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="469.3,668.5117,470.0003,658.6878,467.5993,663.8098,462.4773,661.4089,469.3,668.5117" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="36" x="394" y="624.1318">INSERT</text><!--MD5=[2aafd42ac45621e9d770a552f4bfe041]
+link controller to threshold--><path d="M151.86,577.4317 C169.61,594.0817 191.98,614.3317 213,631.2617 C224.18,640.2617 236.54,649.4717 248.39,657.9617 " fill="none" id="controller-to-threshold" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="252.72,661.0517,247.7101,652.5723,248.6475,658.1509,243.0688,659.0883,252.72,661.0517" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="158" x="218" y="624.1318">determineStatus(soil_moisture)</text><!--MD5=[57e019f4bb7bd47aa0e2a10187249f76]
+link threshold to detection--><path d="M293.8,728.5517 C287.89,755.4817 279.51,793.6417 273.32,821.8717 " fill="none" id="threshold-to-detection" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="272.19,827.0217,278.025,819.0875,273.261,822.1378,270.2107,817.3738,272.19,827.0217" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="104" x="293.5" y="775.1318">Bandingkan status""</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="109" x="291" y="789.7627">""baru vs sebelumnya</text><!--MD5=[b0cd8370c3969b07fa93223f1ae30816]
+link detection to tg_service--><path d="M265,894.3517 C265,921.1217 265,959.0517 265,987.1017 " fill="none" id="detection-to-tg_service" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="265,992.2217,269,983.2217,265,987.2217,261,983.2217,265,992.2217" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="monospace" font-size="11" lengthAdjust="spacing" textLength="98" x="270" y="940.3208">Status berubah</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-style="italic" lengthAdjust="spacing" textLength="78" x="280" y="955.4941">trigger notifikasi</text><!--MD5=[06bba1f263171b18d77983fcfb8d47a0]
+link tg_service to tg_api--><path d="M265,1059.5217 C265,1087.1517 265,1126.4917 265,1154.0917 " fill="none" id="tg_service-to-tg_api" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="265,1159.1017,269,1150.1017,265,1154.1017,261,1150.1017,265,1159.1017" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="monospace" font-size="11" lengthAdjust="spacing" textLength="154" x="270" y="1107.3208">HTTP POST /sendMessage</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-style="italic" lengthAdjust="spacing" textLength="96" x="299" y="1122.4941">bot_token + chat_id</text><!--MD5=[8bf9da85cb0afbf1f90dd3c3a35b71be]
+link tg_api to tg_user--><path d="M265,1216.5517 C265,1239.0917 265,1270.9217 265,1294.7517 " fill="none" id="tg_api-to-tg_user" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="265,1300.0117,269,1291.0117,265,1295.0117,261,1291.0117,265,1300.0117" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="88" x="270" y="1263.1318">Push notification</text><rect fill="#DDDDDD" height="112.5234" rx="5" ry="5" style="stroke:#000000;stroke-width:1.0;" width="221" x="8" y="1370.5234"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="34" x="25" y="1397.3936">Warna</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="60" x="73" y="1397.3936">Keterangan</text><rect fill="#FFFDE7" height="22.6309" style="stroke:none;stroke-width:1.0;" width="48" x="18" y="1404.1543"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="0" x="25" y="1420.0244"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="117" x="73" y="1420.0244">Edge / IoT Device Layer</text><rect fill="#E8F5E9" height="22.6309" style="stroke:none;stroke-width:1.0;" width="48" x="18" y="1426.7852"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="0" x="25" y="1442.6553"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="139" x="73" y="1442.6553">Laravel Backend Processing</text><rect fill="#E3F2FD" height="22.6309" style="stroke:none;stroke-width:1.0;" width="48" x="18" y="1449.416"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="0" x="25" y="1465.2861"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="119" x="73" y="1465.2861">External Service / Client</text><line style="stroke:#000000;stroke-width:1.0;" x1="18" x2="219" y1="1381.5234" y2="1381.5234"/><line style="stroke:#000000;stroke-width:1.0;" x1="18" x2="219" y1="1404.1543" y2="1404.1543"/><line style="stroke:#000000;stroke-width:1.0;" x1="18" x2="219" y1="1426.7852" y2="1426.7852"/><line style="stroke:#000000;stroke-width:1.0;" x1="18" x2="219" y1="1449.416" y2="1449.416"/><line style="stroke:#000000;stroke-width:1.0;" x1="18" x2="219" y1="1472.0469" y2="1472.0469"/><line style="stroke:#000000;stroke-width:1.0;" x1="18" x2="18" y1="1381.5234" y2="1472.0469"/><line style="stroke:#000000;stroke-width:1.0;" x1="66" x2="66" y1="1381.5234" y2="1472.0469"/><line style="stroke:#000000;stroke-width:1.0;" x1="219" x2="219" y1="1381.5234" y2="1472.0469"/><!--MD5=[b9287a6a572e56cd2c033414253409e7]
+@startuml Arsitektur_Telegram_Notification_Pipeline
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
+
+skinparam rectangle {
+    BorderColor #555555
+    BackgroundColor #F5F5F5
+    FontStyle bold
+}
+
+skinparam component {
+    BorderColor #555555
+    BackgroundColor #FFFFFF
+}
+
+title **Arsitektur Telegram Notification Pipeline**\nSistem Monitoring Kebun Jambu Kristal
+
+' ── Edge Layer ──
+rectangle "**Edge Layer**" as edge #FFFDE7 {
+    component "**ESP32 Sensor Node**\nSoil Moisture | Temperature\nHumidity | Light Intensity" as esp32 #FFF9C4
+}
+
+' ── Laravel Backend ──
+rectangle "**Laravel Backend Server**" as backend #E8F5E9 {
+    component "**REST API Endpoint**\nPOST /api/sensor-data\n//middleware: api.key//" as api #C8E6C9
+
+    component "**SensorDataController**\nstore()" as controller #C8E6C9
+
+    component "**Database Persistence**\nSensorData::create()" as db_persist #C8E6C9
+
+    component "**determineStatus()**\nThreshold Evaluation" as threshold #C8E6C9
+
+    component "**Status Change Detection**\npreviousStatus !== newStatus" as detection #C8E6C9
+
+    component "**TelegramService**\nsendMessage()" as tg_service #C8E6C9
+}
+
+' ── External ──
+rectangle "**Telegram Bot API**\nhttps://api.telegram.org" as tg_api #E3F2FD
+
+rectangle "**User Telegram Client**\nAdmin / Petani" as tg_user #E3F2FD
+
+' ── Database ──
+database "**MySQL 8.0**" as mysql #E3F2FD
+
+' ── Alur Data ──
+esp32 -down-> api : ""HTTP POST""\n//sensor data + API Key//
+api -down-> controller : ""Request validated""
+controller -down-> db_persist : ""Simpan data sensor""
+db_persist -right-> mysql : ""INSERT""
+controller -down-> threshold : ""determineStatus(soil_moisture)""
+threshold -down-> detection : ""Bandingkan status""\n""baru vs sebelumnya""
+detection -down-> tg_service : ""Status berubah""\n//trigger notifikasi//
+tg_service -down-> tg_api : ""HTTP POST /sendMessage""\n//bot_token + chat_id//
+tg_api -down-> tg_user : ""Push notification""
+
+' ── Legend ──
+legend bottom left
+    |= Warna |= Keterangan |
+    | <#FFFDE7> | Edge / IoT Device Layer |
+    | <#E8F5E9> | Laravel Backend Processing |
+    | <#E3F2FD> | External Service / Client |
+endlegend
+
+@enduml
+
+@startuml Arsitektur_Telegram_Notification_Pipeline
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
+
+skinparam rectangle {
+    BorderColor #555555
+    BackgroundColor #F5F5F5
+    FontStyle bold
+}
+
+skinparam component {
+    BorderColor #555555
+    BackgroundColor #FFFFFF
+}
+
+title **Arsitektur Telegram Notification Pipeline**\nSistem Monitoring Kebun Jambu Kristal
+
+rectangle "**Edge Layer**" as edge #FFFDE7 {
+    component "**ESP32 Sensor Node**\nSoil Moisture | Temperature\nHumidity | Light Intensity" as esp32 #FFF9C4
+}
+
+rectangle "**Laravel Backend Server**" as backend #E8F5E9 {
+    component "**REST API Endpoint**\nPOST /api/sensor-data\n//middleware: api.key//" as api #C8E6C9
+
+    component "**SensorDataController**\nstore()" as controller #C8E6C9
+
+    component "**Database Persistence**\nSensorData::create()" as db_persist #C8E6C9
+
+    component "**determineStatus()**\nThreshold Evaluation" as threshold #C8E6C9
+
+    component "**Status Change Detection**\npreviousStatus !== newStatus" as detection #C8E6C9
+
+    component "**TelegramService**\nsendMessage()" as tg_service #C8E6C9
+}
+
+rectangle "**Telegram Bot API**\nhttps://api.telegram.org" as tg_api #E3F2FD
+
+rectangle "**User Telegram Client**\nAdmin / Petani" as tg_user #E3F2FD
+
+database "**MySQL 8.0**" as mysql #E3F2FD
+
+esp32 -down-> api : ""HTTP POST""\n//sensor data + API Key//
+api -down-> controller : ""Request validated""
+controller -down-> db_persist : ""Simpan data sensor""
+db_persist -right-> mysql : ""INSERT""
+controller -down-> threshold : ""determineStatus(soil_moisture)""
+threshold -down-> detection : ""Bandingkan status""\n""baru vs sebelumnya""
+detection -down-> tg_service : ""Status berubah""\n//trigger notifikasi//
+tg_service -down-> tg_api : ""HTTP POST /sendMessage""\n//bot_token + chat_id//
+tg_api -down-> tg_user : ""Push notification""
+
+legend bottom left
+    |= Warna |= Keterangan |
+    | <#FFFDE7> | Edge / IoT Device Layer |
+    | <#E8F5E9> | Laravel Backend Processing |
+    | <#E3F2FD> | External Service / Client |
+endlegend
+
+@enduml
+
+PlantUML version 1.2021.00(Sun Jan 10 18:25:05 WITA 2021)
+(MIT source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: Cp1252
+Language: en
+Country: ID
+--></g></svg>

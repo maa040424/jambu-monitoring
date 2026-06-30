@@ -1,64 +1,65 @@
 @startuml Arsitektur Sistem
-skinparam monochrome true
-skinparam shadowing false
+
 skinparam backgroundColor white
-skinparam defaultFontName Arial
-skinparam defaultFontSize 12
-skinparam componentStyle uml2
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
 
-title Arsitektur Sistem\nMonitoring Tanaman Jambu Kristal
-
-package "Perangkat IoT" {
-    [Mikrokontroler ESP32] as mcu
-    [Sensor Suhu dan\nKelembaban Udara] as s1
-    [Sensor Kelembaban\nTanah] as s2
-    [Sensor Intensitas\nCahaya] as s3
+skinparam rectangle {
+    BorderColor #555555
+    BackgroundColor #F5F5F5
+    FontStyle bold
 }
 
-package "Server Aplikasi" {
-    [Modul Autentikasi] as auth
-    [Modul Penerimaan Data] as receiver
-    [Modul Dashboard] as dashboard
-    [Modul Prediksi] as forecast
-    [Modul Ekspor Data] as export
-    [Modul Notifikasi] as notifmod
+skinparam node {
+    BorderColor #37474F
+    BackgroundColor #ECEFF1
 }
 
-package "Sistem Prediksi" {
-    [Model ARIMA] as arima
+skinparam database {
+    BorderColor #1565C0
+    BackgroundColor #E3F2FD
 }
 
-database "Basis Data" as db
+skinparam cloud {
+    BorderColor #2E7D32
+    BackgroundColor #E8F5E9
+}
 
-cloud "Layanan Notifikasi\n(Telegram)" as telegram
+title **Arsitektur Sistem Monitoring & Prediksi Jambu Kristal**
 
-actor "Admin" as admin
-actor "Petani" as petani
+rectangle "**Edge Layer**\n(Kebun Jambu Kristal)" as edge #FFFDE7 {
+    rectangle "**ESP32 Microcontroller**\n(Data Collector)" as esp32 #FFF9C4
+    rectangle "**Sensor Fisik**\n• Soil Moisture (Kelembapan)\n• DHT22 (Suhu & Kelembaban Udara)\n• LDR (Intensitas Cahaya)" as sensors #FFFFFF
+    sensors -right-> esp32 : readings
+}
 
-' === Koneksi Sensor ===
-s1 --> mcu
-s2 --> mcu
-s3 --> mcu
+node "**Cloud Server Environment (VPS)**" as server #ECEFF1 {
+    rectangle "**Web Gateway (Nginx)**\nReverse Proxy" as nginx #E3F2FD
+    rectangle "**Laravel Core Monolith**\n• REST Ingestion Engine\n• Dashboard Web UI\n• Backup & Notification Logic" as laravel #E8F5E9
+    database "**MySQL 8.0**\nSensor & User Database" as db #E3F2FD
+    rectangle "**Flask Prediction Service**\nARIMA Model Module" as flask #FFF3E0
+}
 
-' === Aliran Data ===
-mcu --> receiver : Kirim data sensor
-receiver --> db : Simpan data
-receiver --> notifmod : Perubahan status
-notifmod --> telegram : Kirim notifikasi
+cloud "**Telegram Notification Service**\n(User Alerts & Backup Receiver)" as telegram #E8F5E9
 
-dashboard --> db : Ambil data
-export --> db : Ambil data
-forecast --> arima : Minta prediksi
-arima --> db : Ambil data historis
+rectangle "**Client Access Layer**" as clients #F5F5F5 {
+    rectangle "**Browser (Admin / Petani)**\nInteractive Dashboard & Charts" as web_client #FFFFFF
+}
 
-' === Interaksi Pengguna ===
-admin --> auth : Login
-admin --> dashboard : Lihat monitoring
-admin --> export : Unduh data
-admin --> forecast : Lihat prediksi
+' === Connections ===
+esp32 -right-> nginx : **HTTP POST**\n/api/sensor-data\n(X-API-KEY)
 
-petani --> auth : Login
-petani --> dashboard : Lihat monitoring
-petani --> forecast : Lihat prediksi
+web_client -down-> nginx : **HTTP GET / POST**\nAccess Web App & APIs
+
+nginx -down-> laravel : **FastCGI (FPM)**\nport 9000
+
+laravel -right-> db : **PDO MySQL**\nRead & Write
+laravel -down-> flask : **HTTP GET /predict**\ninter-service query
+laravel -down-> telegram : **HTTPS POST**\nAPI Request
+
+flask -right-> db : **PyMySQL**\nRead training data
 
 @enduml

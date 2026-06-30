@@ -1,0 +1,47 @@
+@startuml Arsitektur_Docker_Deployment
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 12
+skinparam shadowing false
+skinparam monochrome true
+skinparam roundCorner 8
+
+skinparam rectangle {
+    FontStyle bold
+}
+
+title Arsitektur Docker Multi-Container Deployment
+
+rectangle "Docker Compose Network" as docker {
+
+    rectangle "jambu_nginx\n(Nginx Alpine)\nPort 80" as nginx
+
+    rectangle "jambu_app\n(PHP 8.2-FPM)\nLaravel 12" as app
+
+    rectangle "jambu_queue\n(Queue Worker)\nartisan queue:work" as queue
+
+    database "jambu_db\n(MySQL 8.0)\nhealthcheck" as db
+
+    rectangle "jambu_ml\n(Python 3.12)\nFlask ARIMA\nPort 5001" as ml
+
+    rectangle "jambu_mqtt\n(Mosquitto 2.x)\nPort 1883" as mqtt
+}
+
+rectangle "ESP32\nSensor Node" as esp32
+rectangle "Browser\nClient" as browser
+
+cloud "Docker\nVolumes" as volumes
+
+esp32 -down-> nginx : HTTP POST
+browser -down-> nginx : HTTP GET
+
+nginx -down-> app : FastCGI :9000
+app -down-> db : PDO MySQL
+app -right-> ml : HTTP :5001
+ml -down-> db : PyMySQL
+queue -down-> db : Queue Jobs
+
+db -down-> volumes : db-data
+
+@enduml

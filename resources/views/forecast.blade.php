@@ -179,7 +179,9 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="h4 mb-0 fw-bold">Prediksi Sensor (ARIMA)</h2>
     <div class="d-flex align-items-center gap-2">
+        @if(auth()->user()->isSuperAdmin())
         <span class="badge {{ $mode === 'dummy' ? 'bg-warning text-dark' : 'bg-success' }}">{{ $mode === 'dummy' ? '🧪 Dummy' : '📡 Real' }}</span>
+        @endif
         <button class="btn btn-sm btn-outline-danger d-none" id="btn-export-pdf" onclick="exportForecastPdf()">
             <i class="bi bi-file-earmark-pdf me-1"></i> Export PDF
         </button>

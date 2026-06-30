@@ -1,0 +1,42 @@
+@startuml Alur_Data_Persistence
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+skinparam ArrowColor #37474F
+skinparam ArrowThickness 1.5
+
+title **Alur Data Sensor pada Sistem Monitoring**
+
+start
+
+:ESP32 membaca data sensor:
+**soil_moisture**, **temperature**,
+**humidity**, **light_intensity**;
+
+:Mengirim data ke REST API
+melalui HTTP POST;
+
+:Validasi API Key;
+
+:Validasi format data;
+
+:Menentukan status kondisi lahan
+— Kritis (<20%)
+— Perlu Penyiraman (<30%)
+— Normal (≥30%);
+
+:Menyimpan data ke
+database MySQL;
+
+:Data tersedia pada
+dashboard monitoring;
+
+:Data historis digunakan
+untuk prediksi ARIMA;
+
+stop
+
+@enduml

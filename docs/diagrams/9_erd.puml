@@ -1,63 +1,77 @@
 @startuml ERD
-skinparam monochrome true
-skinparam shadowing false
+
 skinparam backgroundColor white
-skinparam defaultFontName Arial
-skinparam defaultFontSize 12
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
 skinparam linetype ortho
 
-title Entity Relationship Diagram (ERD)\nBasis Data Monitoring Tanaman Jambu Kristal
-
-entity "Pengguna" as users {
-    * **id** : Integer <<PK>>
-    --
-    * nama : String
-    * email : String
-    * kata_sandi : String
-    * peran : String
-    tanggal_dibuat : Timestamp
-    tanggal_diperbarui : Timestamp
+skinparam entity {
+    BorderColor #1565C0
+    BackgroundColor #E3F2FD
+    FontStyle bold
 }
 
-entity "Data Sensor" as sensor {
-    * **id** : Integer <<PK>>
+title **Entity Relationship Diagram (ERD)**\nBasis Data Sistem Monitoring Kebun Jambu Kristal
+
+entity "users" as users {
+    * **id** : bigint unsigned <<PK>>
     --
-    * kelembaban_tanah : Desimal
-    * suhu : Desimal
-    * kelembaban_udara : Desimal
-    * intensitas_cahaya : Desimal
-    * status : String
-    * sumber : String
-    tanggal_dibuat : Timestamp
-    tanggal_diperbarui : Timestamp
+    * name : varchar(255)
+    * email : varchar(255) <<Unique>>
+    email_verified_at : timestamp
+    * password : varchar(255)
+    * role : varchar(50) <<Default: petani>>
+    last_login : timestamp
+    remember_token : varchar(100)
+    created_at : timestamp
+    updated_at : timestamp
 }
 
-entity "Sesi" as sessions {
-    * **id** : String <<PK>>
+entity "sensor_data" as sensor_data {
+    * **id** : bigint unsigned <<PK>>
     --
-    id_pengguna : Integer <<FK>>
-    alamat_ip : String
-    waktu_aktivitas_terakhir : Integer
+    * soil_moisture : decimal(8,2)
+    * temperature : decimal(8,2)
+    * humidity : decimal(8,2)
+    * light_intensity : decimal(8,2)
+    * status : varchar(50) <<Kritis, Perlu Penyiraman, Normal>>
+    * source : varchar(20) <<real, dummy>>
+    recorded_at : timestamp
+    created_at : timestamp
+    updated_at : timestamp
 }
 
-note bottom of sensor
-    **Status:**
-    - Normal (kelembaban tanah >= 30%)
-    - Perlu Penyiraman (20% <= kelembaban tanah < 30%)
-    - Kritis (kelembaban tanah < 20%)
+entity "sessions" as sessions {
+    * **id** : varchar(255) <<PK>>
+    --
+    user_id : bigint unsigned <<FK>>
+    ip_address : varchar(45)
+    user_agent : text
+    payload : longtext
+    * last_activity : int
+}
 
-    **Sumber:**
-    - "real" (data dari perangkat IoT)
-    - "dummy" (data simulasi)
+' === Relationships (Crow's Foot Notation) ===
+users ||--o{ sessions : "creates"
+
+note right of sensor_data
+    **Constraint status:**
+    - Kritis (soil_moisture < 20)
+    - Perlu Penyiraman (20 <= soil_moisture < 30)
+    - Normal (soil_moisture >= 30)
+
+    **Constraint source:**
+    - real (dari ESP32)
+    - dummy (simulasi matematika)
 end note
 
-note bottom of users
-    **Peran:**
-    - Admin
-    - Petani
+note right of users
+    **Role:**
+    - admin (hak akses penuh)
+    - petani (hanya monitoring & prediksi)
 end note
-
-' === Relasi ===
-users ||--o{ sessions : "memiliki"
 
 @enduml

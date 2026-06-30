@@ -1,49 +1,59 @@
 @startuml Use Case Diagram
-left to right direction
-skinparam monochrome true
-skinparam shadowing false
+
 skinparam backgroundColor white
-skinparam defaultFontName Arial
-skinparam defaultFontSize 13
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
 skinparam actorStyle awesome
 
-title Use Case Diagram\nSistem Monitoring Tanaman Jambu Kristal
-
-actor "Admin" as admin
-actor "Petani" as petani
-
-rectangle "Sistem Monitoring Tanaman Jambu Kristal" {
-    usecase "Login" as UC1
-    usecase "Lihat Dashboard" as UC2
-    usecase "Lihat Data Sensor" as UC3
-    usecase "Lihat Prediksi" as UC4
-    usecase "Kelola Data Sensor" as UC5
-    usecase "Kelola Sistem" as UC6
-    usecase "Terima Notifikasi" as UC7
-    usecase "Kirim Data Sensor" as UC8
-    usecase "Kirim Notifikasi" as UC9
+skinparam actor {
+    BorderColor #37474F
+    BackgroundColor #ECEFF1
 }
 
-actor "Perangkat IoT\n(ESP32)" as iot
-actor "Sistem Notifikasi\n(Telegram)" as notif
+skinparam usecase {
+    BorderColor #1565C0
+    BackgroundColor #E3F2FD
+}
 
-admin --> UC1
-admin --> UC2
-admin --> UC3
-admin --> UC4
-admin --> UC5
-admin --> UC6
+title **Use Case Diagram**\nSistem Monitoring Tanaman Jambu Kristal
 
-petani --> UC1
-petani --> UC2
-petani --> UC3
-petani --> UC4
-petani --> UC7
+actor "Admin (Pengelola)" as admin
+actor "Petani (Pengguna)" as petani
+actor "Perangkat IoT (ESP32)" as esp32
+actor "Telegram (Notifikasi)" as telegram
 
-iot --> UC8
+rectangle "Sistem Monitoring Jambu Kristal" {
+    usecase "Autentikasi (Login/Logout)" as UC_Auth
+    usecase "Visualisasi Dashboard (Real-time)" as UC_Dash
+    usecase "Pemantauan Historis Data Sensor" as UC_Hist
+    usecase "Analisis & Prediksi ARIMA" as UC_Forecast
+    usecase "Ekspor Laporan PDF" as UC_Export
+    usecase "Manajemen Pengguna & Konfigurasi" as UC_Manage
+    usecase "Pengiriman Data Sensor" as UC_Ingest
+    usecase "Menerima Pesan Notifikasi" as UC_Recv
+}
 
-notif --> UC9
+' === Relasi Actor ke Use Case ===
+admin --> UC_Auth
+admin --> UC_Dash
+admin --> UC_Hist
+admin --> UC_Forecast
+admin --> UC_Export
+admin --> UC_Manage
 
-UC8 ..> UC9 : <<include>>
+petani --> UC_Auth
+petani --> UC_Dash
+petani --> UC_Hist
+petani --> UC_Forecast
+petani --> UC_Export
+petani --> UC_Recv
+
+esp32 --> UC_Ingest
+
+' === Relasi Antar Use Case ===
+UC_Ingest ..> UC_Recv : <<include>> / trigger
 
 @enduml

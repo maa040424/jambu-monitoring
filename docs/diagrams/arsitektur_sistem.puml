@@ -1,0 +1,186 @@
+@startuml Arsitektur_Sistem
+
+' ══════════════════════════════════════════════════
+' DIAGRAM ARSITEKTUR SISTEM
+' Monitoring dan Prediksi Kondisi Lingkungan
+' pada Testbed Kebun Jambu Kristal Berbasis IoT
+' ══════════════════════════════════════════════════
+
+' ── Global Styling ───────────────────────────────
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
+skinparam linetype ortho
+skinparam ArrowColor #37474F
+skinparam ArrowThickness 1.5
+
+skinparam package {
+    BorderColor #1565C0
+    BackgroundColor #FAFAFA
+    FontColor #0D47A1
+    FontStyle bold
+    FontSize 12
+}
+
+skinparam rectangle {
+    BorderColor #546E7A
+    BackgroundColor #ECEFF1
+    FontSize 10
+}
+
+skinparam node {
+    BorderColor #1B5E20
+    BackgroundColor #E8F5E9
+    FontStyle bold
+}
+
+skinparam component {
+    BorderColor #4527A0
+    BackgroundColor #EDE7F6
+    FontStyle bold
+}
+
+skinparam database {
+    BorderColor #E65100
+    BackgroundColor #FFF3E0
+    FontStyle bold
+}
+
+skinparam cloud {
+    BorderColor #0277BD
+    BackgroundColor #E1F5FE
+}
+
+skinparam note {
+    BorderColor #90A4AE
+    BackgroundColor #FFFFFF
+    FontSize 9
+}
+
+title **Diagram Arsitektur Sistem**\nMonitoring dan Prediksi Kondisi Lingkungan Testbed Kebun Jambu Kristal Berbasis IoT
+
+' ══════════════════════════════════════════════════
+' LAYER 1 — HARDWARE (EDGE DEVICE)
+' ══════════════════════════════════════════════════
+package "1. Hardware Layer (Edge Device)" as HW {
+    rectangle "Sensor Soil Moisture\n(Kelembapan Tanah)" as S_SOIL
+    rectangle "Sensor DHT22\n(Suhu & Kelembapan Udara)" as S_DHT22
+    rectangle "LDR Module\n(Intensitas Cahaya)" as S_LIGHT
+
+    node "ESP32\n(Mikrokontroler)" as ESP32
+}
+
+S_SOIL  -down-> ESP32 : <<analog>>
+S_DHT22 -down-> ESP32 : <<digital>>
+S_LIGHT -down-> ESP32 : <<I2C>>
+
+' ══════════════════════════════════════════════════
+' LAYER 2 — COMMUNICATION
+' ══════════════════════════════════════════════════
+package "2. Communication Layer" as COMM {
+    cloud "Jaringan WiFi" as WIFI
+}
+
+ESP32 -down-> WIFI : Pengiriman Data\nPeriodik
+
+' ══════════════════════════════════════════════════
+' LAYER 3 — BACKEND
+' ══════════════════════════════════════════════════
+package "3. Backend Layer" as BE {
+    component "Backend API Server\n(REST API)" as BACKEND
+
+    note right of BACKEND
+        <b>Fungsi:</b>
+        • Menerima HTTP Request dari ESP32
+        • Validasi data sensor
+        • Menyimpan data ke database
+        • Menyediakan endpoint API
+          untuk frontend dashboard
+    end note
+}
+
+WIFI -down-> BACKEND : HTTP POST\n/api/sensor-data
+
+' ══════════════════════════════════════════════════
+' LAYER 4 — DATABASE
+' ══════════════════════════════════════════════════
+package "4. Database Layer" as DBL {
+    database "MySQL Database" as DB
+
+    note right of DB
+        <b>Tabel sensor_data:</b>
+        • soil_moisture
+        • temperature
+        • humidity
+        • light_intensity
+        • status
+        • recorded_at (timestamp)
+    end note
+}
+
+BACKEND -down-> DB : Simpan Data Sensor
+
+' ══════════════════════════════════════════════════
+' LAYER 5 — PREDICTION
+' ══════════════════════════════════════════════════
+package "5. Prediction Layer" as PRED {
+    component "Modul Forecasting\n(Metode ARIMA)" as ARIMA
+
+    note right of ARIMA
+        <b>Fungsi:</b>
+        • Prediksi tren kelembapan tanah
+        • Prediksi tren suhu lingkungan
+        <b>Output:</b>
+        • Nilai prediksi beberapa
+          periode ke depan
+    end note
+}
+
+DB -down-> ARIMA : Ambil Data\nHistoris
+ARIMA -up-> BACKEND : Hasil Prediksi
+
+' ══════════════════════════════════════════════════
+' LAYER 6 — FRONTEND DASHBOARD
+' ══════════════════════════════════════════════════
+package "6. Frontend Dashboard Layer" as FE {
+    component "Web Dashboard" as DASHBOARD
+
+    note right of DASHBOARD
+        <b>Fitur:</b>
+        • Data sensor real-time
+        • Grafik historis (Chart.js)
+        • Hasil prediksi ARIMA
+        <b>Status Kondisi Lahan:</b>
+        • Normal (≥30%)
+        • Perlu Penyiraman (<30%)
+        • Kritis (<20%)
+    end note
+}
+
+BACKEND -down-> DASHBOARD : Response JSON\nvia REST API
+
+' ══════════════════════════════════════════════════
+' LAYER 7 — USER
+' ══════════════════════════════════════════════════
+package "7. User Layer" as USR {
+    actor "User\n(Petani / Admin)" as USER
+
+    note right of USER
+        <b>Aktivitas:</b>
+        • Monitoring data sensor
+        • Melihat grafik historis
+        • Melihat hasil prediksi
+        <i>(Sistem bersifat pasif,</i>
+        <i>tanpa kontrol otomatis)</i>
+    end note
+}
+
+DASHBOARD -down-> USER : Visualisasi\nAntarmuka Web
+
+' ── Footer ───────────────────────────────────────
+center footer \nAliran Data: Sensor → ESP32 → WiFi → Backend API → MySQL → ARIMA → Dashboard → User
+
+@enduml

@@ -1,0 +1,87 @@
+@startuml Sequence Diagram - Pengiriman Data Sensor
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
+skinparam sequenceMessageAlign center
+
+title **Sequence Diagram — Alur Ingest Data, Rule Engine, & Alerting**
+
+actor "ESP32 (Device)" as esp32 #FFF9C4
+participant "Nginx" as nginx #E3F2FD
+participant "ApiKeyMiddleware" as middleware #E8F5E9
+participant "SensorDataController" as controller #E8F5E9
+database "MySQL" as db #E3F2FD
+participant "TelegramService" as telegram #E8F5E9
+entity "Telegram API" as telegram_api #FFF3E0
+
+== 1. Data Ingestion & Security ==
+esp32 -> nginx : POST /api/sensor-data\nHeader: X-API-KEY\nBody: sensor values
+activate nginx
+
+nginx -> middleware : handle(Request)
+activate middleware
+
+middleware -> middleware : Cek header X-API-KEY
+alt API Key Tidak Valid / Kosong
+    middleware --> nginx : HTTP JSON 401 Unauthorized
+    nginx --> esp32 : HTTP 401 Unauthorized
+else API Key Valid
+    middleware -> controller : store(Request)
+    deactivate middleware
+    activate controller
+    
+    == 2. Rule Engine & Persistence ==
+    controller -> controller : validate() payload
+    controller -> controller : determineStatus(soil_moisture)\n(Kritis / Perlu / Normal)
+    
+    controller -> db : SensorData::create()
+    activate db
+    db --> controller : Model instance (saved)
+    deactivate db
+    
+    == 3. State Change Detection ==
+    controller -> db : SensorData::latest()\n(Ambil record sebelumnya)
+    activate db
+    db --> controller : Previous record
+    deactivate db
+    
+    alt Status Baru != Status Sebelumnya
+        controller -> telegram : sendMessage(Alert status berubah)
+        activate telegram
+        telegram -> telegram_api : POST /sendMessage
+        activate telegram_api
+        telegram_api --> telegram : HTTP 200 OK
+        deactivate telegram_api
+        telegram --> controller : status: true
+        deactivate telegram
+    end
+    
+    == 4. Automated SQL Backup ==
+    controller -> db : SensorData::where('source','real')->count()
+    activate db
+    db --> controller : realCount
+    deactivate db
+    
+    alt realCount > 0 AND realCount % 10 == 0
+        controller -> controller : generate SQL string\n(Application-level export)
+        controller -> telegram : sendDocument(Backup SQL file)
+        activate telegram
+        telegram -> telegram_api : POST /sendDocument
+        activate telegram_api
+        telegram_api --> telegram : HTTP 200 OK
+        deactivate telegram_api
+        telegram --> controller : status: true
+        deactivate telegram
+    end
+    
+    controller --> nginx : HTTP JSON 201 Created
+    deactivate controller
+    nginx --> esp32 : HTTP 201 Created (Success)
+    deactivate nginx
+end
+
+@enduml

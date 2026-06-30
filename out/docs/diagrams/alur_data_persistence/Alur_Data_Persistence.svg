@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="666px" preserveAspectRatio="none" style="width:240px;height:666px;" version="1.1" viewBox="0 0 240 666" width="240px" zoomAndPan="magnify"><defs/><g><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="216" x="12" y="21.8701">Alur Data Sensor pada Sistem Monitoring</text><ellipse cx="121" cy="34.6309" fill="#000000" rx="10" ry="10" style="stroke:none;stroke-width:1.0;"/><rect fill="#FEFECE" height="63.8926" rx="12.5" ry="12.5" style="stroke:#A80036;stroke-width:1.5;" width="167" x="37.5" y="64.6309"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="147" x="47.5" y="86.501">ESP32 membaca data sensor:</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="69" x="47.5" y="101.1318">soil_moisture</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="3" x="116.5" y="101.1318">,</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="64" x="122.5" y="101.1318">temperature</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="3" x="186.5" y="101.1318">,</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="47" x="47.5" y="115.7627">humidity</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="3" x="94.5" y="115.7627">,</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="74" x="100.5" y="115.7627">light_intensity</text><rect fill="#FEFECE" height="49.2617" rx="12.5" ry="12.5" style="stroke:#A80036;stroke-width:1.5;" width="157" x="42.5" y="148.5234"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="137" x="52.5" y="170.3936">Mengirim data ke REST API</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="96" x="52.5" y="185.0244">melalui HTTP POST</text><rect fill="#FEFECE" height="34.6309" rx="12.5" ry="12.5" style="stroke:#A80036;stroke-width:1.5;" width="99" x="71.5" y="217.7852"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="79" x="81.5" y="239.6553">Validasi API Key</text><rect fill="#FEFECE" height="34.6309" rx="12.5" ry="12.5" style="stroke:#A80036;stroke-width:1.5;" width="123" x="59.5" y="272.416"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="103" x="69.5" y="294.2861">Validasi format data</text><rect fill="#FEFECE" height="78.5234" rx="12.5" ry="12.5" style="stroke:#A80036;stroke-width:1.5;" width="193" x="24.5" y="327.0469"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="173" x="34.5" y="348.917">Menentukan status kondisi lahan</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="77" x="34.5" y="363.5479">— Kritis (&lt;20%)</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="140" x="34.5" y="378.1787">— Perlu Penyiraman (&lt;30%)</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="89" x="34.5" y="392.8096">— Normal (≥30%)</text><rect fill="#FEFECE" height="49.2617" rx="12.5" ry="12.5" style="stroke:#A80036;stroke-width:1.5;" width="121" x="60.5" y="425.5703"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="101" x="70.5" y="447.4404">Menyimpan data ke</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="84" x="70.5" y="462.0713">database MySQL</text><rect fill="#FEFECE" height="49.2617" rx="12.5" ry="12.5" style="stroke:#A80036;stroke-width:1.5;" width="137" x="52.5" y="494.832"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="97" x="62.5" y="516.7021">Data tersedia pada</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="117" x="62.5" y="531.333">dashboard monitoring</text><rect fill="#FEFECE" height="49.2617" rx="12.5" ry="12.5" style="stroke:#A80036;stroke-width:1.5;" width="144" x="49" y="564.0938"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="124" x="59" y="585.9639">Data historis digunakan</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="112" x="59" y="600.5947">untuk prediksi ARIMA</text><ellipse cx="121" cy="644.3555" fill="#FFFFFF" rx="11" ry="11" style="stroke:#000000;stroke-width:1.0;"/><ellipse cx="121" cy="644.3555" fill="#000000" rx="6" ry="6" style="stroke:#7F7F7F;stroke-width:1.0;"/><line style="stroke:#37474F;stroke-width:1.5;" x1="121" x2="121" y1="44.6309" y2="64.6309"/><polygon fill="#37474F" points="117,54.6309,121,64.6309,125,54.6309,121,58.6309" style="stroke:#37474F;stroke-width:1.0;"/><line style="stroke:#37474F;stroke-width:1.5;" x1="121" x2="121" y1="128.5234" y2="148.5234"/><polygon fill="#37474F" points="117,138.5234,121,148.5234,125,138.5234,121,142.5234" style="stroke:#37474F;stroke-width:1.0;"/><line style="stroke:#37474F;stroke-width:1.5;" x1="121" x2="121" y1="197.7852" y2="217.7852"/><polygon fill="#37474F" points="117,207.7852,121,217.7852,125,207.7852,121,211.7852" style="stroke:#37474F;stroke-width:1.0;"/><line style="stroke:#37474F;stroke-width:1.5;" x1="121" x2="121" y1="252.416" y2="272.416"/><polygon fill="#37474F" points="117,262.416,121,272.416,125,262.416,121,266.416" style="stroke:#37474F;stroke-width:1.0;"/><line style="stroke:#37474F;stroke-width:1.5;" x1="121" x2="121" y1="307.0469" y2="327.0469"/><polygon fill="#37474F" points="117,317.0469,121,327.0469,125,317.0469,121,321.0469" style="stroke:#37474F;stroke-width:1.0;"/><line style="stroke:#37474F;stroke-width:1.5;" x1="121" x2="121" y1="405.5703" y2="425.5703"/><polygon fill="#37474F" points="117,415.5703,121,425.5703,125,415.5703,121,419.5703" style="stroke:#37474F;stroke-width:1.0;"/><line style="stroke:#37474F;stroke-width:1.5;" x1="121" x2="121" y1="474.832" y2="494.832"/><polygon fill="#37474F" points="117,484.832,121,494.832,125,484.832,121,488.832" style="stroke:#37474F;stroke-width:1.0;"/><line style="stroke:#37474F;stroke-width:1.5;" x1="121" x2="121" y1="544.0938" y2="564.0938"/><polygon fill="#37474F" points="117,554.0938,121,564.0938,125,554.0938,121,558.0938" style="stroke:#37474F;stroke-width:1.0;"/><line style="stroke:#37474F;stroke-width:1.5;" x1="121" x2="121" y1="613.3555" y2="633.3555"/><polygon fill="#37474F" points="117,623.3555,121,633.3555,125,623.3555,121,627.3555" style="stroke:#37474F;stroke-width:1.0;"/><!--MD5=[4367ebb3c36b926d58c2e2648e1277ae]
+@startuml Alur_Data_Persistence
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+skinparam ArrowColor #37474F
+skinparam ArrowThickness 1.5
+
+title **Alur Data Sensor pada Sistem Monitoring**
+
+start
+
+:ESP32 membaca data sensor:
+**soil_moisture**, **temperature**,
+**humidity**, **light_intensity**;
+
+:Mengirim data ke REST API
+melalui HTTP POST;
+
+:Validasi API Key;
+
+:Validasi format data;
+
+:Menentukan status kondisi lahan
+— Kritis (<20%)
+— Perlu Penyiraman (<30%)
+— Normal (≥30%);
+
+:Menyimpan data ke
+database MySQL;
+
+:Data tersedia pada
+dashboard monitoring;
+
+:Data historis digunakan
+untuk prediksi ARIMA;
+
+stop
+
+@enduml
+
+PlantUML version 1.2021.00(Sun Jan 10 18:25:05 WITA 2021)
+(MIT source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: Cp1252
+Language: en
+Country: ID
+--></g></svg>

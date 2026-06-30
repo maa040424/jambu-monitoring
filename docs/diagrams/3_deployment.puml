@@ -1,54 +1,90 @@
 @startuml Deployment Diagram
-skinparam monochrome true
-skinparam shadowing false
+
 skinparam backgroundColor white
-skinparam defaultFontName Arial
-skinparam defaultFontSize 12
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
 
-title Deployment Diagram\nMonitoring Tanaman Jambu Kristal
-
-node "Perangkat IoT" as iot_node {
-    artifact "Mikrokontroler ESP32" as mcu
-    component "Sensor Suhu dan\nKelembaban Udara" as s1
-    component "Sensor Kelembaban\nTanah" as s2
-    component "Sensor Intensitas\nCahaya" as s3
+skinparam node {
+    BorderColor #37474F
+    BackgroundColor #ECEFF1
+    FontStyle bold
 }
 
-node "Server Aplikasi" as app_server {
-    artifact "Aplikasi Web" as web_app {
-        component "Modul Dashboard" as mod_dash
-        component "Modul Penerimaan Data" as mod_recv
-        component "Modul Notifikasi" as mod_notif
+skinparam database {
+    BorderColor #1565C0
+    BackgroundColor #E3F2FD
+}
+
+skinparam cloud {
+    BorderColor #2E7D32
+    BackgroundColor #E8F5E9
+}
+
+skinparam artifact {
+    BorderColor #555555
+    BackgroundColor #FFFFFF
+}
+
+title **Deployment Diagram**\nSistem Monitoring Tanaman Jambu Kristal
+
+' ── Client Layer ──
+node "**Web Client (Browser)**" as client #F5F5F5 {
+    artifact "**Dashboard Web**\nHTML / CSS / JS" as browser #FFFFFF
+}
+
+' ── Edge Layer ──
+node "**Edge Layer (Kebun)**" as edge #FFFDE7 {
+    node "**ESP32 Microcontroller**\nFreeRTOS / C++" as esp32 #FFF9C4
+    artifact "**Firmware App**" as firmware #FFFFFF
+    esp32 -up-> firmware : runs
+}
+
+' ── Cloud / Production VPS Layer ──
+node "**Production Server (Linux VPS)**\nUbuntu OS / Docker Engine" as vps #ECEFF1 {
+    
+    node "**Docker Compose Boundary**" as docker #F5F5F5 {
+        
+        node "**Container: jambu_nginx**\nnginx:alpine" as c_nginx #E3F2FD {
+            artifact "**Nginx Config**\nReverse Proxy\nport 80 / 443" as nginx_conf
+        }
+        
+        node "**Container: jambu_app**\nPHP 8.2-FPM" as c_laravel #E8F5E9 {
+            artifact "**Laravel Core**\nBackend Logic\nport 9000" as laravel_core
+        }
+        
+        node "**Container: jambu_queue**\nPHP 8.2-FPM" as c_queue #E8F5E9 {
+            artifact "**Queue Worker**\nArtisan command" as queue_worker
+        }
+        
+        node "**Container: jambu_db**\nmysql:8.0" as c_db #E3F2FD {
+            database "**MySQL Database**" as mysql_db
+        }
+        
+        node "**Container: jambu_ml**\npython:3.12-slim" as c_ml #FFF3E0 {
+            artifact "**Flask App**\nARIMA Model\nport 5001" as ml_flask
+        }
+        
+        node "**Container: jambu_mqtt**\neclipse-mosquitto:2" as c_mqtt #E3F2FD {
+            artifact "**Mosquitto Broker**\nport 1883\n*(Prepared/Inactive)*" as mqtt_conf
+        }
     }
-    artifact "Sistem Prediksi" as ml_app {
-        component "Model ARIMA" as mod_arima
-    }
 }
 
-database "Server Basis Data" as db_server {
-    storage "Basis Data Monitoring" as db_name {
-        collections "Data Sensor" as tbl_sensor
-        collections "Data Pengguna" as tbl_users
-    }
-}
+' ── External Services ──
+cloud "**Telegram Cloud**\nBot API" as telegram #E8F5E9
 
-cloud "Layanan Notifikasi\n(Telegram)" as tele_cloud
+' ── Connections ──
+browser -down-> c_nginx : **HTTP / HTTPS**\nport 80 / 443
+esp32 -right-> c_nginx : **HTTP REST API**\nPOST /api/sensor-data\nHeader: X-API-KEY
 
-node "Klien (Admin)" as client_admin {
-    artifact "Peramban Web" as browser_admin
-}
-
-node "Klien (Petani)" as client_petani {
-    artifact "Peramban Web" as browser_petani
-}
-
-' === Koneksi ===
-mcu --> mod_recv : Kirim data sensor
-browser_admin --> mod_dash : Akses sistem
-browser_petani --> mod_dash : Akses sistem
-mod_recv --> db_server : Simpan data
-mod_dash --> db_server : Ambil data
-mod_arima --> db_server : Ambil data historis
-mod_notif --> tele_cloud : Kirim notifikasi
+c_nginx -right-> c_laravel : **FastCGI**\nport 9000
+c_laravel -down-> c_db : **PDO MySQL**\nport 3306
+c_queue -up-> c_db : **PDO MySQL**\nPoll jobs table
+c_laravel -down-> c_ml : **HTTP REST**\nGET /predict
+c_ml -down-> c_db : **PyMySQL**\nport 3306
+c_laravel -right-> telegram : **HTTPS**\nTelegram Bot API
 
 @enduml

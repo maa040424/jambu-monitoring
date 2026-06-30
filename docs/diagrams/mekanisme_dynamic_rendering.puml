@@ -1,0 +1,35 @@
+@startuml Mekanisme_Dynamic_Rendering
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+skinparam ArrowColor #37474F
+skinparam ArrowThickness 1.5
+
+title **Mekanisme Dynamic Rendering**\npada Dashboard Monitoring
+
+start
+
+:JSON Response
+(Diterima dari Backend API);
+
+:JavaScript Parsing
+(Memproses struktur array data);
+
+:DOM Manipulation
+(Mencari elemen target berdasarkan ID);
+
+:HTML Component Update
+(Memperbarui teks dan status warna);
+
+:Chart.js Rendering
+(Mapping data ke grafik visual);
+
+:Frontend Visualization
+(Perubahan antarmuka tanpa reload halaman);
+
+stop
+
+@enduml

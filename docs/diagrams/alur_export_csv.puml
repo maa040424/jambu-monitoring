@@ -1,0 +1,74 @@
+@startuml Alur_Export_CSV_Filtering
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 12
+skinparam shadowing false
+skinparam monochrome true
+skinparam roundCorner 8
+
+title Alur Export CSV dengan Date Range Filtering
+
+start
+
+:Admin mengklik tombol
+**Export CSV** pada dashboard;
+
+:JavaScript **exportCSV()**
+membaca filter tanggal dan mode;
+
+:Membangun URL request
+(from_date, to_date, mode);
+
+:Browser mengirim
+**GET /export-sensor-data**;
+
+:Laravel middleware admin
+memvalidasi hak akses;
+
+if (User adalah Admin?) then (Ya)
+
+    :ExportController menerima request;
+
+    :Validasi parameter input;
+
+    :Membangun query SensorData
+    dengan filter tanggal dan source;
+
+    if (Filter tanggal diisi?) then (Ya)
+        :Terapkan whereBetween
+        pada created_at;
+    else (Tidak)
+        :Ambil seluruh data;
+    endif
+
+    if (Filter mode diisi?) then (Ya)
+        :Terapkan filter source
+        (dummy / real);
+    else (Tidak)
+        :Ambil semua source;
+    endif
+
+    :Eksekusi query ke MySQL;
+
+    :Generate CSV stream
+    (streamDownload);
+
+    :Tulis UTF-8 BOM header;
+
+    :Tulis header kolom CSV
+    (7 kolom, delimiter semicolon);
+
+    :Iterasi setiap record
+    ke output stream;
+
+    :Browser menerima file
+    **sensor_data.csv**;
+
+else (Tidak)
+    :HTTP 403 Forbidden;
+endif
+
+stop
+
+@enduml

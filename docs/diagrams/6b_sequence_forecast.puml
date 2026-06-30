@@ -1,0 +1,74 @@
+@startuml Sequence Diagram - Forecasting ARIMA
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
+skinparam sequenceMessageAlign center
+
+title **Sequence Diagram — Alur Integrasi Prediksi (ARIMA)**
+
+actor "Admin / Petani" as user #ECEFF1
+participant "Web Browser" as browser #FFFFFF
+participant "Nginx" as nginx #E3F2FD
+participant "ForecastController" as controller #E8F5E9
+participant "MLService" as ml_service #E8F5E9
+participant "Flask ML (ARIMA Service)" as flask #FFF3E0
+database "MySQL" as db #E3F2FD
+
+== 1. Halaman Prediksi ==
+user -> browser : Klik menu Prediksi
+activate browser
+browser -> nginx : GET /forecast (Web Access)
+activate nginx
+nginx -> browser : HTML + JS (Halaman Prediksi)
+deactivate nginx
+
+== 2. Request Data Prediksi ==
+browser -> nginx : GET /api/forecast?source=real&hours=4 (AJAX Request)
+activate nginx
+nginx -> controller : index(Request)
+activate controller
+
+controller -> ml_service : getForecast(source, hours, limit)
+activate ml_service
+
+== 3. Inter-Service HTTP Call ==
+ml_service -> flask : GET http://jambu_ml:5001/predict?source=real&hours=4\n//(connectTimeout: 5s, timeout: 30s)//
+activate flask
+
+flask -> db : Query N data historis terbaru (ORDER BY created_at DESC)
+activate db
+db --> flask : Data historis sensor
+deactivate db
+
+flask -> flask : Hitung rata-rata interval waktu
+flask -> flask : Lakukan Fitting ARIMA & Prediksi\n(Untuk 4 parameter sensor)
+alt Data < 10 (Fallback)
+    flask -> flask : Repetisi nilai terakhir sensor
+end
+flask -> flask : Clamping rentang wajar (Output limits)
+
+flask --> ml_service : HTTP 200 OK (JSON hasil prediksi & MAE/MSE)
+deactivate flask
+
+ml_service --> controller : Array data prediksi / null
+deactivate ml_service
+
+alt ML Service Sukses
+    controller --> nginx : HTTP JSON (Data Aktual + Hasil Prediksi + Metrik)
+else ML Service Gagal / Timeout
+    controller --> nginx : HTTP JSON 500 (Gagal mengambil data prediksi)
+end
+deactivate controller
+
+nginx --> browser : HTTP JSON Response
+deactivate nginx
+
+browser -> browser : Render chart menggunakan Chart.js\n(Data Aktual & Prediksi ARIMA)
+browser --> user : Tampilkan grafik visualisasi prediksi
+deactivate browser
+
+@enduml

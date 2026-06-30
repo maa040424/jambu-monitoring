@@ -1,0 +1,31 @@
+@startuml Integrasi_Monitoring_Pipeline
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+skinparam ArrowColor #37474F
+skinparam ArrowThickness 1.5
+
+title **Integrasi Dashboard dengan Keseluruhan Monitoring Pipeline Sistem**
+
+start
+
+:ESP32 Sensor Node;
+
+:REST API Communication;
+
+:Laravel Backend Server;
+
+:MySQL Database;
+
+:Flask Prediction Service;
+
+:ARIMA Forecast Processing;
+
+:Dashboard Visualization Layer;
+
+stop
+
+@enduml

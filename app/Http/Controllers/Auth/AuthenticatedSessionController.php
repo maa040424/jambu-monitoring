@@ -31,7 +31,12 @@ class AuthenticatedSessionController extends Controller
         // Record last login timestamp
         $request->user()->update(['last_login_at' => now()]);
 
-        return redirect()->route('mode.select');
+        if ($request->user()->isSuperAdmin()) {
+            return redirect()->route('mode.select');
+        }
+
+        $request->session()->put('data_mode', 'real');
+        return redirect()->route('dashboard');
     }
 
     /**

@@ -12,6 +12,10 @@ class ModeController extends Controller
      */
     public function showSelect()
     {
+        if (!auth()->user()->isSuperAdmin()) {
+            return redirect()->route('dashboard');
+        }
+
         // Jika sudah punya mode di session, tampilkan tetap halaman select
         // agar user bisa ganti mode kapan saja
         return view('mode-select');
@@ -22,6 +26,10 @@ class ModeController extends Controller
      */
     public function setMode(Request $request)
     {
+        if (!auth()->user()->isSuperAdmin()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $request->validate([
             'mode' => 'required|in:dummy,real',
         ]);
@@ -36,6 +44,13 @@ class ModeController extends Controller
      */
     public function switchMode(Request $request)
     {
+        if (!auth()->user()->isSuperAdmin()) {
+            if ($request->expectsJson()) {
+                return response()->json(['status' => 'error', 'message' => 'Unauthorized'], 403);
+            }
+            abort(403, 'Unauthorized action.');
+        }
+
         $request->validate([
             'mode' => 'required|in:dummy,real',
         ]);

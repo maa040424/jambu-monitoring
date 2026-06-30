@@ -1,61 +1,81 @@
 @startuml DFD Level 1
-skinparam monochrome true
-skinparam shadowing false
+
 skinparam backgroundColor white
-skinparam defaultFontName Arial
+skinparam defaultFontName "Segoe UI"
 skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
 
-title Data Flow Diagram Level 1\nSistem Monitoring Tanaman Jambu Kristal
+skinparam rectangle {
+    BorderColor #37474F
+    BackgroundColor #ECEFF1
+    FontStyle bold
+}
 
-' === Entitas Luar ===
-rectangle "Admin" as admin
-rectangle "Petani" as petani
-rectangle "Perangkat IoT" as iot
-rectangle "Sistem Notifikasi" as notif
+skinparam database {
+    BorderColor #1565C0
+    BackgroundColor #E3F2FD
+}
 
-' === Data Store ===
-database "D1: Data Sensor" as ds_sensor
-database "D2: Data Pengguna" as ds_users
+skinparam usecase {
+    BorderColor #2E7D32
+    BackgroundColor #E8F5E9
+    FontStyle bold
+}
 
-' === Proses ===
-usecase "P1\nAutentikasi" as p1
-usecase "P2\nPenerimaan\nData Sensor" as p2
-usecase "P3\nMonitoring\nData" as p3
-usecase "P4\nPrediksi\nData Sensor" as p4
-usecase "P5\nEkspor\nData" as p5
-usecase "P6\nNotifikasi\nStatus" as p6
-usecase "P7\nPengelolaan\nData" as p7
+title **Data Flow Diagram (DFD) Level 1**\nSistem Monitoring Tanaman Jambu Kristal
 
-' === Aliran Data ===
-admin --> p1 : Data login
-petani --> p1 : Data login
-p1 --> ds_users : Verifikasi pengguna
-p1 --> admin : Status autentikasi
-p1 --> petani : Status autentikasi
+' ── Entitas Luar ──
+rectangle "**Admin**" as admin #ECEFF1
+rectangle "**Petani**" as petani #ECEFF1
+rectangle "**Perangkat IoT (ESP32)**" as esp32 #FFF9C4
+rectangle "**Telegram Client**" as telegram #FFF3E0
 
-iot --> p2 : Data sensor
-p2 --> ds_sensor : Simpan data
-p2 --> p6 : Perubahan status
+' ── Data Store ──
+database "**D1: sensor_data**" as ds_sensor
+database "**D2: users**" as ds_users
 
-admin --> p3 : Permintaan data
-petani --> p3 : Permintaan data
-ds_sensor --> p3 : Data sensor
-p3 --> admin : Informasi monitoring
-p3 --> petani : Informasi monitoring
+' ── Proses ──
+usecase "**P1**\nAutentikasi & Otorisasi" as p1
+usecase "**P2**\nSensor Data Ingestion" as p2
+usecase "**P3**\nMonitoring & Visualisasi" as p3
+usecase "**P4**\nForecasting (ARIMA)" as p4
+usecase "**P5**\nRule Engine & Alert" as p5
+usecase "**P6**\nAutomated SQL Backup" as p6
 
-admin --> p4 : Permintaan prediksi
-petani --> p4 : Permintaan prediksi
-ds_sensor --> p4 : Data historis
-p4 --> admin : Hasil prediksi
-p4 --> petani : Hasil prediksi
+' ── Aliran Data P1 ──
+admin --> p1 : Kredensial Login
+petani --> p1 : Kredensial Login
+p1 <--> ds_users : Query Verifikasi & Sesi
+p1 --> admin : Akses Halaman Admin
+p1 --> petani : Akses Halaman Petani
 
-admin --> p5 : Permintaan ekspor
-ds_sensor --> p5 : Data sensor
-p5 --> admin : Berkas ekspor
+' ── Aliran Data P2 ──
+esp32 --> p2 : Raw Data (API Key check)
+p2 --> ds_sensor : Simpan Data (source: real)
+p2 --> p5 : Kirim Status Terkini
 
-p6 --> notif : Pesan notifikasi
+' ── Aliran Data P3 ──
+admin --> p3 : Request Dashboard
+petani --> p3 : Request Dashboard
+ds_sensor -down-> p3 : Ambil Data Historis
+p3 --> admin : Tampilan Dashboard & Log
+p3 --> petani : Tampilan Dashboard
 
-admin --> p7 : Permintaan kelola data
-p7 --> ds_sensor : Hapus data
+' ── Aliran Data P4 ──
+admin --> p4 : Request Forecast
+petani --> p4 : Request Forecast
+ds_sensor -down-> p4 : Ambil Data Training (N data)
+p4 --> admin : Tampilkan Grafik Prediksi
+p4 --> petani : Tampilkan Grafik Prediksi
+
+' ── Aliran Data P5 ──
+p5 -up-> ds_sensor : Cek Status Terakhir (State Change)
+p5 -right-> telegram : Kirim Alert (Jika status berubah)
+
+' ── Aliran Data P6 ──
+ds_sensor --> p6 : Hitung Jumlah Record (Kelipatan 10)
+p6 --> telegram : Kirim File SQL Backup (.sql)
 
 @enduml

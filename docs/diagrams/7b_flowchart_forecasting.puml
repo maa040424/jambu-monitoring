@@ -1,0 +1,47 @@
+@startuml Flowchart - ARIMA Forecasting
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
+skinparam conditionStyle inside
+
+title **Flowchart — Algoritme ARIMA & Pra-pemrosesan Data**
+
+start
+
+:Layanan Flask menerima parameter request\n(source, hours, limit) di endpoint /predict;
+:Lakukan koneksi ke database MySQL via PyMySQL;
+:Ambil N data historis terbaru (sensor_data)\nsesuai parameter source dan limit;
+
+if (Apakah data tersedia di database?) then (Tidak)
+    :Kembalikan JSON error 404 (Data kosong);
+    stop
+else (Ya)
+    :Koreksi Zona Waktu (UTC -> WITA / Asia/Makassar);
+    :Hitung interval waktu rata-rata antar record data;
+    
+    repeat :Untuk setiap sensor (soil_moisture, temperature, humidity, light_intensity);
+        :Bersihkan runtun waktu (drop NaN, cast float);
+        
+        if (Apakah jumlah data < 10?) then (Ya)
+            :Gunakan nilai sensor terakhir (Fallback);\n:Duplikasi nilai tersebut sebanyak langkah prediksi;
+        else (Tidak)
+            :Bentuk Model ARIMA(2, 1, 2) untuk sensor;
+            :Lakukan Fitting model menggunakan Kalman Filter;
+            :Lakukan Forecasting sebanyak langkah ke depan (steps);
+        endif
+        
+        :Lakukan Pembatasan Nilai (Output Clamping)\nsesuai batas logis sensor fisik;
+    repeat while (Apakah masih ada parameter sensor yang belum diproses?) is (Ya)
+    -> Tidak;
+    
+    :Gabungkan hasil prediksi 4 sensor;
+    :Kalkulasi metrik evaluasi model (MAE, MSE, RMSE)\nmenggunakan TimeSeriesSplit (5-Fold CV);
+    :Kembalikan JSON respon status 200\n(berisi data aktual, prediksi, & metrik);
+    stop
+endif
+
+@enduml

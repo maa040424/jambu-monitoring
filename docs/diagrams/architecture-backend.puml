@@ -1,0 +1,98 @@
+@startuml architecture-backend
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
+
+skinparam rectangle {
+    BorderColor #555555
+    BackgroundColor #F5F5F5
+    FontStyle bold
+}
+
+skinparam node {
+    BorderColor #37474F
+    BackgroundColor #ECEFF1
+}
+
+skinparam database {
+    BorderColor #1565C0
+    BackgroundColor #E3F2FD
+}
+
+skinparam cloud {
+    BorderColor #2E7D32
+    BackgroundColor #E8F5E9
+}
+
+skinparam component {
+    BorderColor #555555
+    BackgroundColor #FFFFFF
+}
+
+title **Arsitektur Multi-Service Backend**\nSistem Monitoring Kebun Jambu Kristal
+
+' ── Edge Layer ──
+rectangle "**Edge Layer** (Kebun)" as edge #FFFDE7 {
+    component "**ESP32**\nMikrokontroler" as esp32 #FFF9C4
+    note right of esp32
+        Sensor:
+        • Soil Moisture
+        • Temperature (DHT22)
+        • Humidity (DHT22)
+        • Light Intensity (LDR)
+    end note
+}
+
+' ── Docker Compose Environment ──
+node "**Docker Compose — Linux VPS Production Server**" as docker #F5F5F5 {
+
+    rectangle "**Nginx**\nReverse Proxy\n//nginx:alpine//" as nginx #E3F2FD {
+    }
+
+    rectangle "**Laravel Backend**\nPHP 8.2 / PHP-FPM\n//Custom Dockerfile//" as laravel #E8F5E9 {
+    }
+
+    database "**MySQL 8.0**\nDatabase Server\n//mysql:8.0//" as mysql #E3F2FD {
+    }
+
+    rectangle "**Flask ML Service**\nARIMA Forecasting\n//python:3.12-slim//" as flask #FFF3E0 {
+    }
+}
+
+' ── External Services ──
+cloud "**Telegram**\nBot API" as telegram #E8F5E9
+
+rectangle "**Web Dashboard**\nBrowser Client" as dashboard #E3F2FD
+
+' ── Data Flow ──
+
+esp32 -down-> nginx : 
+
+nginx -right-> laravel : 
+
+laravel -right-> mysql : 
+
+laravel -down-> flask : 
+
+flask -up-> mysql : 
+
+laravel -down-> telegram : 
+
+nginx -down-> dashboard : 
+
+' ── Legend ──
+legend bottom left
+    |= Warna |= Keterangan |
+    | <#FFF9C4> | Edge / IoT Device |
+    | <#E8F5E9> | Application Service |
+    | <#E3F2FD> | Infrastructure Service |
+    | <#FFF3E0> | ML / Prediction Service |
+endlegend
+
+
+
+@enduml

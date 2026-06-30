@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="1224px" preserveAspectRatio="none" style="width:816px;height:1224px;" version="1.1" viewBox="0 0 816 1224" width="816px" zoomAndPan="magnify"><defs/><g><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="135" x="334" y="15.8701">Diagram Arsitektur Sistem</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="445" x="179" y="30.501">Monitoring dan Prediksi Kondisi Lingkungan Testbed Kebun Jambu Kristal Berbasis IoT</text><!--MD5=[e421f2d8bbd389e8d5746630cd281077]
+cluster HW--><path d="M143,43.2617 L328,43.2617 A7.5,7.5 0 0 1 333,48.2617 L340,73.2227 L620,73.2227 A5,5 0 0 1 625,78.2227 L625,302.2617 A5,5 0 0 1 620,307.2617 L143,307.2617 A5,5 0 0 1 138,302.2617 L138,48.2617 A5,5 0 0 1 143,43.2617 " fill="#FAFAFA" style="stroke:#1565C0;stroke-width:1.5;"/><line style="stroke:#1565C0;stroke-width:1.5;" x1="138" x2="340" y1="73.2227" y2="73.2227"/><text fill="#0D47A1" font-family="Segoe UI" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="181" x="146" y="62.2109">1. Hardware Layer (Edge Device)</text><!--MD5=[a53b1aa2fb94a61e1b50498cc40147f8]
+cluster COMM--><path d="M304,378.2617 L441,378.2617 A7.5,7.5 0 0 1 446,383.2617 L453,408.2227 L451,408.2227 A5,5 0 0 1 456,413.2227 L456,484.2617 A5,5 0 0 1 451,489.2617 L304,489.2617 A5,5 0 0 1 299,484.2617 L299,383.2617 A5,5 0 0 1 304,378.2617 " fill="#FAFAFA" style="stroke:#1565C0;stroke-width:1.5;"/><line style="stroke:#1565C0;stroke-width:1.5;" x1="299" x2="453" y1="408.2227" y2="408.2227"/><text fill="#0D47A1" font-family="Segoe UI" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="133" x="307" y="397.2109">2. Communication Layer</text><!--MD5=[43a3fb635c12febb4cb7028741c09213]
+cluster BE--><path d="M292,560.2617 L390,560.2617 A7.5,7.5 0 0 1 395,565.2617 L402,590.2227 L675,590.2227 A5,5 0 0 1 680,595.2227 L680,703.2617 A5,5 0 0 1 675,708.2617 L292,708.2617 A5,5 0 0 1 287,703.2617 L287,565.2617 A5,5 0 0 1 292,560.2617 " fill="#FAFAFA" style="stroke:#1565C0;stroke-width:1.5;"/><line style="stroke:#1565C0;stroke-width:1.5;" x1="287" x2="402" y1="590.2227" y2="590.2227"/><text fill="#0D47A1" font-family="Segoe UI" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="94" x="295" y="579.2109">3. Backend Layer</text><!--MD5=[cd31ed20743bf0c8e6bdc2d6c27ba936]
+cluster DBL--><path d="M11,785.2617 L112,785.2617 A7.5,7.5 0 0 1 117,790.2617 L124,815.2227 L318,815.2227 A5,5 0 0 1 323,820.2227 L323,940.2617 A5,5 0 0 1 318,945.2617 L11,945.2617 A5,5 0 0 1 6,940.2617 L6,790.2617 A5,5 0 0 1 11,785.2617 " fill="#FAFAFA" style="stroke:#1565C0;stroke-width:1.5;"/><line style="stroke:#1565C0;stroke-width:1.5;" x1="6" x2="124" y1="815.2227" y2="815.2227"/><text fill="#0D47A1" font-family="Segoe UI" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="97" x="14" y="804.2109">4. Database Layer</text><!--MD5=[a5cfdd35079832dd3b9d89b9804a7863]
+cluster PRED--><path d="M57,1026.7617 L164,1026.7617 A7.5,7.5 0 0 1 169,1031.7617 L176,1056.7227 L420,1056.7227 A5,5 0 0 1 425,1061.7227 L425,1169.7617 A5,5 0 0 1 420,1174.7617 L57,1174.7617 A5,5 0 0 1 52,1169.7617 L52,1031.7617 A5,5 0 0 1 57,1026.7617 " fill="#FAFAFA" style="stroke:#1565C0;stroke-width:1.5;"/><line style="stroke:#1565C0;stroke-width:1.5;" x1="52" x2="176" y1="1056.7227" y2="1056.7227"/><text fill="#0D47A1" font-family="Segoe UI" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="103" x="60" y="1045.7109">5. Prediction Layer</text><!--MD5=[d2242131270c237e071fd8738247fbb8]
+cluster FE--><path d="M479,779.2617 L642,779.2617 A7.5,7.5 0 0 1 647,784.2617 L654,809.2227 L804,809.2227 A5,5 0 0 1 809,814.2227 L809,946.2617 A5,5 0 0 1 804,951.2617 L479,951.2617 A5,5 0 0 1 474,946.2617 L474,784.2617 A5,5 0 0 1 479,779.2617 " fill="#FAFAFA" style="stroke:#1565C0;stroke-width:1.5;"/><line style="stroke:#1565C0;stroke-width:1.5;" x1="474" x2="654" y1="809.2227" y2="809.2227"/><text fill="#0D47A1" font-family="Segoe UI" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="159" x="482" y="798.2109">6. Frontend Dashboard Layer</text><!--MD5=[034ec6170e6a4223821e7762fa7448df]
+cluster USR--><path d="M500,1022.2617 L576,1022.2617 A7.5,7.5 0 0 1 581,1027.2617 L588,1052.2227 L773,1052.2227 A5,5 0 0 1 778,1057.2227 L778,1174.2617 A5,5 0 0 1 773,1179.2617 L500,1179.2617 A5,5 0 0 1 495,1174.2617 L495,1027.2617 A5,5 0 0 1 500,1022.2617 " fill="#FAFAFA" style="stroke:#1565C0;stroke-width:1.5;"/><line style="stroke:#1565C0;stroke-width:1.5;" x1="495" x2="588" y1="1052.2227" y2="1052.2227"/><text fill="#0D47A1" font-family="Segoe UI" font-size="12" font-weight="bold" lengthAdjust="spacing" textLength="72" x="503" y="1041.2109">7. User Layer</text><!--MD5=[bb6fac6366855c7589ff0260fcb0aaa9]
+entity S_SOIL--><rect fill="#ECEFF1" height="54.6016" rx="5" ry="5" style="stroke:#546E7A;stroke-width:1.5;" width="119" x="489.5" y="85.2617"/><text fill="#000000" font-family="Segoe UI" font-size="10" lengthAdjust="spacing" textLength="88" x="503.5" y="110.0527">Sensor Soil Moisture</text><text fill="#000000" font-family="Segoe UI" font-size="10" lengthAdjust="spacing" textLength="91" x="503.5" y="123.3535">(Kelembapan Tanah)</text><!--MD5=[4cf110a61444559fdd71c278ec62020f]
+entity S_DHT22--><rect fill="#ECEFF1" height="54.6016" rx="5" ry="5" style="stroke:#546E7A;stroke-width:1.5;" width="155" x="299.5" y="85.2617"/><text fill="#000000" font-family="Segoe UI" font-size="10" lengthAdjust="spacing" textLength="61" x="313.5" y="110.0527">Sensor DHT22</text><text fill="#000000" font-family="Segoe UI" font-size="10" lengthAdjust="spacing" textLength="127" x="313.5" y="123.3535">(Suhu &amp; Kelembapan Udara)</text><!--MD5=[d1665b37353f2c51f9074d41defc04fa]
+entity S_LIGHT--><rect fill="#ECEFF1" height="54.6016" rx="5" ry="5" style="stroke:#546E7A;stroke-width:1.5;" width="110" x="154" y="85.2617"/><text fill="#000000" font-family="Segoe UI" font-size="10" lengthAdjust="spacing" textLength="55" x="168" y="110.0527">LDR Module</text><text fill="#000000" font-family="Segoe UI" font-size="10" lengthAdjust="spacing" textLength="82" x="168" y="123.3535">(Intensitas Cahaya)</text><!--MD5=[2f5a22cb1e0751c6271e96d2944f1621]
+entity ESP32--><polygon fill="#E8F5E9" points="309.5,234.2617,319.5,224.2617,444.5,224.2617,444.5,281.5234,434.5,291.5234,309.5,291.5234,309.5,234.2617" style="stroke:#1B5E20;stroke-width:1.5;"/><line style="stroke:#1B5E20;stroke-width:1.5;" x1="434.5" x2="444.5" y1="234.2617" y2="224.2617"/><line style="stroke:#1B5E20;stroke-width:1.5;" x1="309.5" x2="434.5" y1="234.2617" y2="234.2617"/><line style="stroke:#1B5E20;stroke-width:1.5;" x1="434.5" x2="434.5" y1="234.2617" y2="291.5234"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="31" x="328.5" y="260.1318">ESP32</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="87" x="328.5" y="274.7627">(Mikrokontroler)</text><!--MD5=[676981c2c8ad9431b972b31f50eb0ffa]
+entity WIFI--><path d="M332.2547,429.6543 C334.3133,424.7655 338.4056,422.9867 342.5772,427.2785 C345.1654,420.5958 349.4849,419.3087 354.6247,424.7413 C358.1756,418.6823 363.5529,417.4384 367.4641,424.3856 C368.7651,418.0783 372.9838,417.0914 377.4122,421.4757 C381.66,416.4024 387.6816,417.7347 389.843,423.8035 C394.5973,419.5346 398.959,421.0176 400.999,426.8125 C405.647,421.1112 409.7721,421.7353 413.0391,428.1814 C416.767,424.2459 421.4555,425.1888 423.577,430.0958 C433.1074,433.9748 434.8439,440.0161 428.6509,448.2819 C437.2487,455.6002 435.6722,462.4185 425.1928,466.017 C422.0146,471.7311 416.7468,472.4118 412.7835,466.8837 C409.9358,473.2937 405.5758,474.8269 400.4659,469.1984 C398.7142,475.63 393.3475,476.9377 389.2516,471.3936 C386.106,476.0313 381.9887,476.5918 378.3525,471.9713 C373.8827,477.9497 369.3626,477.7604 365.5601,471.2859 C361.7723,475.4653 357.3706,475.6634 354.8431,469.9242 C350.9759,475.3482 345.566,473.8952 343.3049,468.25 C338.267,473.2279 334.1629,472.3915 331.2283,466.0134 C322.1158,461.2364 321.4113,455.5411 327.7316,447.8012 C319.3382,439.679 321.4077,432.9808 332.2547,429.6543 " fill="#E1F5FE" style="stroke:#0277BD;stroke-width:1.5;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="70" x="342" y="451.1318">Jaringan WiFi</text><!--MD5=[7304f41d6d1fc8971064c1d66b746837]
+entity BACKEND--><rect fill="#EDE7F6" height="67.2617" rx="5" ry="5" style="stroke:#4527A0;stroke-width:1.5;" width="148" x="303" y="613.7617"/><rect fill="#EDE7F6" height="10" style="stroke:#4527A0;stroke-width:1.5;" width="15" x="431" y="618.7617"/><rect fill="#EDE7F6" height="2" style="stroke:#4527A0;stroke-width:1.5;" width="4" x="429" y="620.7617"/><rect fill="#EDE7F6" height="2" style="stroke:#4527A0;stroke-width:1.5;" width="4" x="429" y="624.7617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="100" x="322" y="649.6318">Backend API Server</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="54" x="322" y="664.2627">(REST API)</text><path d="M486.5,607.2617 L486.5,643.2617 L451.01,647.2617 L486.5,651.2617 L486.5,687.0859 A5,5 0 0 0 491.5,692.0859 L658.5,692.0859 A5,5 0 0 0 663.5,687.0859 L663.5,612.2617 L653.5,602.2617 L491.5,602.2617 A5,5 0 0 0 486.5,607.2617 " fill="#FFFFFF" style="stroke:#90A4AE;stroke-width:1.0;"/><path d="M653.5,602.2617 L653.5,609.7617 A2.5,2.5 0 0 0 656,612.2617 L663.5,612.2617 L653.5,602.2617 " fill="#FFFFFF" style="stroke:#90A4AE;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="9" font-weight="bold" lengthAdjust="spacing" textLength="30" x="496.5" y="620.9736">Fungsi:</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="148" x="496.5" y="632.9443">• Menerima HTTP Request dari ESP32</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="85" x="496.5" y="644.915">• Validasi data sensor</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="123" x="496.5" y="656.8857">• Menyimpan data ke database</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="111" x="496.5" y="668.8564">• Menyediakan endpoint API</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="102" x="500.5" y="680.8271">untuk frontend dashboard</text><!--MD5=[f9ba5bf973e7832d2ce5ed59077b93f7]
+entity DB--><path d="M22,862.2617 C22,852.2617 80,852.2617 80,852.2617 C80,852.2617 138,852.2617 138,862.2617 L138,893.8926 C138,903.8926 80,903.8926 80,903.8926 C80,903.8926 22,903.8926 22,893.8926 L22,862.2617 " fill="#FFF3E0" style="stroke:#E65100;stroke-width:1.5;"/><path d="M22,862.2617 C22,872.2617 80,872.2617 80,872.2617 C80,872.2617 138,872.2617 138,862.2617 " fill="none" style="stroke:#E65100;stroke-width:1.5;"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="88" x="36" y="892.1318">MySQL Database</text><path d="M173.5,832.2617 L173.5,874.2617 L138.22,878.2617 L173.5,882.2617 L173.5,924.0566 A5,5 0 0 0 178.5,929.0566 L301.5,929.0566 A5,5 0 0 0 306.5,924.0566 L306.5,837.2617 L296.5,827.2617 L178.5,827.2617 A5,5 0 0 0 173.5,832.2617 " fill="#FFFFFF" style="stroke:#90A4AE;stroke-width:1.0;"/><path d="M296.5,827.2617 L296.5,834.7617 A2.5,2.5 0 0 0 299,837.2617 L306.5,837.2617 L296.5,827.2617 " fill="#FFFFFF" style="stroke:#90A4AE;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="9" font-weight="bold" lengthAdjust="spacing" textLength="80" x="183.5" y="845.9736">Tabel sensor_data:</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="58" x="183.5" y="857.9443">• soil_moisture</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="56" x="183.5" y="869.915">• temperature</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="40" x="183.5" y="881.8857">• humidity</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="60" x="183.5" y="893.8564">• light_intensity</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="30" x="183.5" y="905.8271">• status</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="104" x="183.5" y="917.7979">• recorded_at (timestamp)</text><!--MD5=[3a116e486edbcba639415f812ce13b81]
+entity ARIMA--><rect fill="#EDE7F6" height="67.2617" rx="5" ry="5" style="stroke:#4527A0;stroke-width:1.5;" width="146" x="68" y="1080.2617"/><rect fill="#EDE7F6" height="10" style="stroke:#4527A0;stroke-width:1.5;" width="15" x="194" y="1085.2617"/><rect fill="#EDE7F6" height="2" style="stroke:#4527A0;stroke-width:1.5;" width="4" x="192" y="1087.2617"/><rect fill="#EDE7F6" height="2" style="stroke:#4527A0;stroke-width:1.5;" width="4" x="192" y="1091.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="98" x="87" y="1116.1318">Modul Forecasting</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="89" x="87" y="1130.7627">(Metode ARIMA)</text><path d="M249.5,1073.7617 L249.5,1110.2617 L214.22,1114.2617 L249.5,1118.2617 L249.5,1153.5859 A5,5 0 0 0 254.5,1158.5859 L403.5,1158.5859 A5,5 0 0 0 408.5,1153.5859 L408.5,1078.7617 L398.5,1068.7617 L254.5,1068.7617 A5,5 0 0 0 249.5,1073.7617 " fill="#FFFFFF" style="stroke:#90A4AE;stroke-width:1.0;"/><path d="M398.5,1068.7617 L398.5,1076.2617 A2.5,2.5 0 0 0 401,1078.7617 L408.5,1078.7617 L398.5,1068.7617 " fill="#FFFFFF" style="stroke:#90A4AE;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="9" font-weight="bold" lengthAdjust="spacing" textLength="30" x="259.5" y="1087.4736">Fungsi:</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="130" x="259.5" y="1099.4443">• Prediksi tren kelembapan tanah</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="120" x="259.5" y="1111.415">• Prediksi tren suhu lingkungan</text><text fill="#000000" font-family="Segoe UI" font-size="9" font-weight="bold" lengthAdjust="spacing" textLength="33" x="259.5" y="1123.3857">Output:</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="96" x="259.5" y="1135.3564">• Nilai prediksi beberapa</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="68" x="263.5" y="1147.3271">periode ke depan</text><!--MD5=[6621d4a0a2403cdab35f084041a73220]
+entity DASHBOARD--><rect fill="#EDE7F6" height="52.6309" rx="5" ry="5" style="stroke:#4527A0;stroke-width:1.5;" width="132" x="490" y="851.7617"/><rect fill="#EDE7F6" height="10" style="stroke:#4527A0;stroke-width:1.5;" width="15" x="602" y="856.7617"/><rect fill="#EDE7F6" height="2" style="stroke:#4527A0;stroke-width:1.5;" width="4" x="600" y="858.7617"/><rect fill="#EDE7F6" height="2" style="stroke:#4527A0;stroke-width:1.5;" width="4" x="600" y="862.7617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="84" x="509" y="887.6318">Web Dashboard</text><path d="M657.5,826.2617 L657.5,874.2617 L622.31,878.2617 L657.5,882.2617 L657.5,930.0273 A5,5 0 0 0 662.5,935.0273 L787.5,935.0273 A5,5 0 0 0 792.5,930.0273 L792.5,831.2617 L782.5,821.2617 L662.5,821.2617 A5,5 0 0 0 657.5,826.2617 " fill="#FFFFFF" style="stroke:#90A4AE;stroke-width:1.0;"/><path d="M782.5,821.2617 L782.5,828.7617 A2.5,2.5 0 0 0 785,831.2617 L792.5,831.2617 L782.5,821.2617 " fill="#FFFFFF" style="stroke:#90A4AE;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="9" font-weight="bold" lengthAdjust="spacing" textLength="23" x="667.5" y="839.9736">Fitur:</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="92" x="667.5" y="851.9443">• Data sensor real-time</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="97" x="667.5" y="863.915">• Grafik historis (Chart.js)</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="86" x="667.5" y="875.8857">• Hasil prediksi ARIMA</text><text fill="#000000" font-family="Segoe UI" font-size="9" font-weight="bold" lengthAdjust="spacing" textLength="91" x="667.5" y="887.8564">Status Kondisi Lahan:</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="67" x="667.5" y="899.8271">• Normal (≥30%)</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="106" x="667.5" y="911.7979">• Perlu Penyiraman (&lt;30%)</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="56" x="667.5" y="923.7686">• Kritis (&lt;20%)</text><!--MD5=[45b63dd073af87a8113be763e73651ff]
+entity USER--><ellipse cx="556" cy="1073.7617" fill="#FEFECE" rx="8" ry="8" style="stroke:#A80036;stroke-width:1.5;"/><path d="M556,1081.7617 L556,1108.7617 M543,1089.7617 L569,1089.7617 M556,1108.7617 L543,1123.7617 M556,1108.7617 L569,1123.7617 " fill="none" style="stroke:#A80036;stroke-width:1.5;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="23" x="515.5" y="1142.1318">User</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="81" x="515.5" y="1156.7627">(Petani / Admin)</text><path d="M636,1073.7617 L636,1110.2617 L600.85,1114.2617 L636,1118.2617 L636,1153.5859 A5,5 0 0 0 641,1158.5859 L757,1158.5859 A5,5 0 0 0 762,1153.5859 L762,1078.7617 L752,1068.7617 L641,1068.7617 A5,5 0 0 0 636,1073.7617 " fill="#FFFFFF" style="stroke:#90A4AE;stroke-width:1.0;"/><path d="M752,1068.7617 L752,1076.2617 A2.5,2.5 0 0 0 754.5,1078.7617 L762,1078.7617 L752,1068.7617 " fill="#FFFFFF" style="stroke:#90A4AE;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="9" font-weight="bold" lengthAdjust="spacing" textLength="41" x="646" y="1087.4736">Aktivitas:</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="97" x="646" y="1099.4443">• Monitoring data sensor</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="90" x="646" y="1111.415">• Melihat grafik historis</text><text fill="#000000" font-family="Segoe UI" font-size="9" lengthAdjust="spacing" textLength="88" x="646" y="1123.3857">• Melihat hasil prediksi</text><text fill="#000000" font-family="Segoe UI" font-size="9" font-style="italic" lengthAdjust="spacing" textLength="82" x="646" y="1135.3564">(Sistem bersifat pasif,</text><text fill="#000000" font-family="Segoe UI" font-size="9" font-style="italic" lengthAdjust="spacing" textLength="92" x="646" y="1147.3271">tanpa kontrol otomatis)</text><!--MD5=[42c5ace5a61be6a06b17298d176631bb]
+link S_SOIL to ESP32--><path d="M549,140.4717 C549,182.6917 549,258.2617 549,258.2617 C549,258.2617 449.98,258.2617 449.98,258.2617 " fill="none" id="S_SOIL-to-ESP32" style="stroke:#37474F;stroke-width:1.5;"/><polygon fill="#37474F" points="444.98,258.2617,453.98,262.2617,449.98,258.2617,453.98,254.2617,444.98,258.2617" style="stroke:#37474F;stroke-width:1.5;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="48" x="515" y="187.1318">«analog»</text><!--MD5=[167d59ae5294786d0107f47d0a232c29]
+link S_DHT22 to ESP32--><path d="M377,140.3717 C377,140.3717 377,219.1317 377,219.1317 " fill="none" id="S_DHT22-to-ESP32" style="stroke:#37474F;stroke-width:1.5;"/><polygon fill="#37474F" points="377,224.1317,381,215.1317,377,219.1317,373,215.1317,377,224.1317" style="stroke:#37474F;stroke-width:1.5;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="45" x="382" y="187.1318">«digital»</text><!--MD5=[0816d9947a62f6a929d7807675b51e72]
+link S_LIGHT to ESP32--><path d="M218.75,140.4717 C218.75,182.6917 218.75,258.2617 218.75,258.2617 C218.75,258.2617 304.43,258.2617 304.43,258.2617 " fill="none" id="S_LIGHT-to-ESP32" style="stroke:#37474F;stroke-width:1.5;"/><polygon fill="#37474F" points="309.43,258.2617,300.43,254.2617,304.43,258.2617,300.43,262.2617,309.43,258.2617" style="stroke:#37474F;stroke-width:1.5;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="28" x="259" y="187.1318">«I2C»</text><!--MD5=[e5b830c7188c05813cd3eb375341e24f]
+link ESP32 to WIFI--><path d="M377,291.5517 C377,291.5517 377,414.9817 377,414.9817 " fill="none" id="ESP32-to-WIFI" style="stroke:#37474F;stroke-width:1.5;"/><polygon fill="#37474F" points="377,419.9817,381,410.9817,377,414.9817,373,410.9817,377,419.9817" style="stroke:#37474F;stroke-width:1.5;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="85" x="382" y="340.1318">Pengiriman Data</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="42" x="403.5" y="354.7627">Periodik</text><!--MD5=[b2c833009d4302558832611e75062c5e]
+link WIFI to BACKEND--><path d="M377,473.3817 C377,473.3817 377,608.4917 377,608.4917 " fill="none" id="WIFI-to-BACKEND" style="stroke:#37474F;stroke-width:1.5;"/><polygon fill="#37474F" points="377,613.4917,381,604.4917,377,608.4917,373,604.4917,377,613.4917" style="stroke:#37474F;stroke-width:1.5;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="56" x="396.5" y="522.1318">HTTP POST</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="85" x="382" y="536.7627">/api/sensor-data</text><!--MD5=[a7e44ef98b122e2d863b475fa06fa2ce]
+link BACKEND to DB--><path d="M302.82,636.2617 C214.85,636.2617 80,636.2617 80,636.2617 C80,636.2617 80,846.9017 80,846.9017 " fill="none" id="BACKEND-to-DB" style="stroke:#37474F;stroke-width:1.5;"/><polygon fill="#37474F" points="80,851.9017,84,842.9017,80,846.9017,76,842.9017,80,851.9017" style="stroke:#37474F;stroke-width:1.5;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="103" x="166" y="748.6318">Simpan Data Sensor</text><!--MD5=[bc1045fb2a5573a3c79f28da085456bc]
+link DB to ARIMA--><path d="M103,904.3617 C103,904.3617 103,1074.9617 103,1074.9617 " fill="none" id="DB-to-ARIMA" style="stroke:#37474F;stroke-width:1.5;"/><polygon fill="#37474F" points="103,1079.9617,107,1070.9617,103,1074.9617,99,1070.9617,103,1079.9617" style="stroke:#37474F;stroke-width:1.5;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="56" x="116" y="984.1318">Ambil Data</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="39" x="124.5" y="998.7627">Historis</text><!--MD5=[91925cb7e5989b63772c64910e81ffdd]
+reverse link BACKEND to ARIMA--><path d="M297.71,659.2617 C297.71,659.2617 163.75,659.2617 163.75,659.2617 C163.75,659.2617 163.75,974.6417 163.75,1079.9717 " fill="none" id="BACKEND-backto-ARIMA" style="stroke:#37474F;stroke-width:1.5;"/><polygon fill="#37474F" points="302.71,659.2617,293.71,655.2617,297.71,659.2617,293.71,663.2617,302.71,659.2617" style="stroke:#37474F;stroke-width:1.5;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="68" x="382" y="883.1318">Hasil Prediksi</text><!--MD5=[8b6ca17244fa769bbc77fb97678751ce]
+link BACKEND to DASHBOARD--><path d="M429.75,680.8517 C429.75,744.9217 429.75,878.2617 429.75,878.2617 C429.75,878.2617 484.92,878.2617 484.92,878.2617 " fill="none" id="BACKEND-to-DASHBOARD" style="stroke:#37474F;stroke-width:1.5;"/><polygon fill="#37474F" points="489.92,878.2617,480.92,874.2617,484.92,878.2617,480.92,882.2617,489.92,878.2617" style="stroke:#37474F;stroke-width:1.5;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="80" x="500" y="741.1318">Response JSON</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="61" x="509.5" y="755.7627">via REST API</text><!--MD5=[1554d7803aaa71bf8d7faf7be6648530]
+link DASHBOARD to USER--><path d="M556,904.8217 C556,904.8217 556,1058.8917 556,1058.8917 " fill="none" id="DASHBOARD-to-USER" style="stroke:#37474F;stroke-width:1.5;"/><polygon fill="#37474F" points="556,1063.8917,560,1054.8917,556,1058.8917,552,1054.8917,556,1063.8917" style="stroke:#37474F;stroke-width:1.5;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="53" x="576" y="984.1318">Visualisasi</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="83" x="561" y="998.7627">Antarmuka Web</text><text fill="#888888" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="0" x="403" y="1201.1318"/><text fill="#888888" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="466" x="168.5" y="1215.7627">Aliran Data: Sensor → ESP32 → WiFi → Backend API → MySQL → ARIMA → Dashboard → User</text><!--MD5=[21daaaa4b8ed4ca66290e45794af5c76]
+@startuml Arsitektur_Sistem
+
+' ══════════════════════════════════════════════════
+' DIAGRAM ARSITEKTUR SISTEM
+' Monitoring dan Prediksi Kondisi Lingkungan
+' pada Testbed Kebun Jambu Kristal Berbasis IoT
+' ══════════════════════════════════════════════════
+
+' ── Global Styling ───────────────────────────────
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
+skinparam linetype ortho
+skinparam ArrowColor #37474F
+skinparam ArrowThickness 1.5
+
+skinparam package {
+    BorderColor #1565C0
+    BackgroundColor #FAFAFA
+    FontColor #0D47A1
+    FontStyle bold
+    FontSize 12
+}
+
+skinparam rectangle {
+    BorderColor #546E7A
+    BackgroundColor #ECEFF1
+    FontSize 10
+}
+
+skinparam node {
+    BorderColor #1B5E20
+    BackgroundColor #E8F5E9
+    FontStyle bold
+}
+
+skinparam component {
+    BorderColor #4527A0
+    BackgroundColor #EDE7F6
+    FontStyle bold
+}
+
+skinparam database {
+    BorderColor #E65100
+    BackgroundColor #FFF3E0
+    FontStyle bold
+}
+
+skinparam cloud {
+    BorderColor #0277BD
+    BackgroundColor #E1F5FE
+}
+
+skinparam note {
+    BorderColor #90A4AE
+    BackgroundColor #FFFFFF
+    FontSize 9
+}
+
+title **Diagram Arsitektur Sistem**\nMonitoring dan Prediksi Kondisi Lingkungan Testbed Kebun Jambu Kristal Berbasis IoT
+
+' ══════════════════════════════════════════════════
+' LAYER 1 — HARDWARE (EDGE DEVICE)
+' ══════════════════════════════════════════════════
+package "1. Hardware Layer (Edge Device)" as HW {
+    rectangle "Sensor Soil Moisture\n(Kelembapan Tanah)" as S_SOIL
+    rectangle "Sensor DHT22\n(Suhu & Kelembapan Udara)" as S_DHT22
+    rectangle "LDR Module\n(Intensitas Cahaya)" as S_LIGHT
+
+    node "ESP32\n(Mikrokontroler)" as ESP32
+}
+
+S_SOIL  -down-> ESP32 : <<analog>>
+S_DHT22 -down-> ESP32 : <<digital>>
+S_LIGHT -down-> ESP32 : <<I2C>>
+
+' ══════════════════════════════════════════════════
+' LAYER 2 — COMMUNICATION
+' ══════════════════════════════════════════════════
+package "2. Communication Layer" as COMM {
+    cloud "Jaringan WiFi" as WIFI
+}
+
+ESP32 -down-> WIFI : Pengiriman Data\nPeriodik
+
+' ══════════════════════════════════════════════════
+' LAYER 3 — BACKEND
+' ══════════════════════════════════════════════════
+package "3. Backend Layer" as BE {
+    component "Backend API Server\n(REST API)" as BACKEND
+
+    note right of BACKEND
+        <b>Fungsi:</b>
+        • Menerima HTTP Request dari ESP32
+        • Validasi data sensor
+        • Menyimpan data ke database
+        • Menyediakan endpoint API
+          untuk frontend dashboard
+    end note
+}
+
+WIFI -down-> BACKEND : HTTP POST\n/api/sensor-data
+
+' ══════════════════════════════════════════════════
+' LAYER 4 — DATABASE
+' ══════════════════════════════════════════════════
+package "4. Database Layer" as DBL {
+    database "MySQL Database" as DB
+
+    note right of DB
+        <b>Tabel sensor_data:</b>
+        • soil_moisture
+        • temperature
+        • humidity
+        • light_intensity
+        • status
+        • recorded_at (timestamp)
+    end note
+}
+
+BACKEND -down-> DB : Simpan Data Sensor
+
+' ══════════════════════════════════════════════════
+' LAYER 5 — PREDICTION
+' ══════════════════════════════════════════════════
+package "5. Prediction Layer" as PRED {
+    component "Modul Forecasting\n(Metode ARIMA)" as ARIMA
+
+    note right of ARIMA
+        <b>Fungsi:</b>
+        • Prediksi tren kelembapan tanah
+        • Prediksi tren suhu lingkungan
+        <b>Output:</b>
+        • Nilai prediksi beberapa
+          periode ke depan
+    end note
+}
+
+DB -down-> ARIMA : Ambil Data\nHistoris
+ARIMA -up-> BACKEND : Hasil Prediksi
+
+' ══════════════════════════════════════════════════
+' LAYER 6 — FRONTEND DASHBOARD
+' ══════════════════════════════════════════════════
+package "6. Frontend Dashboard Layer" as FE {
+    component "Web Dashboard" as DASHBOARD
+
+    note right of DASHBOARD
+        <b>Fitur:</b>
+        • Data sensor real-time
+        • Grafik historis (Chart.js)
+        • Hasil prediksi ARIMA
+        <b>Status Kondisi Lahan:</b>
+        • Normal (≥30%)
+        • Perlu Penyiraman (<30%)
+        • Kritis (<20%)
+    end note
+}
+
+BACKEND -down-> DASHBOARD : Response JSON\nvia REST API
+
+' ══════════════════════════════════════════════════
+' LAYER 7 — USER
+' ══════════════════════════════════════════════════
+package "7. User Layer" as USR {
+    actor "User\n(Petani / Admin)" as USER
+
+    note right of USER
+        <b>Aktivitas:</b>
+        • Monitoring data sensor
+        • Melihat grafik historis
+        • Melihat hasil prediksi
+        <i>(Sistem bersifat pasif,</i>
+        <i>tanpa kontrol otomatis)</i>
+    end note
+}
+
+DASHBOARD -down-> USER : Visualisasi\nAntarmuka Web
+
+' ── Footer ───────────────────────────────────────
+center footer \nAliran Data: Sensor → ESP32 → WiFi → Backend API → MySQL → ARIMA → Dashboard → User
+
+@enduml
+
+@startuml Arsitektur_Sistem
+
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
+skinparam linetype ortho
+skinparam ArrowColor #37474F
+skinparam ArrowThickness 1.5
+
+skinparam package {
+    BorderColor #1565C0
+    BackgroundColor #FAFAFA
+    FontColor #0D47A1
+    FontStyle bold
+    FontSize 12
+}
+
+skinparam rectangle {
+    BorderColor #546E7A
+    BackgroundColor #ECEFF1
+    FontSize 10
+}
+
+skinparam node {
+    BorderColor #1B5E20
+    BackgroundColor #E8F5E9
+    FontStyle bold
+}
+
+skinparam component {
+    BorderColor #4527A0
+    BackgroundColor #EDE7F6
+    FontStyle bold
+}
+
+skinparam database {
+    BorderColor #E65100
+    BackgroundColor #FFF3E0
+    FontStyle bold
+}
+
+skinparam cloud {
+    BorderColor #0277BD
+    BackgroundColor #E1F5FE
+}
+
+skinparam note {
+    BorderColor #90A4AE
+    BackgroundColor #FFFFFF
+    FontSize 9
+}
+
+title **Diagram Arsitektur Sistem**\nMonitoring dan Prediksi Kondisi Lingkungan Testbed Kebun Jambu Kristal Berbasis IoT
+
+package "1. Hardware Layer (Edge Device)" as HW {
+    rectangle "Sensor Soil Moisture\n(Kelembapan Tanah)" as S_SOIL
+    rectangle "Sensor DHT22\n(Suhu & Kelembapan Udara)" as S_DHT22
+    rectangle "LDR Module\n(Intensitas Cahaya)" as S_LIGHT
+
+    node "ESP32\n(Mikrokontroler)" as ESP32
+}
+
+S_SOIL  -down-> ESP32 : <<analog>>
+S_DHT22 -down-> ESP32 : <<digital>>
+S_LIGHT -down-> ESP32 : <<I2C>>
+
+package "2. Communication Layer" as COMM {
+    cloud "Jaringan WiFi" as WIFI
+}
+
+ESP32 -down-> WIFI : Pengiriman Data\nPeriodik
+
+package "3. Backend Layer" as BE {
+    component "Backend API Server\n(REST API)" as BACKEND
+
+    note right of BACKEND
+        <b>Fungsi:</b>
+        • Menerima HTTP Request dari ESP32
+        • Validasi data sensor
+        • Menyimpan data ke database
+        • Menyediakan endpoint API
+          untuk frontend dashboard
+    end note
+}
+
+WIFI -down-> BACKEND : HTTP POST\n/api/sensor-data
+
+package "4. Database Layer" as DBL {
+    database "MySQL Database" as DB
+
+    note right of DB
+        <b>Tabel sensor_data:</b>
+        • soil_moisture
+        • temperature
+        • humidity
+        • light_intensity
+        • status
+        • recorded_at (timestamp)
+    end note
+}
+
+BACKEND -down-> DB : Simpan Data Sensor
+
+package "5. Prediction Layer" as PRED {
+    component "Modul Forecasting\n(Metode ARIMA)" as ARIMA
+
+    note right of ARIMA
+        <b>Fungsi:</b>
+        • Prediksi tren kelembapan tanah
+        • Prediksi tren suhu lingkungan
+        <b>Output:</b>
+        • Nilai prediksi beberapa
+          periode ke depan
+    end note
+}
+
+DB -down-> ARIMA : Ambil Data\nHistoris
+ARIMA -up-> BACKEND : Hasil Prediksi
+
+package "6. Frontend Dashboard Layer" as FE {
+    component "Web Dashboard" as DASHBOARD
+
+    note right of DASHBOARD
+        <b>Fitur:</b>
+        • Data sensor real-time
+        • Grafik historis (Chart.js)
+        • Hasil prediksi ARIMA
+        <b>Status Kondisi Lahan:</b>
+        • Normal (≥30%)
+        • Perlu Penyiraman (<30%)
+        • Kritis (<20%)
+    end note
+}
+
+BACKEND -down-> DASHBOARD : Response JSON\nvia REST API
+
+package "7. User Layer" as USR {
+    actor "User\n(Petani / Admin)" as USER
+
+    note right of USER
+        <b>Aktivitas:</b>
+        • Monitoring data sensor
+        • Melihat grafik historis
+        • Melihat hasil prediksi
+        <i>(Sistem bersifat pasif,</i>
+        <i>tanpa kontrol otomatis)</i>
+    end note
+}
+
+DASHBOARD -down-> USER : Visualisasi\nAntarmuka Web
+
+center footer \nAliran Data: Sensor → ESP32 → WiFi → Backend API → MySQL → ARIMA → Dashboard → User
+
+@enduml
+
+PlantUML version 1.2021.00(Sun Jan 10 18:25:05 WITA 2021)
+(MIT source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: Cp1252
+Language: en
+Country: ID
+--></g></svg>

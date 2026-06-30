@@ -1,0 +1,58 @@
+@startuml Integrasi_Monitoring_Notification
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 12
+skinparam shadowing false
+skinparam monochrome true
+skinparam roundCorner 8
+
+skinparam rectangle {
+    FontStyle bold
+}
+
+title Integrasi Monitoring Pipeline\ndengan Telegram Notification Subsystem
+
+rectangle "ESP32\nData Transmission" as esp32
+
+rectangle "REST API\nPOST /api/sensor-data" as api
+
+rectangle "Input Validation\nRequest validate()" as validate
+
+rectangle "Status Determination\ndetermineStatus()" as status
+
+rectangle "Database Persistence\nSensorData::create()" as persist
+
+rectangle "Status Change Detection\npreviousStatus != status" as detect
+
+rectangle "Message Builder\nFormat HTML + Emoji" as builder
+
+rectangle "TelegramService\nsendMessage()" as sender
+
+rectangle "SQL Backup Generator\ntriggerTelegramBackup()" as backup
+
+rectangle "TelegramService\nsendDocument()" as backup_send
+
+rectangle "Telegram Bot API" as tg_api
+
+rectangle "User Telegram Client" as tg_user
+
+database "MySQL" as db
+
+esp32 -down-> api
+api -down-> validate
+validate -down-> status
+status -down-> persist
+persist -right-> db
+persist -down-> detect
+
+detect -down-> builder : Jika status berubah
+builder -down-> sender
+sender -down-> tg_api
+tg_api -down-> tg_user
+
+persist -left-> backup : Jika data real\nkelipatan 10
+backup -down-> backup_send
+backup_send -right-> tg_api
+
+@enduml

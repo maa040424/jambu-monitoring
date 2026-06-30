@@ -221,6 +221,7 @@
         @if(auth()->user()->isAdmin())
         {{-- Mode Toggle Row (Admin Only) --}}
         <div class="row align-items-center g-2 mb-3">
+            @if(auth()->user()->isSuperAdmin())
             <div class="col-auto">
                 <label class="form-label small fw-semibold text-uppercase text-muted mb-0">
                     <i class="bi bi-database me-1"></i>Mode Data
@@ -238,15 +239,18 @@
                     </button>
                 </div>
             </div>
+            @endif
             <div class="col-auto ms-auto d-flex gap-2">
                 <button class="btn btn-sm btn-outline-success" id="btn-backup-data"
                         data-bs-toggle="modal" data-bs-target="#backup-modal"
                         title="Backup & Restore data real">
                     <i class="bi bi-shield-lock me-1"></i>Backup Data
                 </button>
+                @if(auth()->user()->isSuperAdmin())
                 <button class="btn btn-sm btn-outline-danger" id="btn-clear-data" onclick="clearModeData()">
                     <i class="bi bi-trash3 me-1"></i>Hapus Data <span id="clear-mode-label">{{ ucfirst($mode) }}</span>
                 </button>
+                @endif
             </div>
         </div>
         @endif
@@ -283,6 +287,7 @@
     </div>
 </div>
 
+@if(auth()->user()->isSuperAdmin())
 {{-- Card Simulator --}}
 <div id="simulator-control-card" class="card mb-4 border-primary {{ $mode === 'real' ? 'd-none' : '' }}" style="background: rgba(var(--bs-primary-rgb), 0.03); border: 1px solid rgba(var(--bs-primary-rgb), 0.2) !important; color: var(--text-primary);">
     <div class="card-header bg-transparent border-bottom d-flex align-items-center justify-content-between py-3" style="border-color: rgba(var(--bs-primary-rgb), 0.2) !important;">
@@ -353,6 +358,7 @@
         </div>
     </div>
 </div>
+@endif
 
 </div>
 

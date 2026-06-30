@@ -1,0 +1,49 @@
+@startuml Arsitektur_Export_Data
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 12
+skinparam shadowing false
+skinparam monochrome true
+skinparam roundCorner 8
+
+skinparam rectangle {
+    FontStyle bold
+}
+
+title Arsitektur Export Data Monitoring
+
+rectangle "Dashboard Frontend" as fe {
+    rectangle "Export CSV Button\n(Admin Only)" as btn_csv
+    rectangle "Export PDF Button\n(All Users)" as btn_pdf
+}
+
+rectangle "CSV Export Pipeline" as csv_pipe {
+    rectangle "Route: GET /export-sensor-data\nmiddleware: admin" as route_csv
+    rectangle "ExportController\nstreamDownload() + fputcsv()" as ctrl_csv
+}
+
+rectangle "PDF Export Pipeline" as pdf_pipe {
+    rectangle "Route: GET /export-forecast-pdf\nmiddleware: auth" as route_pdf
+    rectangle "ForecastPdfController\nProxy Response" as ctrl_pdf
+}
+
+rectangle "Flask ML Service\nGET /predict/pdf\nmatplotlib + reportlab" as flask
+
+database "MySQL 8.0" as db
+
+rectangle "sensor_data.csv\nCSV Semicolon + UTF-8 BOM" as file_csv
+rectangle "prediksi_arima.pdf\nGrafik + Tabel" as file_pdf
+
+btn_csv -down-> route_csv : exportCSV()
+route_csv -down-> ctrl_csv
+ctrl_csv -right-> db : Query + Filter
+ctrl_csv -down-> file_csv : Stream Download
+
+btn_pdf -down-> route_pdf : exportForecastPdf()
+route_pdf -down-> ctrl_pdf
+ctrl_pdf -down-> flask : HTTP GET\ntimeout: 60s
+flask -right-> db : Query historis
+ctrl_pdf -down-> file_pdf : Proxy Response
+
+@enduml

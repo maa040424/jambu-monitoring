@@ -1,0 +1,38 @@
+@startuml Mekanisme_Automated_Backup
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+skinparam ArrowColor #37474F
+skinparam ArrowThickness 1.5
+
+title **Mekanisme Automated Backup**\ndan External Backup Delivery
+
+start
+
+:ESP32 Device;
+
+:Laravel Backend Service;
+
+:Store Monitoring Data
+MySQL Database;
+
+:Check Total Data Counter
+Setiap kelipatan 10 records;
+
+:Trigger Backup Job;
+
+:Generate SQL Backup File
+(.sql dump);
+
+:Send Backup File
+via Telegram Bot;
+
+:External Backup Storage
+Telegram Cloud;
+
+stop
+
+@enduml

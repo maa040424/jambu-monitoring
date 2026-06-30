@@ -1,0 +1,38 @@
+@startuml Integrasi_Prediction_Pipeline
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 12
+skinparam shadowing false
+skinparam monochrome true
+skinparam roundCorner 8
+
+skinparam rectangle {
+    FontStyle bold
+}
+
+title Arsitektur Integrasi Prediction Pipeline\ndengan Subsistem Monitoring
+
+rectangle "Dashboard Frontend\n(forecast.blade.php)" as dashboard
+
+rectangle "forecast.js\nFetch API" as js
+
+rectangle "Laravel API Route\nGET /api/forecast\nmiddleware: web, auth" as route
+
+rectangle "ForecastController" as controller
+
+rectangle "MLService\ngetForecast()" as mlservice
+
+rectangle "Flask Prediction API\nGET /predict\nPort 5001" as flask
+
+rectangle "Chart.js\nVisualisasi Prediksi" as chartjs
+
+dashboard -down-> js : User akses halaman
+js -down-> route : AJAX Request
+route -down-> controller : Route Dispatch
+controller -down-> mlservice : Service Call
+mlservice -down-> flask : HTTP Request\ninter-service
+flask -up-> mlservice : JSON Response
+js -right-> chartjs : renderForecast()
+
+@enduml

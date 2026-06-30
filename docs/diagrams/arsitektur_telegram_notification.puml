@@ -1,0 +1,46 @@
+@startuml Arsitektur_Telegram_Notification
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 12
+skinparam shadowing false
+skinparam monochrome true
+skinparam roundCorner 8
+
+skinparam rectangle {
+    FontStyle bold
+}
+
+title Arsitektur Telegram Notification Pipeline
+
+rectangle "ESP32 Sensor Node" as esp32
+
+rectangle "REST API Endpoint\nPOST /api/sensor-data\nmiddleware: api.key" as api
+
+rectangle "SensorDataController\nstore()" as controller
+
+rectangle "Database Persistence\nSensorData::create()" as persist
+
+rectangle "determineStatus()\nThreshold Evaluation" as threshold
+
+rectangle "Status Change Detection\npreviousStatus != newStatus" as detection
+
+rectangle "TelegramService\nsendMessage()" as tg_service
+
+rectangle "Telegram Bot API\napi.telegram.org" as tg_api
+
+rectangle "User Telegram Client" as tg_user
+
+database "MySQL 8.0" as db
+
+esp32 -down-> api : HTTP POST
+api -down-> controller
+controller -down-> persist
+persist -right-> db : INSERT
+controller -down-> threshold
+threshold -down-> detection
+detection -down-> tg_service : Status berubah
+tg_service -down-> tg_api : HTTP POST\n/sendMessage
+tg_api -down-> tg_user : Push notification
+
+@enduml

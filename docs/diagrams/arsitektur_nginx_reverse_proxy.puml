@@ -1,0 +1,41 @@
+@startuml Arsitektur_Nginx_Reverse_Proxy
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 12
+skinparam shadowing false
+skinparam monochrome true
+skinparam roundCorner 8
+
+skinparam rectangle {
+    FontStyle bold
+}
+
+title Arsitektur Nginx Reverse Proxy
+
+rectangle "Client\n(Browser / ESP32)" as client
+
+rectangle "Nginx Reverse Proxy\n(Port 80)" as nginx {
+
+    rectangle "Security Headers\nX-Frame-Options\nX-Content-Type-Options" as sec
+
+    rectangle "Gzip Compression\ntext, css, js, json" as gzip
+
+    rectangle "Static Asset Cache\njs, css, img, font\n(expires 7 hari)" as cache
+
+    rectangle "Request Router\ntry_files → index.php" as router
+
+    rectangle "Sensitive File Block\n.env, .ht → deny all" as block
+}
+
+rectangle "PHP-FPM\n(jambu_app:9000)\nLaravel Application" as fpm
+
+client -down-> sec
+sec -down-> gzip
+gzip -down-> router
+
+router -right-> cache : Static file
+router -down-> fpm : PHP request
+router -left-> block : Sensitive file
+
+@enduml

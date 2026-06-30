@@ -1,0 +1,34 @@
+@startuml Arsitektur_Komunikasi_Dashboard
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 8
+skinparam ArrowColor #37474F
+skinparam ArrowThickness 1.5
+
+title **Arsitektur Komunikasi Dashboard dengan Backend API**
+
+start
+
+:Frontend Dashboard;
+
+:HTTP Request (Fetch API)
+GET /api/sensor-data;
+
+:Laravel API Endpoint
+Backend API Service;
+
+:Query Database
+Mengambil data sensor historis;
+
+:JSON Response
+Mengembalikan format JSON;
+
+:Frontend Processing
+Update Chart, Table, dan Stat Cards;
+
+stop
+
+@enduml

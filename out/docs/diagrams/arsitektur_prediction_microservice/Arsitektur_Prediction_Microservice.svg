@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="1412px" preserveAspectRatio="none" style="width:680px;height:1412px;" version="1.1" viewBox="0 0 680 1412" width="680px" zoomAndPan="magnify"><defs/><g><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="175" x="246.4325" y="15.8701">Arsitektur Prediction Microservice</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="264" x="201.9325" y="30.501">Sistem Forecasting Monitoring Kebun Jambu Kristal</text><!--MD5=[3fa27d43eca854d2331bcae433a9e45d]
+cluster dashboard--><rect fill="#E3F2FD" height="195" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="289" x="40.865" y="44.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="84" x="143.365" y="62.1318">Web Dashboard</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-style="italic" font-weight="bold" lengthAdjust="spacing" textLength="74" x="148.365" y="76.7627">Browser Client</text><!--MD5=[5ec7eedd57310648f8059ffb2621ca4b]
+cluster docker--><rect fill="#F5F5F5" height="954" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="638" x="36.865" y="317.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="198" x="256.865" y="335.1318">Docker Compose — Production Server</text><!--MD5=[975968c22cb13ae27f8cff5454a4d17d]
+cluster laravel--><rect fill="#E8F5E9" height="302" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="176" x="111.865" y="510.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="84" x="157.865" y="528.1318">Laravel Backend</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="101" x="149.365" y="542.7627">PHP 8.2 / PHP-FPM</text><!--MD5=[71c2ab1c1c8272e025db689c64a870a2]
+cluster flask--><rect fill="#FFF3E0" height="207" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="584" x="66.865" y="897.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="85" x="316.365" y="915.1318">Flask ML Service</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="139" x="289.365" y="929.7627">ARIMA Forecasting Engine</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-style="italic" font-weight="bold" lengthAdjust="spacing" textLength="144" x="286.865" y="944.3936">python:3.12-slim | Port 5001</text><!--MD5=[a944e6a5b3e90bc2053f136dcbaaf61b]
+entity chartjs--><rect fill="#BBDEFB" height="67.2617" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="144" x="161.865" y="148.2617"/><rect fill="#BBDEFB" height="10" style="stroke:#555555;stroke-width:1.5;" width="15" x="285.865" y="153.2617"/><rect fill="#BBDEFB" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="283.865" y="155.2617"/><rect fill="#BBDEFB" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="283.865" y="159.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="39" x="180.865" y="184.1318">Chart.js</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="96" x="180.865" y="198.7627">Visualisasi Prediksi</text><!--MD5=[8824c66cba45be527cf3dd56bcd70cd2]
+entity nginx--><rect fill="#E3F2FD" height="57.2617" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="101" x="110.365" y="383.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="32" x="124.365" y="409.1318">Nginx</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="73" x="124.365" y="423.7627">Reverse Proxy</text><!--MD5=[95056b5cbad1279cc73d9cc5c17a1af7]
+entity mysql--><path d="M116.865,1199.2617 C116.865,1189.2617 171.865,1189.2617 171.865,1189.2617 C171.865,1189.2617 226.865,1189.2617 226.865,1199.2617 L226.865,1245.5234 C226.865,1255.5234 171.865,1255.5234 171.865,1255.5234 C171.865,1255.5234 116.865,1255.5234 116.865,1245.5234 L116.865,1199.2617 " fill="#E3F2FD" style="stroke:#1565C0;stroke-width:1.5;"/><path d="M116.865,1199.2617 C116.865,1209.2617 171.865,1209.2617 171.865,1209.2617 C171.865,1209.2617 226.865,1209.2617 226.865,1199.2617 " fill="none" style="stroke:#1565C0;stroke-width:1.5;"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="55" x="130.865" y="1229.1318">MySQL 8.0</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="82" x="130.865" y="1243.7627">Database Server</text><!--MD5=[c05fcadc036a699206cfdfa4a4fdb889]
+entity controller--><rect fill="#C8E6C9" height="52.6309" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="143" x="128.365" y="606.2617"/><rect fill="#C8E6C9" height="10" style="stroke:#555555;stroke-width:1.5;" width="15" x="251.365" y="611.2617"/><rect fill="#C8E6C9" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="249.365" y="613.2617"/><rect fill="#C8E6C9" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="249.365" y="617.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="95" x="147.365" y="642.1318">ForecastController</text><!--MD5=[425de40a85ce42134ad4fce3e154352d]
+entity mlservice--><rect fill="#C8E6C9" height="52.6309" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="98" x="150.865" y="743.2617"/><rect fill="#C8E6C9" height="10" style="stroke:#555555;stroke-width:1.5;" width="15" x="228.865" y="748.2617"/><rect fill="#C8E6C9" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="226.865" y="750.2617"/><rect fill="#C8E6C9" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="226.865" y="754.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="50" x="169.865" y="779.1318">MLService</text><!--MD5=[453ec97e7ad26416e5cda754d1a4536e]
+entity endpoint--><rect fill="#FFE0B2" height="52.6309" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="139" x="83.365" y="1028.2617"/><rect fill="#FFE0B2" height="10" style="stroke:#555555;stroke-width:1.5;" width="15" x="202.365" y="1033.2617"/><rect fill="#FFE0B2" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="200.365" y="1035.2617"/><rect fill="#FFE0B2" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="200.365" y="1039.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="91" x="102.365" y="1064.1318">Endpoint /predict</text><!--MD5=[3bc89d07aeb7fd8d2f2a882cfb33b8c8]
+entity arima--><rect fill="#FFE0B2" height="67.2617" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="144" x="490.865" y="1021.2617"/><rect fill="#FFE0B2" height="10" style="stroke:#555555;stroke-width:1.5;" width="15" x="614.865" y="1026.2617"/><rect fill="#FFE0B2" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="612.865" y="1028.2617"/><rect fill="#FFE0B2" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="612.865" y="1032.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="64" x="509.865" y="1057.1318">ARIMA(2,1,2)</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="96" x="509.865" y="1071.7627">Forecasting Model</text><!--MD5=[6a310a3e99d6016a148bf5e7a91da69e]
+entity cv--><rect fill="#FFE0B2" height="67.2617" rx="5" ry="5" style="stroke:#555555;stroke-width:1.5;" width="112" x="343.865" y="1021.2617"/><rect fill="#FFE0B2" height="10" style="stroke:#555555;stroke-width:1.5;" width="15" x="435.865" y="1026.2617"/><rect fill="#FFE0B2" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="433.865" y="1028.2617"/><rect fill="#FFE0B2" height="2" style="stroke:#555555;stroke-width:1.5;" width="4" x="433.865" y="1032.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="64" x="362.865" y="1057.1318">5-Fold Cross</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="53" x="362.865" y="1071.7627">Validation</text><!--MD5=[1903564f3f58e6c44e52e835d8fcbb93]
+link dashboard to nginx--><path d="M40.8378,194.0929 C40.5456,194.5365 40.2481,194.9912 39.9459,195.4569 C35.1113,202.907 29.0687,213.1423 23.82,224.813 C13.3225,248.1542 6,277.2367 17.865,301.2617 C36.135,338.2717 73.585,366.2317 105.585,384.6317 " fill="none" id="dashboard-to-nginx" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="110.255,387.2717,104.3805,379.3667,105.8998,384.8157,100.4508,386.335,110.255,387.2717" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="monospace" font-size="11" lengthAdjust="spacing" textLength="119" x="22.865" y="279.3208">GET /api/forecast</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-style="italic" lengthAdjust="spacing" textLength="64" x="50.365" y="294.4941">AJAX Request</text><!--MD5=[fc56a94d20bd1220ae51b7b839da2174]
+reverse link dashboard to nginx--><path d="M128.7805,239.5118 C129.096,239.7813 129.4096,240.0503 129.7211,240.3187 C139.6894,248.9098 147.55,256.9767 150.865,263.2617 C170.795,301.0617 169.025,352.0917 165.355,383.1417 " fill="none" id="dashboard-backto-nginx" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="128.7805,239.5118,133.0271,248.3981,132.5828,242.7587,138.2222,242.3144,128.7805,239.5118" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="80" x="167.865" y="287.1318">JSON Response</text><!--MD5=[97bc7f5cabc8c013f80e2a0080c35c23]
+link nginx to controller--><path d="M132.485,440.5417 C125.335,449.3017 118.625,459.5217 114.865,470.2617 C111.335,480.3317 111.945,484.0017 114.865,494.2617 C126.435,535.0017 153.905,575.5017 174.505,601.8717 " fill="none" id="nginx-to-controller" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="177.755,605.9817,175.3245,596.4375,174.6596,602.0551,169.0419,601.3902,177.755,605.9817" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-style="italic" lengthAdjust="spacing" textLength="84" x="119.865" y="487.1318">Route Forwarding</text><!--MD5=[2ed4bef4a39d4b71e9bb41e23c37cd97]
+reverse link nginx to controller--><path d="M196.485,444.0217 C203.165,451.8617 209.205,460.7617 212.865,470.2617 C230.355,515.6717 218.265,573.4617 208.595,606.1617 " fill="none" id="nginx-backto-controller" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="193.155,440.2717,196.1268,449.6615,196.4697,444.0151,202.1162,444.358,193.155,440.2717" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="56" x="222.865" y="487.1318">HTTP JSON</text><!--MD5=[0169dad037c41e15401ed1a1ee74394f]
+link controller to mlservice--><path d="M179.785,659.3217 C170.175,674.6317 161.755,694.6717 166.865,713.2617 C169.295,722.1117 173.545,730.9717 178.205,738.9317 " fill="none" id="controller-to-mlservice" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="180.825,743.2617,179.5861,733.4911,178.2357,738.9844,172.7424,737.6339,180.825,743.2617" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="66" x="171.865" y="706.1318">getForecast()</text><!--MD5=[3df371063363bfd56615f4bc9e7981ac]
+reverse link controller to mlservice--><path d="M231.605,663.6417 C237.845,671.3317 243.485,680.0617 246.865,689.2617 C253.875,708.3817 242.355,728.0917 228.975,743.1117 " fill="none" id="controller-backto-mlservice" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="228.095,659.4817,230.8565,668.9355,231.3254,663.2981,236.9627,663.7669,228.095,659.4817" style="stroke:#A80036;stroke-width:1.0;"/><!--MD5=[1217a1479cb4b41807bfce3a0a4e9ef3]
+link mlservice to endpoint--><path d="M150.685,782.2817 C126.405,790.7217 99.295,804.9017 84.865,828.2617 C45.815,891.4417 96.415,978.4917 129.105,1023.7317 " fill="none" id="mlservice-to-endpoint" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="132.205,1027.9717,130.1039,1018.3496,129.2463,1023.9411,123.6549,1023.0835,132.205,1027.9717" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="monospace" font-size="11" lengthAdjust="spacing" textLength="119" x="89.865" y="844.3208">HTTP GET /predict</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-style="italic" lengthAdjust="spacing" textLength="80" x="109.365" y="859.4941">Inter-Service Call</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-style="italic" lengthAdjust="spacing" textLength="58" x="120.365" y="874.125">timeout: 30s</text><!--MD5=[b5804e961ea56693904179cb1621c73f]
+reverse link mlservice to endpoint--><path d="M211.405,801.6017 C214.065,810.1117 216.515,819.4417 217.865,828.2617 C221.425,851.5517 222.085,858.0917 217.865,881.2617 C207.965,935.5717 181.895,995.0117 165.935,1028.0117 " fill="none" id="mlservice-backto-endpoint" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="209.725,796.4117,208.6967,806.2067,211.2675,801.1678,216.3064,803.7387,209.725,796.4117" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="monospace" font-size="11" lengthAdjust="spacing" textLength="91" x="244.365" y="851.8208">JSON Response</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-style="italic" lengthAdjust="spacing" textLength="130" x="224.865" y="866.9941">(aktual + prediksi + metrik)</text><!--MD5=[fdebab8554bce8a15e12365db87d22fb]
+link endpoint to mysql--><path d="M121.735,1081.5117 C111.095,1092.2517 100.475,1105.6417 94.865,1120.2617 C88.655,1136.4417 87.375,1143.6317 94.865,1159.2617 C99.575,1169.1017 106.695,1177.8817 114.745,1185.5217 " fill="none" id="endpoint-to-mysql" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="118.755,1189.1817,114.7776,1180.1717,115.0521,1185.8219,109.4019,1186.0964,118.755,1189.1817" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="88" x="99.865" y="1137.1318">Query historical""</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="68" x="109.865" y="1151.7627">""sensor data</text><!--MD5=[b763dd8e32e9df75c9a23451f0102bae]
+reverse link endpoint to mysql--><path d="M178.795,1085.7717 C186.105,1096.0317 193.085,1108.0217 196.865,1120.2617 C203.895,1143.0417 197.025,1169.1817 188.725,1189.1617 " fill="none" id="endpoint-backto-mysql" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="175.645,1081.4817,177.7461,1091.1039,178.6037,1085.5124,184.1951,1086.37,175.645,1081.4817" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="63" x="216.865" y="1137.1318">DataFrame""</text><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="89" x="203.865" y="1151.7627">""(N data terbaru)</text><!--MD5=[51419479a648ab66ad33753366f6b715]
+link endpoint to arima--><path d="M171.285,1028.0817 C199.565,989.7817 257.695,920.8517 326.865,893.7617 C387.695,869.9317 417.585,860.5717 473.865,893.7617 C518.355,920.0017 542.155,977.3517 553.645,1016.0217 " fill="none" id="endpoint-to-arima" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="555.115,1021.1217,556.4695,1011.3664,553.732,1016.3168,548.7816,1013.5793,555.115,1021.1217" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="79" x="407.365" y="859.6318">fit() &amp; forecast()</text><!--MD5=[901f0bca19f61e4a796a7741b6fe6a8b]
+link endpoint to cv--><path d="M222.655,1054.7617 C259.095,1054.7617 303.285,1054.7617 338.415,1054.7617 " fill="none" id="endpoint-to-cv" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="343.535,1054.7617,334.535,1050.7617,338.535,1054.7617,334.535,1058.7617,343.535,1054.7617" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="77" x="244.615" y="1044.6318">TimeSeriesSplit</text><!--MD5=[91724d3b1509aa78e686c8479de8ce98]
+reverse link chartjs to dashboard--><path d="M156.615,181.7617 C108.745,181.7617 55.265,181.7617 49.395,181.7617 " fill="none" id="chartjs-backto-dashboard" style="stroke:#A80036;stroke-width:1.0;"/><polygon fill="#A80036" points="161.825,181.7617,152.825,177.7617,156.825,181.7617,152.825,185.7617,161.825,181.7617" style="stroke:#A80036;stroke-width:1.0;"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="68" x="71.545" y="171.6318">Render Chart</text><rect fill="#DDDDDD" height="112.5234" rx="5" ry="5" style="stroke:#000000;stroke-width:1.0;" width="219" x="8" y="1284.2617"/><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="34" x="25" y="1311.1318">Warna</text><text fill="#000000" font-family="Segoe UI" font-size="11" font-weight="bold" lengthAdjust="spacing" textLength="60" x="73" y="1311.1318">Keterangan</text><rect fill="#E3F2FD" height="22.6309" style="stroke:none;stroke-width:1.0;" width="48" x="18" y="1317.8926"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="0" x="25" y="1333.7627"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="128" x="73" y="1333.7627">Infrastructure / Frontend</text><rect fill="#E8F5E9" height="22.6309" style="stroke:none;stroke-width:1.0;" width="48" x="18" y="1340.5234"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="0" x="25" y="1356.3936"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="119" x="73" y="1356.3936">Laravel Backend Service</text><rect fill="#FFF3E0" height="22.6309" style="stroke:none;stroke-width:1.0;" width="48" x="18" y="1363.1543"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="0" x="25" y="1379.0244"/><text fill="#000000" font-family="Segoe UI" font-size="11" lengthAdjust="spacing" textLength="137" x="73" y="1379.0244">Flask ML Prediction Service</text><line style="stroke:#000000;stroke-width:1.0;" x1="18" x2="217" y1="1295.2617" y2="1295.2617"/><line style="stroke:#000000;stroke-width:1.0;" x1="18" x2="217" y1="1317.8926" y2="1317.8926"/><line style="stroke:#000000;stroke-width:1.0;" x1="18" x2="217" y1="1340.5234" y2="1340.5234"/><line style="stroke:#000000;stroke-width:1.0;" x1="18" x2="217" y1="1363.1543" y2="1363.1543"/><line style="stroke:#000000;stroke-width:1.0;" x1="18" x2="217" y1="1385.7852" y2="1385.7852"/><line style="stroke:#000000;stroke-width:1.0;" x1="18" x2="18" y1="1295.2617" y2="1385.7852"/><line style="stroke:#000000;stroke-width:1.0;" x1="66" x2="66" y1="1295.2617" y2="1385.7852"/><line style="stroke:#000000;stroke-width:1.0;" x1="217" x2="217" y1="1295.2617" y2="1385.7852"/><!--MD5=[f29797fdbc7aee0bb2313f30da053217]
+@startuml Arsitektur_Prediction_Microservice
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
+
+skinparam rectangle {
+    BorderColor #555555
+    BackgroundColor #F5F5F5
+    FontStyle bold
+}
+
+skinparam component {
+    BorderColor #555555
+    BackgroundColor #FFFFFF
+}
+
+skinparam database {
+    BorderColor #1565C0
+    BackgroundColor #E3F2FD
+}
+
+title **Arsitektur Prediction Microservice**\nSistem Forecasting Monitoring Kebun Jambu Kristal
+
+' ── Frontend ──
+rectangle "**Web Dashboard**\n//Browser Client//" as dashboard #E3F2FD {
+    component "**Chart.js**\nVisualisasi Prediksi" as chartjs #BBDEFB
+}
+
+' ── Docker Compose ──
+rectangle "**Docker Compose — Production Server**" as docker #F5F5F5 {
+
+    rectangle "**Nginx**\nReverse Proxy" as nginx #E3F2FD
+
+    rectangle "**Laravel Backend**\nPHP 8.2 / PHP-FPM" as laravel #E8F5E9 {
+        component "ForecastController" as controller #C8E6C9
+        component "MLService" as mlservice #C8E6C9
+    }
+
+    rectangle "**Flask ML Service**\nARIMA Forecasting Engine\n//python:3.12-slim | Port 5001//" as flask #FFF3E0 {
+        component "Endpoint /predict" as endpoint #FFE0B2
+        component "ARIMA(2,1,2)\nForecasting Model" as arima #FFE0B2
+        component "5-Fold Cross\nValidation" as cv #FFE0B2
+    }
+
+    database "**MySQL 8.0**\nDatabase Server" as mysql #E3F2FD
+}
+
+' ── Alur Data ──
+dashboard -down-> nginx : ""GET /api/forecast""\n//AJAX Request//
+nginx -down-> controller : //Route Forwarding//
+controller -right-> mlservice : ""getForecast()""
+mlservice -down-> endpoint : ""HTTP GET /predict""\n//Inter-Service Call//\n//timeout: 30s//
+endpoint -down-> mysql : ""Query historical""\n""sensor data""
+mysql -up-> endpoint : ""DataFrame""\n""(N data terbaru)""
+endpoint -right-> arima : ""fit() & forecast()""
+endpoint -right-> cv : ""TimeSeriesSplit""
+endpoint -up-> mlservice : ""JSON Response""\n//(aktual + prediksi + metrik)//
+mlservice -up-> controller
+controller -up-> nginx : ""HTTP JSON""
+nginx -up-> dashboard : ""JSON Response""
+dashboard -left-> chartjs : ""Render Chart""
+
+' ── Legend ──
+legend bottom left
+    |= Warna |= Keterangan |
+    | <#E3F2FD> | Infrastructure / Frontend |
+    | <#E8F5E9> | Laravel Backend Service |
+    | <#FFF3E0> | Flask ML Prediction Service |
+endlegend
+
+@enduml
+
+@startuml Arsitektur_Prediction_Microservice
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
+
+skinparam rectangle {
+    BorderColor #555555
+    BackgroundColor #F5F5F5
+    FontStyle bold
+}
+
+skinparam component {
+    BorderColor #555555
+    BackgroundColor #FFFFFF
+}
+
+skinparam database {
+    BorderColor #1565C0
+    BackgroundColor #E3F2FD
+}
+
+title **Arsitektur Prediction Microservice**\nSistem Forecasting Monitoring Kebun Jambu Kristal
+
+rectangle "**Web Dashboard**\n//Browser Client//" as dashboard #E3F2FD {
+    component "**Chart.js**\nVisualisasi Prediksi" as chartjs #BBDEFB
+}
+
+rectangle "**Docker Compose — Production Server**" as docker #F5F5F5 {
+
+    rectangle "**Nginx**\nReverse Proxy" as nginx #E3F2FD
+
+    rectangle "**Laravel Backend**\nPHP 8.2 / PHP-FPM" as laravel #E8F5E9 {
+        component "ForecastController" as controller #C8E6C9
+        component "MLService" as mlservice #C8E6C9
+    }
+
+    rectangle "**Flask ML Service**\nARIMA Forecasting Engine\n//python:3.12-slim | Port 5001//" as flask #FFF3E0 {
+        component "Endpoint /predict" as endpoint #FFE0B2
+        component "ARIMA(2,1,2)\nForecasting Model" as arima #FFE0B2
+        component "5-Fold Cross\nValidation" as cv #FFE0B2
+    }
+
+    database "**MySQL 8.0**\nDatabase Server" as mysql #E3F2FD
+}
+
+dashboard -down-> nginx : ""GET /api/forecast""\n//AJAX Request//
+nginx -down-> controller : //Route Forwarding//
+controller -right-> mlservice : ""getForecast()""
+mlservice -down-> endpoint : ""HTTP GET /predict""\n//Inter-Service Call//\n//timeout: 30s//
+endpoint -down-> mysql : ""Query historical""\n""sensor data""
+mysql -up-> endpoint : ""DataFrame""\n""(N data terbaru)""
+endpoint -right-> arima : ""fit() & forecast()""
+endpoint -right-> cv : ""TimeSeriesSplit""
+endpoint -up-> mlservice : ""JSON Response""\n//(aktual + prediksi + metrik)//
+mlservice -up-> controller
+controller -up-> nginx : ""HTTP JSON""
+nginx -up-> dashboard : ""JSON Response""
+dashboard -left-> chartjs : ""Render Chart""
+
+legend bottom left
+    |= Warna |= Keterangan |
+    | <#E3F2FD> | Infrastructure / Frontend |
+    | <#E8F5E9> | Laravel Backend Service |
+    | <#FFF3E0> | Flask ML Prediction Service |
+endlegend
+
+@enduml
+
+PlantUML version 1.2021.00(Sun Jan 10 18:25:05 WITA 2021)
+(MIT source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: Cp1252
+Language: en
+Country: ID
+--></g></svg>

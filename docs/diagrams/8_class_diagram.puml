@@ -1,72 +1,116 @@
 @startuml Class Diagram
-skinparam monochrome true
-skinparam shadowing false
+
 skinparam backgroundColor white
-skinparam defaultFontName Arial
-skinparam defaultFontSize 12
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
 skinparam classAttributeIconSize 0
 
-title Class Diagram\nSistem Monitoring Tanaman Jambu Kristal
-
-class Pengguna {
-    - id : Integer
-    - nama : String
-    - email : String
-    - kataSandi : String
-    - peran : String
-    --
-    + login() : Boolean
-    + logout() : void
+skinparam class {
+    BorderColor #37474F
+    BackgroundColor #ECEFF1
+    FontStyle bold
 }
 
-class DataSensor {
-    - id : Integer
-    - kelembabanTanah : Desimal
-    - suhu : Desimal
-    - kelembabanUdara : Desimal
-    - intensitasCahaya : Desimal
-    - status : String
-    - sumber : String
-    - waktu : Timestamp
-    --
-    + simpanData() : void
-    + ambilData() : List
-    + hapusData() : void
-    + tentukanStatus() : String
+skinparam stereotypePosition top
+
+title **Class Diagram (Laravel Backend System)**
+
+package "Http/Controllers" {
+    class SensorDataController {
+        + index(Request) : JsonResponse
+        + store(Request) : JsonResponse
+        + deviceStatus() : JsonResponse
+        + destroySelected(Request) : RedirectResponse
+        + clear() : RedirectResponse
+        - determineStatus(soilMoisture : float) : string
+    }
+
+    class ForecastController {
+        - mlService : MLService
+        + __construct(MLService)
+        + index(Request) : JsonResponse
+    }
+
+    class BackupController {
+        - telegramService : TelegramService
+        + __construct(TelegramService)
+        + index() : View
+        + download(file : string) : BinaryFileResponse
+        + triggerBackup() : RedirectResponse
+        + destroy(file : string) : RedirectResponse
+    }
 }
 
-class Prediksi {
-    - id : Integer
-    - dataSensor : List
-    - jumlahLangkah : Integer
-    - metode : String
-    --
-    + ambilDataHistoris() : List
-    + prosesPrediksi() : List
-    + tampilkanHasil() : void
+package "Http/Middleware" {
+    class ApiKeyMiddleware {
+        + handle(Request, Closure) : Response
+    }
+
+    class AdminMiddleware {
+        + handle(Request, Closure) : Response
+    }
 }
 
-class Notifikasi {
-    - id : Integer
-    - pesan : String
-    - tujuan : String
-    - statusBaru : String
-    - statusLama : String
-    --
-    + kirimNotifikasi() : void
-    + buatPesan() : String
+package "Models" {
+    class SensorData {
+        + id : int
+        + soil_moisture : float
+        + temperature : float
+        + humidity : float
+        + light_intensity : float
+        + status : string
+        + source : string
+        + recorded_at : DateTime
+        + created_at : DateTime
+        + updated_at : DateTime
+    }
+
+    class User {
+        + id : int
+        + name : string
+        + email : string
+        + password : string
+        + role : string
+        + last_login : DateTime
+        + created_at : DateTime
+        + updated_at : DateTime
+        + isAdmin() : bool
+    }
 }
 
-' === Relasi ===
-Pengguna "1" --> "*" DataSensor : melihat / mengelola
-DataSensor "*" --> "1" Prediksi : dianalisis oleh
-DataSensor "1" --> "0..1" Notifikasi : memicu
-Pengguna "1" --> "*" Notifikasi : menerima
+package "Services" {
+    class MLService {
+        - baseUrl : string
+        + __construct()
+        + getForecast(source : string, hours : int, limit : int) : array|null
+    }
 
-note bottom of Pengguna
-    Peran:
-    - "Admin"
-    - "Petani"
-end note
+    class TelegramService {
+        - botToken : string
+        - chatId : string
+        + __construct()
+        + sendMessage(message : string) : bool
+        + sendDocument(filePath : string, caption : string) : bool
+    }
+}
+
+' === Relationships / Dependensi ===
+ApiKeyMiddleware .right.> SensorDataController : protects
+AdminMiddleware .right.> BackupController : protects
+
+SensorDataController --> SensorData : creates / queries
+SensorDataController --> TelegramService : uses
+SensorDataController --> BackupController : triggers backup
+
+ForecastController --> MLService : uses
+ForecastController --> SensorData : reads
+
+BackupController --> TelegramService : uses
+BackupController --> SensorData : exports data
+
+User "1" --> "*" SensorData : monitors
 
 @enduml

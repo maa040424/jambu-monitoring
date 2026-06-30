@@ -1,71 +1,104 @@
 @startuml Sequence Diagram
-skinparam monochrome true
-skinparam shadowing false
+
 skinparam backgroundColor white
-skinparam defaultFontName Arial
-skinparam defaultFontSize 12
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam padding 4
 skinparam sequenceMessageAlign center
 
-title Sequence Diagram\nAlur Kerja Sistem Monitoring Tanaman Jambu Kristal
+title **Sequence Diagram Sistem Terintegrasi**
 
-actor "Perangkat IoT" as iot
-participant "Server\nAplikasi" as server
-database "Basis Data" as db
-participant "Sistem\nPrediksi" as ml
-participant "Sistem\nNotifikasi" as notif
-actor "Admin /\nPetani" as user
+actor "Perangkat IoT" as iot #FFF9C4
+actor "Admin / Petani" as user #ECEFF1
+participant "Web Browser" as browser #FFFFFF
+participant "Nginx Proxy" as nginx #E3F2FD
+participant "Laravel App" as laravel #E8F5E9
+participant "Flask ML" as flask #FFF3E0
+database "MySQL" as db #E3F2FD
+participant "Telegram Bot" as telegram #E8F5E9
 
-== Pengiriman Data Sensor ==
+== Fase 1: Data Ingestion (Real-Time Sensor Upload) ==
 
-iot -> server : Kirim data sensor
-activate server
+iot -> nginx : POST /api/sensor-data (API Key)
+activate nginx
+nginx -> laravel : FastCGI Request
+activate laravel
 
-server -> server : Validasi data
-server -> server : Tentukan status
-
-server -> db : Simpan data sensor
+laravel -> laravel : Validasi Kunci API & Payload
+laravel -> db : Simpan Data Sensor & Status
 activate db
-db --> server : Data tersimpan
+db --> laravel : Terdaftar
 deactivate db
 
-server -> db : Ambil data sebelumnya
+laravel -> db : Ambil data sebelumnya untuk perbandingan
 activate db
-db --> server : Status sebelumnya
+db --> laravel : Data sebelumnya
 deactivate db
 
-alt Status berubah
-    server -> notif : Kirim notifikasi
-    activate notif
-    notif --> server : Notifikasi terkirim
-    deactivate notif
+alt Status kelembaban berubah
+    laravel -> telegram : Kirim pesan notifikasi
+    activate telegram
+    telegram --> laravel : Sukses
+    deactivate telegram
 end
 
-server --> iot : Konfirmasi diterima
-deactivate server
+alt Jumlah record data real kelipatan 10
+    laravel -> laravel : Ekspor Tabel Data ke SQL String
+    laravel -> telegram : Kirim berkas SQL backup
+    activate telegram
+    telegram --> laravel : Sukses
+    deactivate telegram
+end
 
-== Monitoring dan Prediksi ==
+laravel --> nginx : HTTP 201 Created
+deactivate laravel
+nginx --> iot : HTTP 201 Created
+deactivate nginx
 
-user -> server : Minta data dashboard
-activate server
-server -> db : Ambil data sensor
+== Fase 2: Visualisasi Dashboard & Forecasting ==
+
+user -> browser : Membuka Dashboard Web
+activate browser
+browser -> nginx : GET /dashboard (Session Auth)
+activate nginx
+nginx -> laravel : Route to Web Page
+activate laravel
+laravel -> db : Ambil data sensor terbaru
 activate db
-db --> server : Data sensor
+db --> laravel : Data sensor
 deactivate db
-server --> user : Tampilkan data monitoring
-deactivate server
+laravel --> nginx : Halaman Dashboard (HTML)
+deactivate laravel
+nginx --> browser : Render Dashboard
+deactivate nginx
+browser --> user : Tampilkan grafik monitoring
+deactivate browser
 
-user -> server : Minta prediksi
-activate server
-server -> ml : Minta proses prediksi
-activate ml
-ml -> db : Ambil data historis
+user -> browser : Meminta Prediksi ARIMA
+activate browser
+browser -> nginx : GET /api/forecast (AJAX Request)
+activate nginx
+nginx -> laravel : Route to API Forecast
+activate laravel
+
+laravel -> flask : HTTP GET /predict (connectTimeout: 5s)
+activate flask
+flask -> db : Query N data historis
 activate db
-db --> ml : Data historis
+db --> flask : Data historis
 deactivate db
-ml -> ml : Proses prediksi ARIMA
-ml --> server : Hasil prediksi
-deactivate ml
-server --> user : Tampilkan hasil prediksi
-deactivate server
+flask -> flask : Hitung Prediksi ARIMA
+flask --> laravel : JSON hasil prediksi
+deactivate flask
+
+laravel --> nginx : JSON respon
+deactivate laravel
+nginx --> browser : JSON respon
+deactivate nginx
+browser -> browser : Render Visualisasi ARIMA (Chart.js)
+browser --> user : Tampilkan grafik hasil prediksi
+deactivate browser
 
 @enduml

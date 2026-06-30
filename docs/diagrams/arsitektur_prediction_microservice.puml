@@ -1,0 +1,43 @@
+@startuml Arsitektur_Prediction_Microservice
+
+skinparam backgroundColor white
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 12
+skinparam shadowing false
+skinparam monochrome true
+skinparam roundCorner 8
+
+skinparam rectangle {
+    FontStyle bold
+}
+
+title Arsitektur Prediction Microservice
+
+rectangle "Dashboard Frontend\n(forecast.js)" as frontend
+
+rectangle "Laravel Backend" as laravel {
+
+    rectangle "API Route\nGET /api/forecast\nmiddleware: auth" as route
+
+    rectangle "ForecastController" as controller
+
+    rectangle "MLService\nHTTP Client" as mlservice
+}
+
+rectangle "Flask Prediction Service\n(jambu_ml : Port 5001)" as flask {
+
+    rectangle "GET /predict\nARIMA(2,1,2)" as predict
+
+    rectangle "GET /predict/pdf\nmatplotlib + reportlab" as pdf
+}
+
+database "MySQL 8.0\nsensor_data" as db
+
+frontend -down-> route : AJAX Request
+route -down-> controller
+controller -down-> mlservice
+mlservice -down-> predict : HTTP GET
+mlservice -down-> pdf : HTTP GET
+predict -right-> db : PyMySQL\n(direct query)
+
+@enduml
