@@ -22,7 +22,7 @@
     <link href="{{ asset('css/dashboard.css') }}?v={{ time() }}" rel="stylesheet">
 
     {{-- Lottie Player (animasi loading) --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-player/2.0.8/lottie-player.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 <body>
 
