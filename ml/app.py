@@ -571,20 +571,22 @@ def predict_pdf():
     # Components — simplified
     elements.append(Paragraph("<b>3 Komponen Utama ARIMA:</b>", method_bold))
 
+    table_analogi_style = ParagraphStyle(
+        'TableAnalogi', parent=body_style,
+        fontSize=7.5, leading=10, textColor=colors.HexColor('#333333')
+    )
+
     comp_data = [
         ['Komponen', 'Arti Singkat', 'Analogi'],
         ['AR\n(Auto Regressive)',
          'Melihat data\nsebelumnya',
-         '\"Kalau kemarin suhu 33°C dan lusa 32°C, maka hari ini '
-         'kemungkinan sekitar 33°C juga.\" — Menggunakan pola masa lalu.'],
+         Paragraph('\"Kalau kemarin suhu 33°C dan lusa 32°C, maka hari ini kemungkinan sekitar 33°C juga.\" — Menggunakan pola masa lalu.', table_analogi_style)],
         ['I\n(Integrated)',
          'Menghilangkan\ntren',
-         '\"Suhu terus naik karena musim kemarau, tapi ARIMA bisa '
-         'memisahkan tren naik ini agar prediksi tetap akurat.\"'],
+         Paragraph('\"Suhu terus naik karena musim kemarau, tapi ARIMA bisa memisahkan tren naik ini agar prediksi tetap akurat.\"', table_analogi_style)],
         ['MA\n(Moving Average)',
          'Belajar dari\nkesalahan',
-         '\"Kemarin saya prediksi 33°C tapi ternyata 31°C. '
-         'Selisih 2°C ini saya gunakan untuk memperbaiki tebakan hari ini.\"'],
+         Paragraph('\"Kemarin saya prediksi 33°C tapi ternyata 31°C. Selisih 2°C ini saya gunakan untuk memperbaiki tebakan hari ini.\"', table_analogi_style)],
     ]
 
     comp_table = Table(comp_data, colWidths=[2.8*cm, 2.8*cm, 10.8*cm])
