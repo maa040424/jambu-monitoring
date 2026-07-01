@@ -39,7 +39,7 @@ FORECAST_STEPS = 24  # predict 24 steps ahead
 WITA = timezone(timedelta(hours=8))
 
 
-def get_sensor_data(source='dummy', limit=500):
+def get_sensor_data(source='dummy', limit=1000):
     """Fetch sensor data from MySQL — ambil data TERBARU."""
     conn = pymysql.connect(**DB_CONFIG)
     try:
@@ -207,12 +207,12 @@ def predict():
         source: 'dummy' or 'real' (default: 'dummy')
         hours:  number of hours to forecast ahead (default: 4)
         steps:  number of forecast steps (legacy, overridden by hours if provided)
-        limit:  max data points to use (default: 500)
+        limit:  max data points to use (default: 1000)
     """
     source = request.args.get('source', 'dummy')
     hours = request.args.get('hours', None)
     steps = int(request.args.get('steps', FORECAST_STEPS))
-    limit = int(request.args.get('limit', 500))
+    limit = int(request.args.get('limit', 1000))
 
     # Fetch data
     df = get_sensor_data(source=source, limit=limit)
@@ -351,7 +351,7 @@ def predict_pdf():
 
     source = request.args.get('source', 'dummy')
     steps = int(request.args.get('steps', FORECAST_STEPS))
-    limit = int(request.args.get('limit', 500))
+    limit = int(request.args.get('limit', 1000))
 
     # Fetch data
     df = get_sensor_data(source=source, limit=limit)
