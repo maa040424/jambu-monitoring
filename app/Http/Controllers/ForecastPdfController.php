@@ -23,7 +23,7 @@ class ForecastPdfController extends Controller
                 ->get("{$mlUrl}/predict/pdf", [
                     'source' => $source,
                     'steps' => 24,
-                    'limit' => 500,
+                    'limit' => 1000,
                 ]);
 
             if (!$response->successful()) {

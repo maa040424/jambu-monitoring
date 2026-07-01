@@ -22,7 +22,7 @@ class ForecastController extends Controller
     {
         $source = $request->query('source', 'dummy');
         $hours = $request->query('hours', 4);
-        $limit = $request->query('limit', 500);
+        $limit = $request->query('limit', 1000);
 
         $forecastData = $this->mlService->getForecast($source, (int) $hours, (int) $limit);
 

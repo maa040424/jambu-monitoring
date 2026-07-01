@@ -22,7 +22,7 @@ class MLService
      * @param int    $limit   Jumlah data historis untuk training
      * @return array|null
      */
-    public function getForecast(string $source = 'dummy', int $hours = 4, int $limit = 500): ?array
+    public function getForecast(string $source = 'dummy', int $hours = 4, int $limit = 1000): ?array
     {
         try {
             $response = Http::connectTimeout(5)
