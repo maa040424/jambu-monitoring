@@ -285,9 +285,9 @@ def predict():
         t = last_time + (avg_interval * i)
         forecast_times.append(t.isoformat())
 
-    # Build actual data (last 50 points for the chart)
+    # Build actual data (last 1000 points for the chart)
     actual_data = []
-    recent = df.tail(50)
+    recent = df.tail(1000)
     for _, row in recent.iterrows():
         actual_data.append({
             'time': row['created_at'].isoformat(),
@@ -397,7 +397,7 @@ def predict_pdf():
     forecast_times = [last_time + avg_interval * (i + 1) for i in range(steps)]
 
     # Recent actual data for charts
-    recent = df.tail(50)
+    recent = df.tail(1000)
 
     # ── Generate charts with matplotlib ──
     sensor_labels = {
