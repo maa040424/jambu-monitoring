@@ -127,3 +127,26 @@ Gunakan perintah ini untuk memeriksa kondisi server secara cepat:
     ```bash
     docker exec jambu_app php artisan tinker --execute="echo config('database.connections.mysql.host');"
     ```
+
+---
+
+## 6. Perubahan Kode Python (ML/ARIMA) Tidak Teraplikasi setelah `git pull`
+### 🔍 Gejala
+- Anda sudah melakukan `git pull` di VPS, namun saat generate PDF prediksi atau mengakses endpoint ML, perubahan kode di folder `ml/` belum terasa (masih pakai kode lama).
+
+### 💡 Penyebab
+- Berbeda dengan service Laravel (`app`) yang mem-mounting volume host ke dalam container (`- .:/var/www/html`), service `ml` (Flask) menggunakan metode `COPY . .` di dalam `Dockerfile`.
+- Ini artinya, kode Python "terkunci" di dalam image saat proses build. Hanya menjalankan `docker compose restart ml` tidak akan mengambil kode terbaru.
+
+### 🛠️ Solusi
+Build ulang image untuk service `ml` secara spesifik, lalu jalankan kembali containernya:
+```bash
+# 1. Masuk ke folder proyek
+cd /var/www/jambu-monitoring
+
+# 2. Build ulang image ML agar kode baru di-copy
+docker compose build ml
+
+# 3. Re-create & jalankan container ML di background
+docker compose up -d ml
+```
