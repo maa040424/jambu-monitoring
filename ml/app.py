@@ -32,7 +32,7 @@ DB_CONFIG = {
     'charset':  'utf8mb4',
 }
 
-SENSORS = ['soil_moisture', 'temperature', 'humidity', 'light_intensity']
+SENSORS = ['soil_moisture', 'temperature', 'humidity']
 FORECAST_STEPS = 24  # predict 24 steps ahead
 
 # Timezone: WITA (UTC+8) — Asia/Makassar
@@ -242,7 +242,8 @@ def predict():
 
     last_time = df['created_at'].iloc[-1]
 
-    # Run ARIMA for each sensor + cross-validation
+    # Run ARIMA for each sensor (only continuous: soil_moisture, temperature, humidity)
+    # light_intensity is NOT predicted — it's a discrete binary sensor (LM393)
     results = {}
     warnings_list = []
     validation_metrics = {}
@@ -269,8 +270,6 @@ def predict():
                 val = max(0, min(60, val))
             elif sensor == 'humidity':
                 val = max(0, min(100, val))
-            elif sensor == 'light_intensity':
-                val = max(0, min(10000, val))
             clamped.append(round(val, 1))
 
         results[sensor] = clamped
@@ -294,10 +293,9 @@ def predict():
             'soil_moisture': round(float(row['soil_moisture']), 1),
             'temperature': round(float(row['temperature']), 1),
             'humidity': round(float(row['humidity']), 1),
-            'light_intensity': round(float(row['light_intensity']), 1),
         })
 
-    # Build forecast data
+    # Build forecast data (only 3 predicted sensors)
     forecast_data = []
     for i in range(steps):
         forecast_data.append({
@@ -305,8 +303,11 @@ def predict():
             'soil_moisture': results['soil_moisture'][i],
             'temperature': results['temperature'][i],
             'humidity': results['humidity'][i],
-            'light_intensity': results['light_intensity'][i],
         })
+
+    # Latest light condition (not predicted — LM393 is digital binary)
+    last_light_val = float(df['light_intensity'].iloc[-1])
+    light_condition = 'Terang' if last_light_val >= 250 else 'Gelap'
 
     return jsonify({
         'status': 'success',
@@ -316,6 +317,10 @@ def predict():
         'forecast_steps': steps,
         'actual': actual_data,
         'forecast': forecast_data,
+        'latest_sensor': {
+            'light_condition': light_condition,
+            'light_raw_value': last_light_val,
+        },
         'warnings': warnings_list if warnings_list else None,
         'cross_validation': {
             'method': '5-Fold Time Series Split',
@@ -367,7 +372,7 @@ def predict_pdf():
 
     last_time = df['created_at'].iloc[-1]
 
-    # Run ARIMA predictions + cross-validation
+    # Run ARIMA predictions + cross-validation (only 3 continuous sensors)
     all_forecasts = {}
     all_cv_results = {}
     for sensor in SENSORS:
@@ -384,14 +389,16 @@ def predict_pdf():
                 val = max(0, min(60, val))
             elif sensor == 'humidity':
                 val = max(0, min(100, val))
-            elif sensor == 'light_intensity':
-                val = max(0, min(10000, val))
             clamped.append(round(val, 1))
         all_forecasts[sensor] = clamped
 
         # 5-Fold Cross-Validation for PDF
         cv_result = cross_validate_arima(series, n_splits=5)
         all_cv_results[sensor] = cv_result
+
+    # Latest light condition (not predicted)
+    last_light_val = float(df['light_intensity'].iloc[-1])
+    light_condition = 'Terang' if last_light_val >= 250 else 'Gelap'
 
     # Build forecast timestamps
     forecast_times = [last_time + avg_interval * (i + 1) for i in range(steps)]
@@ -404,7 +411,6 @@ def predict_pdf():
         'soil_moisture': ('Kelembapan Tanah (%)', '#26a69a'),
         'temperature': ('Suhu Udara (°C)', '#ef5350'),
         'humidity': ('Kelembapan Udara (%)', '#42a5f5'),
-        'light_intensity': ('Intensitas Cahaya (lux)', '#ffa726'),
     }
 
     chart_images = {}
@@ -624,11 +630,12 @@ def predict_pdf():
     # How it works in this system
     elements.append(Paragraph("<b>Bagaimana Sistem Ini Bekerja:</b>", method_bold))
     workflow_items = [
-        "1. Sensor IoT mengumpulkan data (suhu, kelembapan, cahaya) setiap beberapa menit.",
-        "2. Data historis dikirim ke model ARIMA untuk dipelajari polanya.",
+        "1. Sensor IoT mengumpulkan data (kelembapan tanah, suhu udara, kelembapan udara, kondisi cahaya) setiap beberapa menit.",
+        "2. Data historis 3 parameter kontinu dikirim ke model ARIMA untuk dipelajari polanya.",
         "3. ARIMA memprediksi " + str(steps) + " langkah ke depan berdasarkan pola yang ditemukan.",
-        "4. Hasil prediksi ditampilkan dalam grafik dan tabel pada laporan ini.",
-        "5. Petani dapat menggunakan prediksi ini untuk merencanakan penyiraman, pemupukan, atau perlindungan tanaman.",
+        "4. Parameter kondisi cahaya tidak diprediksi karena sensor LM393 bersifat digital (Terang/Gelap).",
+        "5. Hasil prediksi ditampilkan dalam grafik dan tabel pada laporan ini.",
+        "6. Petani dapat menggunakan prediksi ini untuk merencanakan penyiraman, pemupukan, atau perlindungan tanaman.",
     ]
     for item in workflow_items:
         elements.append(Paragraph(item, step_style))
@@ -663,7 +670,6 @@ def predict_pdf():
         'soil_moisture': 'Kel. Tanah (%)',
         'temperature': 'Suhu (°C)',
         'humidity': 'Kel. Udara (%)',
-        'light_intensity': 'Cahaya (lux)',
     }
 
     cv_summary_data = [['Sensor', 'MAE', 'RMSE', 'MAPE (%)', 'Fold Berhasil']]
@@ -767,14 +773,13 @@ def predict_pdf():
     # Forecast table
     elements.append(Paragraph("Tabel Hasil Prediksi", heading_style))
 
-    table_data = [['Waktu', 'Kel. Tanah (%)', 'Suhu (°C)', 'Kel. Udara (%)', 'Cahaya (lux)']]
+    table_data = [['Waktu', 'Kel. Tanah (%)', 'Suhu (°C)', 'Kel. Udara (%)']]
     for i, ft in enumerate(forecast_times):
         table_data.append([
             ft.strftime('%d/%m/%Y %H:%M'),
             str(all_forecasts['soil_moisture'][i]),
             str(all_forecasts['temperature'][i]),
             str(all_forecasts['humidity'][i]),
-            str(all_forecasts['light_intensity'][i]),
         ])
 
     table = Table(table_data, repeatRows=1)
@@ -796,9 +801,22 @@ def predict_pdf():
     elements.append(table)
     elements.append(Spacer(1, 20))
 
+    # Light condition note
+    elements.append(Spacer(1, 12))
+    elements.append(Paragraph(
+        f"<b>Status Cahaya Terakhir:</b> {light_condition} "
+        f"(sensor LM393 — tidak diprediksi karena bersifat digital)",
+        ParagraphStyle('LightNote', parent=body_style, fontSize=9,
+                      textColor=colors.HexColor('#666666'),
+                      backColor=colors.HexColor('#fff8e1'),
+                      borderPadding=8, spaceAfter=12)
+    ))
+
     # Footer note
     elements.append(Paragraph(
         "<i>Catatan: Prediksi menggunakan model ARIMA(2,1,2) berdasarkan data historis. "
+        "Prediksi dilakukan untuk kelembapan tanah, suhu udara, dan kelembapan udara. "
+        "Parameter kondisi cahaya tidak diprediksi karena sensor LM393 bersifat digital (Terang/Gelap). "
         "Hasil prediksi bersifat estimasi dan dapat berbeda dengan kondisi aktual.</i>",
         ParagraphStyle('FooterNote', parent=body_style, fontSize=8, textColor=colors.HexColor('#999999'))
     ))
@@ -808,6 +826,103 @@ def predict_pdf():
 
     from flask import send_file
     filename = f"prediksi_arima_{source}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
+    return send_file(
+        pdf_buffer,
+        mimetype='application/pdf',
+        as_attachment=True,
+        download_name=filename
+    )
+
+
+@app.route('/recap/pdf', methods=['GET', 'POST'])
+def recap_pdf():
+    """
+    Generate PDF Laporan Rekapitulasi Kondisi Lingkungan per Periode.
+    Menerima data JSON rekapitulasi atau query parameter source/start_date/end_date.
+    """
+    from io import BytesIO
+    from flask import send_file
+    try:
+        from ml.generate_recap_pdf import build_recap_pdf
+    except ImportError:
+        from generate_recap_pdf import build_recap_pdf
+
+    data = None
+    if request.is_json:
+        data = request.get_json()
+    elif request.method == 'POST' and request.form.get('recap_json'):
+        try:
+            data = json.loads(request.form.get('recap_json'))
+        except Exception:
+            data = None
+
+    if not data:
+        source = request.args.get('source', 'dummy')
+        df = get_sensor_data(source=source, limit=1000)
+        if df.empty:
+            return jsonify({'status': 'error', 'message': 'Data tidak ditemukan'}), 400
+
+        # Build fallback summary from DataFrame
+        total_rec = len(df)
+        soil_stat = {'name': 'Kelembapan Tanah', 'unit': '%', 'valid_count': total_rec, 'min': round(float(df['soil_moisture'].min()), 1), 'max': round(float(df['soil_moisture'].max()), 1), 'avg': round(float(df['soil_moisture'].mean()), 1)}
+        temp_stat = {'name': 'Suhu Udara', 'unit': '°C', 'valid_count': total_rec, 'min': round(float(df['temperature'].min()), 1), 'max': round(float(df['temperature'].max()), 1), 'avg': round(float(df['temperature'].mean()), 1)}
+        hum_stat  = {'name': 'Kelembapan Udara', 'unit': '%', 'valid_count': total_rec, 'min': round(float(df['humidity'].min()), 1), 'max': round(float(df['humidity'].max()), 1), 'avg': round(float(df['humidity'].mean()), 1)}
+
+        terang_cnt = int((df['light_intensity'] >= 250).sum())
+        gelap_cnt = total_rec - terang_cnt
+        light_stat = {'name': 'Kondisi Cahaya (LM393)', 'unit': 'Diskrit', 'valid_count': total_rec, 'terang_count': terang_cnt, 'terang_pct': round((terang_cnt/total_rec)*100, 1), 'gelap_count': gelap_cnt, 'gelap_pct': round((gelap_cnt/total_rec)*100, 1)}
+
+        kritis_cnt = int((df['soil_moisture'] < 20).sum())
+        perlu_cnt  = int(((df['soil_moisture'] >= 20) & (df['soil_moisture'] < 30)).sum())
+        normal_cnt = int((df['soil_moisture'] >= 30).sum())
+
+        high_temp_cnt = int((df['temperature'] > 35).sum())
+
+        data = {
+            'has_data': True,
+            'mode': source,
+            'period': {
+                'start_date': str(df['created_at'].iloc[0])[:10],
+                'end_date': str(df['created_at'].iloc[-1])[:10],
+                'total_records': total_rec,
+            },
+            'sensor_stats': {
+                'soil_moisture': soil_stat,
+                'temperature': temp_stat,
+                'humidity': hum_stat,
+                'light': light_stat,
+            },
+            'soil_recap': {
+                'total_valid': total_rec,
+                'kritis_count': kritis_cnt,
+                'kritis_pct': round((kritis_cnt / total_rec) * 100, 1),
+                'perlu_penyiraman_count': perlu_cnt,
+                'perlu_penyiraman_pct': round((perlu_cnt / total_rec) * 100, 1),
+                'normal_count': normal_cnt,
+                'normal_pct': round((normal_cnt / total_rec) * 100, 1),
+            },
+            'temp_recap': {
+                'threshold': 35.0,
+                'total_valid': total_rec,
+                'high_temp_count': high_temp_cnt,
+                'high_temp_pct': round((high_temp_cnt / total_rec) * 100, 1),
+                'max_temp': round(float(df['temperature'].max()), 1),
+                'max_temp_time': str(df.loc[df['temperature'].idxmax(), 'created_at']),
+            },
+            'daily_trends': [],
+            'recommendations': {
+                'summary': f"Dianalisis sebanyak {total_rec} rekaman data sensor pada mode {source}.",
+                'facts': [f"Kelembapan tanah rata-rata {soil_stat['avg']}%, suhu rata-rata {temp_stat['avg']}°C."],
+                'actions': ["Pantau kelembapan tanah dan sesuaikan jadwal penyiraman."],
+                'disclaimer': "Data berkala dari sensor testbed.",
+            }
+        }
+
+    pdf_buffer = BytesIO()
+    build_recap_pdf(data, pdf_buffer)
+    pdf_buffer.seek(0)
+
+    filename = f"rekap_lingkungan_{data.get('mode', 'data')}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
     return send_file(
         pdf_buffer,
         mimetype='application/pdf',
