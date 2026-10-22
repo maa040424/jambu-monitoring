@@ -62,6 +62,10 @@ def generate_trend_chart_image(daily_trends):
     ax2.axhline(y=35, color='#ef5350', linestyle=':', linewidth=1.0, alpha=0.7)
 
     # Formatting x-axis
+    import matplotlib.ticker as ticker
+    if len(dates) > 12:
+        ax1.xaxis.set_major_locator(ticker.MaxNLocator(nbins=10))
+
     ax1.tick_params(axis='x', labelsize=7, rotation=30)
     ax1.grid(True, linestyle=':', alpha=0.5)
 
@@ -183,7 +187,7 @@ def build_recap_pdf(recap, output_destination):
     start_d = period_info.get('start_date') or '-'
     end_d = period_info.get('end_date') or '-'
     total_rec = period_info.get('total_records', 0)
-    created_now = datetime.now().strftime('%d/%m/%Y %H:%M WIB')
+    created_now = datetime.now().strftime('%d/%m/%Y %H:%M WITA')
 
     meta_data = [
         [
@@ -296,15 +300,56 @@ def build_recap_pdf(recap, output_destination):
     elements.append(two_col_table)
     elements.append(Spacer(1, 8))
 
-    # 4. GRAFIK TREN HARIAN (Matplotlib)
+    # 4. TREN AGREGASI RATA-RATA HARIAN (Grafik + Tabel Ringkas)
+    elements.append(Paragraph("3. Tren Agregasi Rata-Rata Harian", section_heading))
     daily_trends = recap.get('daily_trends', [])
     if daily_trends and len(daily_trends) > 0:
-        elements.append(Paragraph("3. Grafik Tren Agregasi Rata-Rata Harian", section_heading))
         chart_buf = generate_trend_chart_image(daily_trends)
         if chart_buf:
-            img = Image(chart_buf, width=17.4 * cm, height=6.5 * cm)
+            img = Image(chart_buf, width=17.4 * cm, height=6.2 * cm)
             elements.append(img)
-            elements.append(Spacer(1, 8))
+            elements.append(Spacer(1, 6))
+
+        # Tabel Ringkas Agregasi Harian
+        display_trends = daily_trends
+        trend_note = ""
+        if len(daily_trends) > 10:
+            display_trends = daily_trends[-10:]
+            trend_note = f"<i>(Menampilkan 10 hari rekaman terbaru dari total {len(daily_trends)} hari pada periode ini. Data harian lengkap tersedia pada ekspor CSV).</i>"
+
+        trend_table_data = [
+            ['Tanggal', 'Kel. Tanah Rata-Rata (%)', 'Suhu Rata-Rata (°C)', 'Kel. Udara Rata-Rata (%)', 'Jumlah Data']
+        ]
+        for tr in display_trends:
+            trend_table_data.append([
+                str(tr.get('date', tr.get('label', '-'))),
+                f"{tr.get('soil_avg', '-')}%",
+                f"{tr.get('temp_avg', '-')}°C",
+                f"{tr.get('hum_avg', '-')}%",
+                f"{tr.get('count', '-')} data",
+            ])
+
+        t_trends = Table(trend_table_data, colWidths=[3.4 * cm, 4.0 * cm, 3.4 * cm, 4.0 * cm, 2.6 * cm])
+        t_trends.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1b5e20')),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, -1), 7.5),
+            ('ALIGN', (1, 0), (-1, -1), 'CENTER'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('GRID', (0, 0), (-1, -1), 0.4, colors.HexColor('#dddddd')),
+            ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#f5f9f5')]),
+            ('TOPPADDING', (0, 0), (-1, -1), 2.5),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 2.5),
+        ]))
+        elements.append(t_trends)
+        if trend_note:
+            elements.append(Spacer(1, 3))
+            elements.append(Paragraph(trend_note, disclaimer_style))
+        elements.append(Spacer(1, 8))
+    else:
+        elements.append(Paragraph("<i>Tidak ada data agregasi tren harian pada rentang periode ini.</i>", body_style))
+        elements.append(Spacer(1, 8))
 
     # 5. KESIMPULAN & REKOMENDASI KEPUTUSAN BUDIDAYA
     elements.append(Paragraph("4. Kesimpulan dan Rekomendasi Keputusan Budidaya", section_heading))

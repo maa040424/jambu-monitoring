@@ -838,7 +838,8 @@ def predict_pdf():
 def recap_pdf():
     """
     Generate PDF Laporan Rekapitulasi Kondisi Lingkungan per Periode.
-    Menerima data JSON rekapitulasi atau query parameter source/start_date/end_date.
+    Menerima data JSON rekapitulasi (Single Source of Truth dari Laravel RecapReportService)
+    atau fallback query parameter source/start_date/end_date.
     """
     from io import BytesIO
     from flask import send_file
@@ -849,74 +850,130 @@ def recap_pdf():
 
     data = None
     if request.is_json:
-        data = request.get_json()
-    elif request.method == 'POST' and request.form.get('recap_json'):
-        try:
-            data = json.loads(request.form.get('recap_json'))
-        except Exception:
-            data = None
+        data = request.get_json(silent=True)
+    elif request.method == 'POST':
+        if request.form.get('recap_json'):
+            try:
+                data = json.loads(request.form.get('recap_json'))
+            except Exception:
+                data = None
+        elif request.data:
+            try:
+                data = json.loads(request.data.decode('utf-8'))
+            except Exception:
+                data = None
 
     if not data:
         source = request.args.get('source', 'dummy')
-        df = get_sensor_data(source=source, limit=1000)
+        start_date = request.args.get('start_date')
+        end_date = request.args.get('end_date')
+
+        conn = get_db_connection()
+        try:
+            query = "SELECT id, soil_moisture, temperature, humidity, light_intensity, created_at FROM sensor_data WHERE source = %s"
+            params = [source]
+            if start_date:
+                query += " AND created_at >= %s"
+                params.append(f"{start_date} 00:00:00")
+            if end_date:
+                query += " AND created_at <= %s"
+                params.append(f"{end_date} 23:59:59")
+            query += " ORDER BY created_at ASC"
+            df = pd.read_sql(query, conn, params=params)
+        finally:
+            conn.close()
+
         if df.empty:
-            return jsonify({'status': 'error', 'message': 'Data tidak ditemukan'}), 400
-
-        # Build fallback summary from DataFrame
-        total_rec = len(df)
-        soil_stat = {'name': 'Kelembapan Tanah', 'unit': '%', 'valid_count': total_rec, 'min': round(float(df['soil_moisture'].min()), 1), 'max': round(float(df['soil_moisture'].max()), 1), 'avg': round(float(df['soil_moisture'].mean()), 1)}
-        temp_stat = {'name': 'Suhu Udara', 'unit': '°C', 'valid_count': total_rec, 'min': round(float(df['temperature'].min()), 1), 'max': round(float(df['temperature'].max()), 1), 'avg': round(float(df['temperature'].mean()), 1)}
-        hum_stat  = {'name': 'Kelembapan Udara', 'unit': '%', 'valid_count': total_rec, 'min': round(float(df['humidity'].min()), 1), 'max': round(float(df['humidity'].max()), 1), 'avg': round(float(df['humidity'].mean()), 1)}
-
-        terang_cnt = int((df['light_intensity'] >= 250).sum())
-        gelap_cnt = total_rec - terang_cnt
-        light_stat = {'name': 'Kondisi Cahaya (LM393)', 'unit': 'Diskrit', 'valid_count': total_rec, 'terang_count': terang_cnt, 'terang_pct': round((terang_cnt/total_rec)*100, 1), 'gelap_count': gelap_cnt, 'gelap_pct': round((gelap_cnt/total_rec)*100, 1)}
-
-        kritis_cnt = int((df['soil_moisture'] < 20).sum())
-        perlu_cnt  = int(((df['soil_moisture'] >= 20) & (df['soil_moisture'] < 30)).sum())
-        normal_cnt = int((df['soil_moisture'] >= 30).sum())
-
-        high_temp_cnt = int((df['temperature'] > 35).sum())
-
-        data = {
-            'has_data': True,
-            'mode': source,
-            'period': {
-                'start_date': str(df['created_at'].iloc[0])[:10],
-                'end_date': str(df['created_at'].iloc[-1])[:10],
-                'total_records': total_rec,
-            },
-            'sensor_stats': {
-                'soil_moisture': soil_stat,
-                'temperature': temp_stat,
-                'humidity': hum_stat,
-                'light': light_stat,
-            },
-            'soil_recap': {
-                'total_valid': total_rec,
-                'kritis_count': kritis_cnt,
-                'kritis_pct': round((kritis_cnt / total_rec) * 100, 1),
-                'perlu_penyiraman_count': perlu_cnt,
-                'perlu_penyiraman_pct': round((perlu_cnt / total_rec) * 100, 1),
-                'normal_count': normal_cnt,
-                'normal_pct': round((normal_cnt / total_rec) * 100, 1),
-            },
-            'temp_recap': {
-                'threshold': 35.0,
-                'total_valid': total_rec,
-                'high_temp_count': high_temp_cnt,
-                'high_temp_pct': round((high_temp_cnt / total_rec) * 100, 1),
-                'max_temp': round(float(df['temperature'].max()), 1),
-                'max_temp_time': str(df.loc[df['temperature'].idxmax(), 'created_at']),
-            },
-            'daily_trends': [],
-            'recommendations': {
-                'summary': f"Dianalisis sebanyak {total_rec} rekaman data sensor pada mode {source}.",
-                'facts': [f"Kelembapan tanah rata-rata {soil_stat['avg']}%, suhu rata-rata {temp_stat['avg']}°C."],
-                'actions': ["Pantau kelembapan tanah dan sesuaikan jadwal penyiraman."],
-                'disclaimer': "Data berkala dari sensor testbed.",
+            data = {
+                'has_data': False,
+                'mode': source,
+                'period': {
+                    'start_date': start_date or '-',
+                    'end_date': end_date or '-',
+                    'total_records': 0,
+                },
+                'sensor_stats': {},
+                'soil_recap': {},
+                'temp_recap': {},
+                'daily_trends': [],
+                'recommendations': {
+                    'summary': 'Tidak ada rekaman data sensor pada periode ini.',
+                    'facts': [],
+                    'actions': ['Pilih rentang tanggal lain atau pastikan data sensor tersedia.'],
+                    'disclaimer': 'Data berkala dari sensor testbed.',
+                }
             }
-        }
+        else:
+            total_rec = len(df)
+            soil_stat = {'name': 'Kelembapan Tanah', 'unit': '%', 'valid_count': total_rec, 'min': round(float(df['soil_moisture'].min()), 1), 'max': round(float(df['soil_moisture'].max()), 1), 'avg': round(float(df['soil_moisture'].mean()), 1)}
+            temp_stat = {'name': 'Suhu Udara', 'unit': '°C', 'valid_count': total_rec, 'min': round(float(df['temperature'].min()), 1), 'max': round(float(df['temperature'].max()), 1), 'avg': round(float(df['temperature'].mean()), 1)}
+            hum_stat  = {'name': 'Kelembapan Udara', 'unit': '%', 'valid_count': total_rec, 'min': round(float(df['humidity'].min()), 1), 'max': round(float(df['humidity'].max()), 1), 'avg': round(float(df['humidity'].mean()), 1)}
+
+            terang_cnt = int((df['light_intensity'] >= 250).sum())
+            gelap_cnt = total_rec - terang_cnt
+            light_stat = {'name': 'Kondisi Cahaya (LM393)', 'unit': 'Diskrit', 'valid_count': total_rec, 'terang_count': terang_cnt, 'terang_pct': round((terang_cnt/total_rec)*100, 1), 'gelap_count': gelap_cnt, 'gelap_pct': round((gelap_cnt/total_rec)*100, 1)}
+
+            kritis_cnt = int((df['soil_moisture'] < 20).sum())
+            perlu_cnt  = int(((df['soil_moisture'] >= 20) & (df['soil_moisture'] < 30)).sum())
+            normal_cnt = int((df['soil_moisture'] >= 30).sum())
+
+            high_temp_cnt = int((df['temperature'] > 35).sum())
+
+            # Daily trends aggregation
+            df['date_str'] = pd.to_datetime(df['created_at']).dt.strftime('%Y-%m-%d')
+            daily_trends = []
+            for d, group in df.groupby('date_str', sort=True):
+                daily_trends.append({
+                    'date': d,
+                    'label': pd.to_datetime(d).strftime('%d %b'),
+                    'soil_avg': round(float(group['soil_moisture'].mean()), 1),
+                    'temp_avg': round(float(group['temperature'].mean()), 1),
+                    'hum_avg': round(float(group['humidity'].mean()), 1),
+                    'count': len(group)
+                })
+
+            max_temp_val = round(float(df['temperature'].max()), 1)
+            max_temp_time = str(df.loc[df['temperature'].idxmax(), 'created_at'])
+
+            data = {
+                'has_data': True,
+                'mode': source,
+                'period': {
+                    'start_date': start_date or str(df['created_at'].iloc[0])[:10],
+                    'end_date': end_date or str(df['created_at'].iloc[-1])[:10],
+                    'total_records': total_rec,
+                },
+                'sensor_stats': {
+                    'soil_moisture': soil_stat,
+                    'temperature': temp_stat,
+                    'humidity': hum_stat,
+                    'light': light_stat,
+                },
+                'soil_recap': {
+                    'total_valid': total_rec,
+                    'kritis_count': kritis_cnt,
+                    'kritis_pct': round((kritis_cnt / total_rec) * 100, 1),
+                    'perlu_penyiraman_count': perlu_cnt,
+                    'perlu_penyiraman_pct': round((perlu_cnt / total_rec) * 100, 1),
+                    'normal_count': normal_cnt,
+                    'normal_pct': round((normal_cnt / total_rec) * 100, 1),
+                },
+                'temp_recap': {
+                    'threshold': 35.0,
+                    'total_valid': total_rec,
+                    'high_temp_count': high_temp_cnt,
+                    'high_temp_pct': round((high_temp_cnt / total_rec) * 100, 1),
+                    'max_temp': max_temp_val,
+                    'max_temp_time': max_temp_time,
+                },
+                'daily_trends': daily_trends,
+                'recommendations': {
+                    'summary': f"Dianalisis sebanyak {total_rec} rekaman data sensor pada mode {source}.",
+                    'facts': [f"Kelembapan tanah rata-rata {soil_stat['avg']}%, suhu rata-rata {temp_stat['avg']}°C, kelembapan udara rata-rata {hum_stat['avg']}%."],
+                    'actions': ["Pantau kelembapan tanah dan sesuaikan jadwal penyiraman."],
+                    'disclaimer': "Sistem menyajikan data historis riil yang tersimpan di database tanpa interpolasi buatan.",
+                }
+            }
 
     pdf_buffer = BytesIO()
     build_recap_pdf(data, pdf_buffer)

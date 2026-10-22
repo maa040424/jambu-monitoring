@@ -186,17 +186,17 @@ class RecapReportController extends Controller
         $startDate = $validated['start_date'] ?? null;
         $endDate = $validated['end_date'] ?? null;
 
+        // SINGLE SOURCE OF TRUTH: generate aggregate using RecapReportService
+        $recap = $this->recapService->generateRecap($mode, $startDate, $endDate);
+
         $mlUrl = config('services.ml.url', 'http://127.0.0.1:5001');
 
-        // Coba via ML Service jika aktif
+        // Coba via ML Service jika aktif (kirim data hasil agregasi sebagai JSON payload)
         try {
-            $response = Http::connectTimeout(3)
+            $response = Http::connectTimeout(5)
                 ->timeout(30)
-                ->get("{$mlUrl}/recap/pdf", [
-                    'source'     => $mode,
-                    'start_date' => $startDate,
-                    'end_date'   => $endDate,
-                ]);
+                ->asJson()
+                ->post("{$mlUrl}/recap/pdf", $recap);
 
             if ($response->successful()) {
                 $filename = "laporan_rekap_{$mode}_" . now()->format('Ymd_His') . ".pdf";
@@ -208,17 +208,15 @@ class RecapReportController extends Controller
             Log::info("Flask ML Service not reachable for recap PDF, using direct Python script fallback: " . $e->getMessage());
         }
 
-        // Fallback: Generate langsung lewat Python ReportLab lokal
-        return $this->generatePdfDirectly($mode, $startDate, $endDate);
+        // Fallback: Generate langsung lewat Python ReportLab lokal menggunakan data $recap yang SAMA
+        return $this->generatePdfDirectly($recap, $mode, $startDate, $endDate);
     }
 
     /**
      * Fallback generator PDF menggunakan script Python ReportLab lokal.
      */
-    protected function generatePdfDirectly(string $mode, ?string $startDate, ?string $endDate)
+    protected function generatePdfDirectly(array $recap, string $mode, ?string $startDate, ?string $endDate)
     {
-        $recap = $this->recapService->generateRecap($mode, $startDate, $endDate);
-
         $tempJsonPath = storage_path('app/temp_recap_' . uniqid() . '.json');
         $tempPdfPath  = storage_path('app/temp_recap_' . uniqid() . '.pdf');
 

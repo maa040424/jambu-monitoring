@@ -418,4 +418,52 @@ class RecapReportTest extends TestCase
         $respApi = $this->actingAs($this->user)->getJson('/api/sensor-data');
         $respApi->assertOk();
     }
+
+    /**
+     * 14. Ekspor PDF dan CSV menggunakan sumber kalkulasi data yang identik.
+     */
+    public function test_pdf_and_csv_exports_use_identical_recap_data_and_structure(): void
+    {
+        // Masukkan data uji representatif
+        SensorData::create([
+            'soil_moisture'   => 45.0,
+            'temperature'     => 36.5, // > 35 -> Warning
+            'humidity'        => 70.0,
+            'light_intensity' => 300.0,
+            'status'          => 'Normal',
+            'source'          => 'dummy',
+            'created_at'      => Carbon::parse('2026-06-01 10:00:00'),
+        ]);
+
+        SensorData::create([
+            'soil_moisture'   => 25.0,
+            'temperature'     => 31.0,
+            'humidity'        => 80.0,
+            'light_intensity' => 100.0,
+            'status'          => 'Perlu Penyiraman',
+            'source'          => 'dummy',
+            'created_at'      => Carbon::parse('2026-06-02 11:00:00'),
+        ]);
+
+        $service = app(RecapReportService::class);
+        $recap = $service->generateRecap('dummy', '2026-06-01', '2026-06-02');
+
+        // CSV Export check
+        $csvResponse = $this->actingAs($this->user)->get('/recap/export-csv?mode=dummy&start_date=2026-06-01&end_date=2026-06-02');
+        $csvResponse->assertOk();
+        $csvContent = $csvResponse->streamedContent();
+
+        // Verifikasi bahwa CSV mencantumkan metrik yang sama persis
+        $this->assertStringContainsString("\"Total Data Dianalisis\";\"{$recap['period']['total_records']} record\"", $csvContent);
+        $this->assertStringContainsString("\"Kelembapan Tanah\";%;2;25;45;35", $csvContent);
+        $this->assertStringContainsString("\"Suhu Udara\";°C;2;31;36.5;33.8", $csvContent);
+        $this->assertStringContainsString("\"Peringatan Suhu Tinggi\";\"> 35.0°C\";\"{$recap['temp_recap']['high_temp_count']} kali\";\"{$recap['temp_recap']['high_temp_pct']}%", $csvContent);
+        $this->assertStringContainsString('=== 4. TREN RATA-RATA HARIAN ===', $csvContent);
+
+        // PDF Export check
+        $pdfResponse = $this->actingAs($this->user)->get('/recap/export-pdf?mode=dummy&start_date=2026-06-01&end_date=2026-06-02');
+        $pdfResponse->assertOk();
+        $pdfResponse->assertHeader('Content-Type', 'application/pdf');
+        $this->assertGreaterThan(1000, strlen($pdfResponse->getContent()));
+    }
 }
