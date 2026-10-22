@@ -268,19 +268,26 @@ class RecapReportService
         // Fakta & Aturan 2: Kelembapan Tanah
         if ($soil['kritis_count'] > 0) {
             $facts[] = "Terdapat {$soil['kritis_count']} pembacaan ({$soil['kritis_pct']}%) dengan status Kritis (<20%).";
-            $actions[] = "Terdapat indikasi dehidrasi tanah pada beberapa pembacaan. Disarankan pemeriksaan langsung kondisi fisik tanah di area perakaran dan percepatan jadwal penyiraman pada jam-jam tanah terdeteksi kering.";
         }
 
         if ($soil['perlu_penyiraman_count'] > 0) {
             $facts[] = "Sebanyak {$soil['perlu_penyiraman_count']} pembacaan ({$soil['perlu_penyiraman_pct']}%) berada pada kategori Perlu Penyiraman (20% - 29.9%).";
-            if ($soil['kritis_count'] === 0) {
-                $actions[] = "Kelembapan tanah sesekali turun ke batas waspada. Disarankan menjaga keteraturan volume irigasi agar kelembapan tidak tergelincir ke zona kritis.";
+        }
+
+        // Rekomendasi tindakan tanah objektif
+        if ($soil['kritis_count'] > 0 || $soil['perlu_penyiraman_count'] > 0) {
+            if ($soil['kritis_count'] <= 2 && $soil['perlu_penyiraman_count'] <= 2) {
+                $actions[] = "Penurunan kelembapan tanah tergolong insidental dan terbatas (hanya terdeteksi {$soil['kritis_count']} pembacaan kritis dan {$soil['perlu_penyiraman_count']} pembacaan perlu penyiraman). Kondisi ini tidak mengindikasikan dehidrasi kebun secara menyeluruh; disarankan pengecekan fisik titik sensor dan mempertahankan jadwal irigasi normal.";
+            } elseif ($soil['kritis_count'] > 0) {
+                $actions[] = "Terdeteksi {$soil['kritis_count']} pembacaan berstatus kritis. Disarankan pemeriksaan kondisi fisik tanah di area perakaran dan percepatan jadwal penyiraman pada jam-jam tanah terdeteksi kering.";
+            } else {
+                $actions[] = "Kelembapan tanah sesekali turun ke batas waspada ({$soil['perlu_penyiraman_count']} pembacaan). Disarankan menjaga keteraturan volume irigasi agar kelembapan tidak tergelincir ke zona kritis.";
             }
         }
 
         if ($soil['normal_pct'] >= 75.0) {
-            $facts[] = "Sebagian besar waktu ({$soil['normal_pct']}%), kelembapan tanah berada pada kondisi Normal (≥30%).";
-            $actions[] = "Kondisi kelembapan perakaran tanaman jambu kristal secara umum stabil. Pertahankan pola irigasi saat ini sembari memantau tren cuaca.";
+            $facts[] = "Sebagian besar pembacaan sensor ({$soil['normal_pct']}%), kelembapan tanah berada pada kondisi Normal (≥30%).";
+            $actions[] = "Kondisi kelembapan perakaran tanaman jambu kristal secara umum stabil (didukung {$soil['normal_pct']}% pembacaan normal). Pertahankan pola irigasi saat ini sembari memantau tren cuaca.";
         }
 
         // Fakta & Aturan 3: Suhu Udara Ekstrem

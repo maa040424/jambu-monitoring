@@ -29,31 +29,62 @@ from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT, TA_JUSTIFY
 def generate_trend_chart_image(daily_trends):
     """
     Menghasilkan gambar grafik tren harian menggunakan Matplotlib.
+    Menggunakan tanggal kalender riil sebagai sumbu X untuk memastikan proporsi waktu yang akurat.
     Mengembalikan BytesIO buffer PNG.
     """
     if not daily_trends or len(daily_trends) == 0:
         return None
 
-    dates = [d['label'] for d in daily_trends]
-    soil = [d['soil_avg'] for d in daily_trends]
-    temp = [d['temp_avg'] for d in daily_trends]
-    hum = [d['hum_avg'] for d in daily_trends]
+    from datetime import datetime, timedelta
+    import matplotlib.dates as mdates
+
+    # Parse tanggal aktual dari field 'date' (YYYY-MM-DD)
+    parsed_items = []
+    for d in daily_trends:
+        raw_date = d.get('date') or d.get('label')
+        dt_obj = None
+        if raw_date:
+            try:
+                dt_obj = datetime.strptime(str(raw_date)[:10], '%Y-%m-%d')
+            except Exception:
+                try:
+                    dt_obj = datetime.strptime(str(raw_date), '%d %b %Y')
+                except Exception:
+                    dt_obj = None
+
+        if dt_obj:
+            parsed_items.append((
+                dt_obj,
+                float(d.get('soil_avg', 0.0)),
+                float(d.get('temp_avg', 0.0)),
+                float(d.get('hum_avg', 0.0))
+            ))
+
+    if not parsed_items:
+        return None
+
+    # Urutkan secara kronologis
+    parsed_items.sort(key=lambda x: x[0])
+    dates = [p[0] for p in parsed_items]
+    soil = [p[1] for p in parsed_items]
+    temp = [p[2] for p in parsed_items]
+    hum = [p[3] for p in parsed_items]
 
     fig, ax1 = plt.subplots(figsize=(7.5, 2.8), dpi=150)
     fig.patch.set_facecolor('#ffffff')
     ax1.set_facecolor('#fafafa')
 
     # Line 1: Kelembapan Tanah (Hijau)
-    line1 = ax1.plot(dates, soil, color='#2e7d32', linewidth=2.0, marker='o', markersize=4, label='Kel. Tanah (%)')
+    line1 = ax1.plot(dates, soil, color='#2e7d32', linewidth=1.8, marker='o', markersize=3.5, label='Kel. Tanah (%)')
     # Line 2: Kelembapan Udara (Biru)
-    line2 = ax1.plot(dates, hum, color='#0288d1', linewidth=1.8, linestyle='-.', marker='s', markersize=3, label='Kel. Udara (%)')
+    line2 = ax1.plot(dates, hum, color='#0288d1', linewidth=1.6, linestyle='-.', marker='s', markersize=3, label='Kel. Udara (%)')
     ax1.set_ylabel('Kelembapan (%)', fontsize=8, color='#333333')
     ax1.tick_params(axis='y', labelsize=7)
     ax1.set_ylim(0, 100)
 
     # Line 3: Suhu Udara (Merah) di Sumbu Kanan
     ax2 = ax1.twinx()
-    line3 = ax2.plot(dates, temp, color='#d32f2f', linewidth=2.0, linestyle='--', marker='^', markersize=4, label='Suhu (°C)')
+    line3 = ax2.plot(dates, temp, color='#d32f2f', linewidth=1.8, linestyle='--', marker='^', markersize=3.5, label='Suhu (°C)')
     ax2.set_ylabel('Suhu (°C)', fontsize=8, color='#d32f2f')
     ax2.tick_params(axis='y', labelcolor='#d32f2f', labelsize=7)
     ax2.set_ylim(15, 45)
@@ -61,12 +92,27 @@ def generate_trend_chart_image(daily_trends):
     # Threshold line 35°C
     ax2.axhline(y=35, color='#ef5350', linestyle=':', linewidth=1.0, alpha=0.7)
 
-    # Formatting x-axis
-    import matplotlib.ticker as ticker
-    if len(dates) > 12:
-        ax1.xaxis.set_major_locator(ticker.MaxNLocator(nbins=10))
+    # Formatting x-axis: menggunakan skala tanggal kalender riil
+    total_days = (dates[-1] - dates[0]).days if len(dates) > 1 else 1
 
-    ax1.tick_params(axis='x', labelsize=7, rotation=30)
+    if total_days > 45:
+        # Rentang multi-bulan: gunakan interval otomatis yang proporsional
+        ax1.xaxis.set_major_locator(mdates.AutoDateLocator(minticks=6, maxticks=10))
+        ax1.xaxis.set_major_formatter(mdates.DateFormatter('%d %b'))
+    elif total_days > 14:
+        ax1.xaxis.set_major_locator(mdates.DayLocator(interval=max(1, total_days // 7)))
+        ax1.xaxis.set_major_formatter(mdates.DateFormatter('%d %b'))
+    elif total_days > 1:
+        ax1.xaxis.set_major_locator(mdates.DayLocator(interval=1))
+        ax1.xaxis.set_major_formatter(mdates.DateFormatter('%d %b'))
+    else:
+        ax1.xaxis.set_major_formatter(mdates.DateFormatter('%d %b %Y'))
+
+    # Padding batas sumbu X agar titik pertama dan terakhir tidak menempel pada garis tepi
+    pad_days = max(1, round(total_days * 0.03)) if total_days > 0 else 1
+    ax1.set_xlim(dates[0] - timedelta(days=pad_days), dates[-1] + timedelta(days=pad_days))
+
+    ax1.tick_params(axis='x', labelsize=7, rotation=25)
     ax1.grid(True, linestyle=':', alpha=0.5)
 
     # Legend kombinasi
@@ -306,9 +352,9 @@ def build_recap_pdf(recap, output_destination):
     if daily_trends and len(daily_trends) > 0:
         chart_buf = generate_trend_chart_image(daily_trends)
         if chart_buf:
-            img = Image(chart_buf, width=17.4 * cm, height=6.2 * cm)
+            img = Image(chart_buf, width=17.4 * cm, height=5.8 * cm)
             elements.append(img)
-            elements.append(Spacer(1, 6))
+            elements.append(Spacer(1, 5))
 
         # Tabel Ringkas Agregasi Harian
         display_trends = daily_trends
@@ -329,7 +375,7 @@ def build_recap_pdf(recap, output_destination):
                 f"{tr.get('count', '-')} data",
             ])
 
-        t_trends = Table(trend_table_data, colWidths=[3.4 * cm, 4.0 * cm, 3.4 * cm, 4.0 * cm, 2.6 * cm])
+        t_trends = Table(trend_table_data, colWidths=[3.4 * cm, 4.0 * cm, 3.4 * cm, 4.0 * cm, 2.6 * cm], repeatRows=1)
         t_trends.setStyle(TableStyle([
             ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1b5e20')),
             ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
