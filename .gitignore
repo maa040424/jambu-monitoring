@@ -27,3 +27,6 @@ docker-compose.override.yml
 Homestead.json
 Homestead.yaml
 Thumbs.db
+__pycache__/
+*.py[cod]
+/storage/app/temp_*

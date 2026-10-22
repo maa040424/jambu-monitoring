@@ -21,12 +21,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement('
-            UPDATE sensor_data
-            SET created_at  = DATE_ADD(created_at, INTERVAL 1 HOUR),
-                updated_at  = DATE_ADD(updated_at, INTERVAL 1 HOUR),
-                recorded_at = DATE_ADD(recorded_at, INTERVAL 1 HOUR)
-        ');
+        if (DB::getDriverName() === 'sqlite') {
+            DB::statement("
+                UPDATE sensor_data
+                SET created_at  = datetime(created_at, '+1 hour'),
+                    updated_at  = datetime(updated_at, '+1 hour'),
+                    recorded_at = datetime(recorded_at, '+1 hour')
+            ");
+        } else {
+            DB::statement('
+                UPDATE sensor_data
+                SET created_at  = DATE_ADD(created_at, INTERVAL 1 HOUR),
+                    updated_at  = DATE_ADD(updated_at, INTERVAL 1 HOUR),
+                    recorded_at = DATE_ADD(recorded_at, INTERVAL 1 HOUR)
+            ');
+        }
     }
 
     /**
@@ -34,11 +43,20 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement('
-            UPDATE sensor_data
-            SET created_at  = DATE_SUB(created_at, INTERVAL 1 HOUR),
-                updated_at  = DATE_SUB(updated_at, INTERVAL 1 HOUR),
-                recorded_at = DATE_SUB(recorded_at, INTERVAL 1 HOUR)
-        ');
+        if (DB::getDriverName() === 'sqlite') {
+            DB::statement("
+                UPDATE sensor_data
+                SET created_at  = datetime(created_at, '-1 hour'),
+                    updated_at  = datetime(updated_at, '-1 hour'),
+                    recorded_at = datetime(recorded_at, '-1 hour')
+            ");
+        } else {
+            DB::statement('
+                UPDATE sensor_data
+                SET created_at  = DATE_SUB(created_at, INTERVAL 1 HOUR),
+                    updated_at  = DATE_SUB(updated_at, INTERVAL 1 HOUR),
+                    recorded_at = DATE_SUB(recorded_at, INTERVAL 1 HOUR)
+            ');
+        }
     }
 };

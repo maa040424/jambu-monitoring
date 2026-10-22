@@ -203,15 +203,7 @@ class SensorDataController extends Controller
      */
     private function determineStatus(float $soilMoisture): string
     {
-        if ($soilMoisture < 20) {
-            return 'Kritis';
-        }
-
-        if ($soilMoisture < 30) {
-            return 'Perlu Penyiraman';
-        }
-
-        return 'Normal';
+        return SensorData::determineStatus($soilMoisture);
     }
 
     /**
@@ -236,7 +228,7 @@ class SensorDataController extends Controller
         $message .= "💧 Kelembaban Tanah: {$data->soil_moisture}%\n";
         $message .= "🌡️ Suhu: {$data->temperature}°C\n";
         $message .= "💨 Kelembaban Udara: {$data->humidity}%\n";
-        $message .= "☀️ Intensitas Cahaya: <b>{$lightStatus}</b>\n\n";
+        $message .= "☀️ Kondisi Cahaya: <b>{$lightStatus}</b>\n\n";
         $message .= "🕐 Direkam: " . ($data->recorded_at ?? $data->created_at) . "\n";
         $message .= "📤 Diterima: {$data->created_at}";
 
