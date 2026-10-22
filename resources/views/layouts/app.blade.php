@@ -57,9 +57,17 @@
                         <i class="bi bi-graph-up-arrow"></i>
                         <span>Prediksi ARIMA</span>
                     </a>
+                    <a href="{{ route('recap.index') }}" class="nav-link-item {{ request()->routeIs('recap.*') ? 'active' : '' }}">
+                        <i class="bi bi-file-earmark-bar-graph"></i>
+                        <span>Rekap Lingkungan</span>
+                    </a>
                     <a href="{{ route('profil.kebun') }}" class="nav-link-item {{ request()->routeIs('profil.kebun') ? 'active' : '' }}">
                         <i class="bi bi-tree-fill"></i>
                         <span>Profil Kebun</span>
+                    </a>
+                    <a href="{{ route('tentang.sistem') }}" class="nav-link-item {{ request()->routeIs('tentang.sistem') ? 'active' : '' }}">
+                        <i class="bi bi-info-circle-fill"></i>
+                        <span>Tentang Sistem</span>
                     </a>
                     @if(auth()->user()->isAdmin())
                     <a href="{{ route('users.index') }}" class="nav-link-item {{ request()->routeIs('users.*') ? 'active' : '' }}">

@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\ModeController;
+use App\Http\Controllers\RecapReportController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\Api\SensorDataController;
 use Illuminate\Support\Facades\Route;
@@ -31,7 +32,11 @@ Route::middleware('auth')->group(function () {
     // Semua user (admin + petani) bisa akses
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/forecast', [ForecastController::class, 'index'])->name('forecast');
+    Route::get('/recap', [RecapReportController::class, 'index'])->name('recap.index');
+    Route::get('/recap/export-csv', [RecapReportController::class, 'exportCsv'])->name('recap.export.csv');
+    Route::get('/recap/export-pdf', [RecapReportController::class, 'exportPdf'])->name('recap.export.pdf');
     Route::get('/profil-kebun', function () { return view('profil-kebun'); })->name('profil.kebun');
+    Route::get('/tentang-sistem', function () { return view('tentang-sistem'); })->name('tentang.sistem');
 
     // Ubah password (semua user)
     Route::get('/change-password', [ChangePasswordController::class, 'edit'])->name('password.edit');
